@@ -165,3 +165,6 @@ out/
 
 # Local Docker Data
 .docker_data/
+
+# SQLite databases
+*.db
