@@ -4,7 +4,7 @@ This file is used to log and track the completion status of the development phas
 
 ## High-Level Status Overview
 * **Phase 1: Foundation Setup & Central API Gateway** — **[x] Completed** (June 25, 2026)
-* **Phase 2: Core Booking Marketplace & Scheduling Engine** — **[ ] Pending**
+* **Phase 2: Core Booking Marketplace & Scheduling Engine** — **[/] In Progress** (Sub-Phase 2.1 Completed, Sub-Phase 2.2 Pending)
 * **Phase 3: Telehealth Infrastructure & In-House Bot Recorder** — **[ ] Pending**
 * **Phase 4: AI Clinical Scribe Pipeline & Doctor Portal Approval** — **[ ] Pending**
 * **Phase 5: Post-Visit AI Care Companion & Conversational Booking Agent** — **[ ] Pending**
@@ -28,3 +28,18 @@ This file is used to log and track the completion status of the development phas
   * [x] Bound routes, health tests, and gateway CORS attributes in [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/app/main.py).
   * [x] Created server build commands in [`Dockerfile`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/Dockerfile).
   * [x] Added package helpers ([`__init__.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/__init__.py)) to resolve IDE static analyzer squiggly lines.
+
+### Phase 2: Core Booking Marketplace & Scheduling Engine
+* **Status**: [/] In Progress
+* **Sub-Phase 2.1: Scheduling Microservice & Database Schema**: [x] Completed (June 25, 2026)
+* **Sub-Phase 2.1 Verification Status**: PASSED (Verified via [verify_scheduling.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/verify_scheduling.py))
+* **Sub-Phase 2.1 Delivered Tasks**:
+  * [x] Configured microservice dependencies in [`requirements.txt`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/requirements.txt) and local configurations in [`config.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/config.py).
+  * [x] Built SQLAlchemy connection module [`database.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/database.py) with dynamic SQLite/Postgre context handlers.
+  * [x] Programmed relational database structures for User, Doctor, Appointment, and ScheduleException in [`models.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/models.py), including a partial unique index constraint to natively block duplicate active slots.
+  * [x] Initialized Alembic migrations ([`alembic.ini`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/alembic.ini), [`env.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/alembic/env.py)) and generated the first migration revision.
+  * [x] Compiled data input/output validators in [`schemas.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/schemas.py).
+  * [x] Programmed routing endpoints (get doctors, get availability, post appointments) in [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/main.py).
+  * [x] Wrote database populator script [`seed.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/seed.py) to seed the workspace with test accounts and calendar exceptions.
+  * [x] Created microservice build template in [`Dockerfile`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/Dockerfile).
+  * [x] Verified endpoints, exceptions, and double-booking database constraint checks via integration test script [`verify_scheduling.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/verify_scheduling.py).
