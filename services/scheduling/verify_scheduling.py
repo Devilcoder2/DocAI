@@ -4,7 +4,7 @@ import time
 import subprocess
 import json
 import httpx
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time as datetime_time
 
 print("=" * 60)
 print("Scheduling Microservice Integration & Concurrency Test")
@@ -92,7 +92,7 @@ try:
         print("-" * 40)
 
         # Find a valid open slot for testing booking (e.g., 9:00 AM tomorrow)
-        booking_time = datetime.combine(tomorrow, time(9, 0))
+        booking_time = datetime.combine(tomorrow, datetime_time(9, 0))
         booking_time_str = booking_time.isoformat()
 
         # Test 3: Create Appointment
