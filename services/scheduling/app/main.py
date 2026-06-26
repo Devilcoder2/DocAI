@@ -563,7 +563,7 @@ def get_clinical_note(id: UUID, db: Session = Depends(get_db)) -> ClinicalNoteOu
     return note
 
 
-@app.post("/appointments/{id}/clinical-note", response_model=ClinicalNoteOut, status_code=sa_status.HTTP_201_CREATED if hasattr(sa_status, 'HTTP_201_CREATED') else status.HTTP_201_CREATED) # Wait, it is status.HTTP_201_CREATED
+@app.post("/appointments/{id}/clinical-note", response_model=ClinicalNoteOut, status_code=status.HTTP_201_CREATED)
 def create_clinical_note(
     id: UUID,
     payload: ClinicalNoteCreate,
