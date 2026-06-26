@@ -51,7 +51,7 @@ def run_phase4_verification():
     scribe_env["PYTHONPATH"] = "services/scribe"
     
     scribe_api_process = subprocess.Popen(
-        ["./venv/bin/python", "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8003"],
+        [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8003"],
         cwd="services/scribe",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -62,7 +62,7 @@ def run_phase4_verification():
     # 2. Spawn Scribe RabbitMQ Consumer
     print("[Step 2] Spawning Scribe RabbitMQ Consumer subprocess...")
     scribe_consumer_process = subprocess.Popen(
-        ["./venv/bin/python", "-m", "app.consumer"],
+        [sys.executable, "-m", "app.consumer"],
         cwd="services/scribe",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
