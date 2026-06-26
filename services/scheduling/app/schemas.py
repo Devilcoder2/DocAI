@@ -93,6 +93,51 @@ class AppointmentCreate(BaseModel):
     insurance_policy_number: Optional[str] = Field(None, description="Member ID policy number.")
 
 
+class ClinicalNoteBase(BaseModel):
+    """
+    Base properties of a clinical SOAP note.
+    """
+    appointment_id: UUID = Field(..., description="UUID of the associated consultation.")
+    raw_transcript: Optional[str] = Field(None, description="Unstructured transcription dialogues.")
+    subjective: Optional[str] = Field(None, description="SOAP Subjective section.")
+    objective: Optional[str] = Field(None, description="SOAP Objective section.")
+    assessment: Optional[str] = Field(None, description="SOAP Assessment section.")
+    plan: Optional[str] = Field(None, description="SOAP Plan section.")
+    patient_summary: Optional[str] = Field(None, description="Patient lay translation summary.")
+    status: str = Field("draft", description="Document lock status (draft, approved).")
+
+
+class ClinicalNoteCreate(ClinicalNoteBase):
+    """
+    Input schema to link a clinical note to an appointment.
+    """
+    pass
+
+
+class ClinicalNoteUpdate(BaseModel):
+    """
+    Fields that can be updated on the clinical note.
+    """
+    raw_transcript: Optional[str] = Field(None, description="Updated transcript.")
+    subjective: Optional[str] = Field(None, description="Updated Subjective text.")
+    objective: Optional[str] = Field(None, description="Updated Objective text.")
+    assessment: Optional[str] = Field(None, description="Updated Assessment text.")
+    plan: Optional[str] = Field(None, description="Updated Plan text.")
+    patient_summary: Optional[str] = Field(None, description="Updated layman summary.")
+    status: Optional[str] = Field(None, description="Update status key.")
+
+
+class ClinicalNoteOut(ClinicalNoteBase):
+    """
+    Response schema returning clinical note records.
+    """
+    id: UUID
+    signed_at: Optional[datetime] = Field(None, description="Physician electronic signature timestamp.")
+
+    class Config:
+        from_attributes = True
+
+
 class AppointmentOut(AppointmentCreate):
     """
     Response schema returning booking records.
@@ -101,6 +146,7 @@ class AppointmentOut(AppointmentCreate):
     patient_id: UUID = Field(..., description="UUID of the patient booking the slot.")
     status: str = Field(..., description="Booking state: pending, confirmed, completed, cancelled.")
     duration_minutes: int = Field(30, description="Length of the appointment in minutes.")
+    clinical_note: Optional[ClinicalNoteOut] = Field(None, description="Linked SOAP clinical note draft if present.")
 
     class Config:
         from_attributes = True
