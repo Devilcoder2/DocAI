@@ -7,7 +7,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from app.database import SessionLocal
 from app.models import User, Doctor, Appointment, ClinicalNote
-from app.ai_engine_mock_templates import generate_mock_scribe_note # Wait! Let's just define the templates directly or import them
 
 def seed_phase4_data() -> None:
     """
