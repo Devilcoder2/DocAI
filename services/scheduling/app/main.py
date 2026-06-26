@@ -6,10 +6,11 @@ from sqlalchemy import cast, String
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.database import get_db
-from app.models import User, Doctor, Appointment, ScheduleException
+from app.models import User, Doctor, Appointment, ScheduleException, ClinicalNote
 from app.schemas import (
     DoctorOut, AppointmentOut, AppointmentCreate, ScheduleExceptionOut,
-    UserCreate, UserUpdate, UserOut, DoctorCreate, DoctorUpdate
+    UserCreate, UserUpdate, UserOut, DoctorCreate, DoctorUpdate,
+    ClinicalNoteCreate, ClinicalNoteUpdate, ClinicalNoteOut
 )
 
 app = FastAPI(
@@ -206,6 +207,31 @@ def create_appointment(
             status_code=status.HTTP_409_CONFLICT,
             detail="Slot allocation race condition: The selected time has just been reserved by another patient."
         )
+
+
+@app.get("/appointments", response_model=List[AppointmentOut])
+def list_appointments(
+    doctor_id: Optional[UUID] = Query(None, description="Filter by doctor ID."),
+    patient_id: Optional[UUID] = Query(None, description="Filter by patient ID."),
+    db: Session = Depends(get_db)
+) -> List[AppointmentOut]:
+    """
+    Lists appointments based on optional filters.
+
+    Inputs:
+        doctor_id (UUID, optional): Filter by doctor UUID.
+        patient_id (UUID, optional): Filter by patient UUID.
+        db (Session): Database session context.
+
+    Outputs:
+        List[AppointmentOut]: Array of matching appointments.
+    """
+    query = db.query(Appointment)
+    if doctor_id:
+        query = query.filter(Appointment.doctor_id == doctor_id)
+    if patient_id:
+        query = query.filter(Appointment.patient_id == patient_id)
+    return query.order_by(Appointment.appointment_time.asc()).all()
 
 
 @app.get("/appointments/{id}", response_model=AppointmentOut)
@@ -509,4 +535,191 @@ def delete_doctor(id: UUID, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to delete doctor profile: {str(e)}"
+        )
+
+
+# ==========================================
+# CLINICAL NOTE CRUD ENDPOINTS
+# ==========================================
+
+@app.get("/appointments/{id}/clinical-note", response_model=ClinicalNoteOut)
+def get_clinical_note(id: UUID, db: Session = Depends(get_db)) -> ClinicalNoteOut:
+    """
+    Fetches the SOAP clinical note draft or approved record for an appointment.
+
+    Inputs:
+        id (UUID): Appointment ID path parameter.
+        db (Session): Database session context.
+
+    Outputs:
+        ClinicalNoteOut: Detailed SOAP note record.
+    """
+    note = db.query(ClinicalNote).filter(ClinicalNote.appointment_id == id).first()
+    if not note:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No clinical note records found for this appointment."
+        )
+    return note
+
+
+@app.post("/appointments/{id}/clinical-note", response_model=ClinicalNoteOut, status_code=sa_status.HTTP_201_CREATED if hasattr(sa_status, 'HTTP_201_CREATED') else status.HTTP_201_CREATED) # Wait, it is status.HTTP_201_CREATED
+def create_clinical_note(
+    id: UUID,
+    payload: ClinicalNoteCreate,
+    db: Session = Depends(get_db)
+) -> ClinicalNoteOut:
+    """
+    Creates a new draft clinical note for a completed or active consult session.
+
+    Inputs:
+        id (UUID): Appointment ID path parameter.
+        payload (ClinicalNoteCreate): Initial notes content fields.
+        db (Session): Database session context.
+
+    Outputs:
+        ClinicalNoteOut: Newly initialized database record.
+    """
+    # Verify appointment exists
+    appointment = db.query(Appointment).filter(Appointment.id == id).first()
+    if not appointment:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Associated appointment not found."
+        )
+
+    # Check if a draft note already exists to prevent duplicate entities
+    existing_note = db.query(ClinicalNote).filter(ClinicalNote.appointment_id == id).first()
+    if existing_note:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A clinical note draft has already been initialized for this appointment."
+        )
+
+    new_note = ClinicalNote(
+        appointment_id=id,
+        raw_transcript=payload.raw_transcript,
+        subjective=payload.subjective,
+        objective=payload.objective,
+        assessment=payload.assessment,
+        plan=payload.plan,
+        patient_summary=payload.patient_summary,
+        status="draft"
+    )
+    
+    db.add(new_note)
+    try:
+        db.commit()
+        db.refresh(new_note)
+        return new_note
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to save clinical note draft: {str(e)}"
+        )
+
+
+@app.put("/appointments/{id}/clinical-note", response_model=ClinicalNoteOut)
+def update_clinical_note(
+    id: UUID,
+    payload: ClinicalNoteUpdate,
+    db: Session = Depends(get_db)
+) -> ClinicalNoteOut:
+    """
+    Updates the text blocks of a draft clinical note. Fails if the note is already approved.
+
+    Inputs:
+        id (UUID): Appointment ID path parameter.
+        payload (ClinicalNoteUpdate): Clinical fields to save.
+        db (Session): Database session context.
+
+    Outputs:
+        ClinicalNoteOut: Updated database record.
+    """
+    note = db.query(ClinicalNote).filter(ClinicalNote.appointment_id == id).first()
+    if not note:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Clinical note draft not found."
+        )
+
+    if note.status == "approved":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Clinical note has already been approved and locked. Modifications are disabled."
+        )
+
+    # Dynamically apply updates
+    if payload.raw_transcript is not None:
+        note.raw_transcript = payload.raw_transcript
+    if payload.subjective is not None:
+        note.subjective = payload.subjective
+    if payload.objective is not None:
+        note.objective = payload.objective
+    if payload.assessment is not None:
+        note.assessment = payload.assessment
+    if payload.plan is not None:
+        note.plan = payload.plan
+    if payload.patient_summary is not None:
+        note.patient_summary = payload.patient_summary
+    if payload.status is not None:
+        note.status = payload.status
+
+    try:
+        db.commit()
+        db.refresh(note)
+        return note
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update clinical note: {str(e)}"
+        )
+
+
+@app.post("/appointments/{id}/clinical-note/approve", response_model=ClinicalNoteOut)
+def approve_clinical_note(id: UUID, db: Session = Depends(get_db)) -> ClinicalNoteOut:
+    """
+    Signs and locks a clinical SOAP note, updating appointment status to completed.
+
+    Inputs:
+        id (UUID): Appointment ID path parameter.
+        db (Session): Database session context.
+
+    Outputs:
+        ClinicalNoteOut: Locked clinical note record.
+    """
+    # 1. Fetch note
+    note = db.query(ClinicalNote).filter(ClinicalNote.appointment_id == id).first()
+    if not note:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Clinical note draft not found."
+        )
+
+    if note.status == "approved":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Clinical note has already been approved and locked."
+        )
+
+    # 2. Lock note status and log sign-off time
+    note.status = "approved"
+    note.signed_at = datetime.now()
+
+    # 3. Update parent appointment status to completed
+    appointment = db.query(Appointment).filter(Appointment.id == id).first()
+    if appointment:
+        appointment.status = "completed"
+
+    try:
+        db.commit()
+        db.refresh(note)
+        return note
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to approve clinical note: {str(e)}"
         )
