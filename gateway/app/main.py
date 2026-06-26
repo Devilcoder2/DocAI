@@ -79,7 +79,8 @@ async def proxy_request(method: str, path: str, request: Request, headers: dict 
             
         # Parse output body if status is not NO_CONTENT
         if response.status_code == 204:
-            return JSONResponse(status_code=204, content=None)
+            from fastapi import Response
+            return Response(status_code=204)
             
         try:
             res_content = response.json()
