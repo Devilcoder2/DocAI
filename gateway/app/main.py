@@ -236,7 +236,7 @@ async def delete_me(request: Request):
     return await proxy_request("DELETE", f"/users/{user_id}", request)
 
 
-@app.get("/api/v1/doctors/{id}")
+@app.get("/api/v1/public/doctors/{id}")
 async def public_get_doctor_profile(id: str, request: Request):
     """
     Exposes doctor profiles publicly so provider page details can render.
