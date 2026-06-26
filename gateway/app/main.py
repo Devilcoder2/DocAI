@@ -40,9 +40,9 @@ app.add_middleware(AuthMiddleware)
 app.add_middleware(AuditMiddleware)
 
 
-async def proxy_request(method: str, path: str, request: Request, headers: dict = None, json_body: dict = None, params: dict = None):
+async def proxy_request(method: str, path: str, request: Request, headers: dict = None, json_body: dict = None, params: dict = None, service_url: str = settings.SERVICE_SCHEDULING_URL):
     """
-    Helper function that proxies request HTTP methods to the scheduling microservice.
+    Helper function that proxies request HTTP methods to the specified microservice.
 
     Inputs:
         method (str): GET, POST, PUT, DELETE.
@@ -51,11 +51,12 @@ async def proxy_request(method: str, path: str, request: Request, headers: dict 
         headers (dict, optional): Custom headers to merge.
         json_body (dict, optional): Payload for POST/PUT.
         params (dict, optional): Query parameters.
+        service_url (str): Downstream service base URL.
 
     Outputs:
         JSONResponse: Proxy HTTP response container.
     """
-    url = f"{settings.SERVICE_SCHEDULING_URL}{path}"
+    url = f"{service_url}{path}"
     
     req_headers = {}
     if headers:
@@ -158,7 +159,6 @@ async def auth_register(request: Request):
     if response.status_code != 201:
         return response
 
-    user_data = response.init_headers  # wait, read body directly from response object
     import json
     user_json = json.loads(response.body.decode("utf-8"))
     
@@ -284,3 +284,102 @@ async def fetch_appointment(id: str, request: Request):
     user_id = request.state.user_id
     headers = {"X-User-Id": str(user_id)}
     return await proxy_request("GET", f"/appointments/{id}", request, headers=headers)
+
+
+# ==========================================
+# PROTECTED TELEHEALTH & WEBRTC PROXIES
+# ==========================================
+
+@app.post("/api/v1/telehealth/rooms/token")
+async def proxy_telehealth_token(request: Request):
+    """
+    Retrieves a WebRTC LiveKit token for the room, verifying user authorization.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body.")
+    
+    auth_header = request.headers.get("Authorization")
+    headers = {}
+    if auth_header:
+        headers["Authorization"] = auth_header
+
+    return await proxy_request(
+        "POST", "/rooms/token", request,
+        headers=headers, json_body=body,
+        service_url=settings.SERVICE_TELEHEALTH_URL
+    )
+
+
+@app.post("/api/v1/telehealth/rooms/{room_name}/scribe/start")
+async def proxy_scribe_start(room_name: str, request: Request):
+    """
+    Triggers transcription recording start for a clinical consult room.
+    """
+    auth_header = request.headers.get("Authorization")
+    headers = {}
+    if auth_header:
+        headers["Authorization"] = auth_header
+
+    return await proxy_request(
+        "POST", f"/rooms/{room_name}/scribe/start", request,
+        headers=headers,
+        service_url=settings.SERVICE_TELEHEALTH_URL
+    )
+
+
+@app.post("/api/v1/telehealth/rooms/{room_name}/scribe/stop")
+async def proxy_scribe_stop(room_name: str, request: Request):
+    """
+    Triggers transcription recording stop for a clinical consult room.
+    """
+    auth_header = request.headers.get("Authorization")
+    headers = {}
+    if auth_header:
+        headers["Authorization"] = auth_header
+
+    return await proxy_request(
+        "POST", f"/rooms/{room_name}/scribe/stop", request,
+        headers=headers,
+        service_url=settings.SERVICE_TELEHEALTH_URL
+    )
+
+
+@app.get("/api/v1/telehealth/rooms/{room_name}/scribe/status")
+async def proxy_scribe_status(room_name: str, request: Request):
+    """
+    Queries active recording status of the AI Scribe bot for a room.
+    """
+    auth_header = request.headers.get("Authorization")
+    headers = {}
+    if auth_header:
+        headers["Authorization"] = auth_header
+
+    return await proxy_request(
+        "GET", f"/rooms/{room_name}/scribe/status", request,
+        headers=headers,
+        service_url=settings.SERVICE_TELEHEALTH_URL
+    )
+
+
+# ==========================================
+# PUBLIC WEBHOOK PROXIES
+# ==========================================
+
+@app.post("/api/v1/public/telehealth/webhooks/livekit")
+async def proxy_livekit_webhook(request: Request):
+    """
+    Exposes unprotected webhook proxy for LiveKit server notifications.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body.")
+
+    return await proxy_request(
+        "POST", "/webhooks/livekit", request,
+        json_body=body,
+        service_url=settings.SERVICE_TELEHEALTH_URL
+    )
+
