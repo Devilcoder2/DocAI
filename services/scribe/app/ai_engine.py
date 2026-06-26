@@ -175,7 +175,7 @@ def generate_mock_scribe_note(reason_for_visit: str) -> Dict[str, str]:
     }
 
 
-async def transcribe_and_synthesize(
+def transcribe_and_synthesize(
     appointment_id: str,
     audio_path: str,
     reason_for_visit: str,
