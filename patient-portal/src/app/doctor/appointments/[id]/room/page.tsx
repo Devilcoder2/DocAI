@@ -452,7 +452,7 @@ export default function DoctorTelehealthRoom({ params }: { params: Promise<{ id:
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 relative min-h-[300px]">
             
             {/* Remote Feed (Patient) */}
-            <div className="relative bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
+            <div className="relative aspect-video bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
               {isSimulator ? (
                 // Simulator Mock Feed UI
                 <div className="text-center p-8 flex flex-col items-center gap-4">
@@ -485,7 +485,7 @@ export default function DoctorTelehealthRoom({ params }: { params: Promise<{ id:
             </div>
 
             {/* Local Feed (Doctor) */}
-            <div className="relative bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
+            <div className="relative aspect-video bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
               <video 
                 ref={localVideoRef} 
                 autoPlay 
