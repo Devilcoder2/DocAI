@@ -74,6 +74,6 @@ While all automated tests pass, the following details require attention:
 
 Below are items we will address one by one before proceeding to Phase 4:
 
-- `[ ]` Action 1: Modify `verify_gateway.py` to check if port 8000 is already active. If active, query the `/health` endpoint. If healthy, run tests against the running process directly instead of crashing.
-- `[ ]` Action 2: Add validation checks in `process_audio.py` for the existence of `ffmpeg` in the host PATH, printing a clean console warning if it is missing rather than failing silently.
-- `[ ]` Action 3: Review patient portal room layouts to ensure layout shift properties are locked during simulator transitions.
+- `[x]`: Action 1: Modify `verify_gateway.py` to check if port 8000 is already active. If active, query the `/health` endpoint. If healthy, run tests against the running process directly instead of crashing.
+- `[x]`: Action 2: Add validation checks in `process_audio.py` for the existence of `ffmpeg` in the host PATH, printing a clean console warning if it is missing rather than failing silently.
+- `[x]`: Action 3: Review patient portal room layouts to ensure layout shift properties are locked during simulator transitions (added aspect-video wrappers).
