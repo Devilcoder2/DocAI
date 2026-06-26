@@ -64,6 +64,7 @@ class Appointment(Base):
     # Relationships
     doctor = relationship("Doctor", back_populates="appointments")
     patient = relationship("User", back_populates="appointments")
+    clinical_note = relationship("ClinicalNote", uselist=False, back_populates="appointment", cascade="all, delete-orphan")
 
 
 class ScheduleException(Base):
@@ -81,6 +82,40 @@ class ScheduleException(Base):
     
     # Relationships
     doctor = relationship("Doctor", back_populates="exceptions")
+
+
+class ClinicalNote(Base):
+    """
+    Clinical Note model.
+    Holds raw conversational transcripts and structured SOAP note blocks.
+    
+    Database Columns:
+        id (UUID): Primary key.
+        appointment_id (UUID): Associated appointment link.
+        raw_transcript (Text): Chronological conversational transcript.
+        subjective (Text): Clinical SOAP Subjective section.
+        objective (Text): Clinical SOAP Objective section.
+        assessment (Text): Clinical SOAP Assessment section.
+        plan (Text): Clinical SOAP Plan section.
+        patient_summary (Text): Patient-friendly lay summary.
+        status (String): Note state ('draft' or 'approved').
+        signed_at (DateTime): Timestamp of clinician sign-off.
+    """
+    __tablename__ = "clinical_notes"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    appointment_id = Column(UUID(as_uuid=True), ForeignKey("appointments.id", ondelete="CASCADE"), unique=True, nullable=False)
+    raw_transcript = Column(Text, nullable=True)
+    subjective = Column(Text, nullable=True)
+    objective = Column(Text, nullable=True)
+    assessment = Column(Text, nullable=True)
+    plan = Column(Text, nullable=True)
+    patient_summary = Column(Text, nullable=True)
+    status = Column(String, default="draft")  # draft, approved
+    signed_at = Column(DateTime, nullable=True)
+    
+    # Relationships
+    appointment = relationship("Appointment", back_populates="clinical_note")
 
 
 # PostgreSQL Partial Unique Index
