@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, ArrowRight, ArrowLeft, CheckCircle, ShieldAlert, Sparkles, Bell, Calendar } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, CheckCircle, ShieldAlert, Sparkles, Bell, Calendar, MapPin } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
 interface BookingWizardProps {
