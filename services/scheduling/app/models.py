@@ -18,7 +18,7 @@ class User(Base):
     
     # Relationships
     doctor_profile = relationship("Doctor", uselist=False, back_populates="user", cascade="all, delete-orphan")
-    appointments = relationship("Appointment", back_populates="patient")
+    appointments = relationship("Appointment", back_populates="patient", cascade="all, delete-orphan")
 
 
 class Doctor(Base):
