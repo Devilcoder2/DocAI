@@ -39,7 +39,7 @@ export default function DoctorProfilePage({ params }: { params: Promise<{ id: st
   const { data: doctor, isLoading: isLoadingDoc, isError: isErrorDoc } = useQuery<Doctor>({
     queryKey: ["doctor", doctorId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/doctors/${doctorId}`);
+      const response = await fetch(`http://localhost:8000/api/v1/public/doctors/${doctorId}`);
       if (!response.ok) {
         throw new Error("Failed to load doctor profile.");
       }
