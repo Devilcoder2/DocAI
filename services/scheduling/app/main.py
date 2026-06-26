@@ -7,7 +7,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.database import get_db
 from app.models import User, Doctor, Appointment, ScheduleException
-from app.schemas import DoctorOut, AppointmentOut, AppointmentCreate, ScheduleExceptionOut
+from app.schemas import (
+    DoctorOut, AppointmentOut, AppointmentCreate, ScheduleExceptionOut,
+    UserCreate, UserUpdate, UserOut, DoctorCreate, DoctorUpdate
+)
 
 app = FastAPI(
     title="Scheduling & Booking Microservice",
@@ -221,3 +224,289 @@ def get_appointment(id: UUID, db: Session = Depends(get_db)) -> AppointmentOut:
     if not appointment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Appointment record not found.")
     return appointment
+
+
+# ==========================================
+# USER PROFILE CRUD ENDPOINTS
+# ==========================================
+
+@app.post("/users", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+def create_user(payload: UserCreate, db: Session = Depends(get_db)) -> UserOut:
+    """
+    Creates a new user record.
+
+    Inputs:
+        payload (UserCreate): User profile parameters (name, email, role).
+        db (Session): Database session context.
+
+    Outputs:
+        UserOut: Newly created user record.
+    """
+    # Check if email is already taken
+    existing_user = db.query(User).filter(User.email.ilike(payload.email)).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A user with this email address already exists."
+        )
+
+    new_user = User(
+        name=payload.name,
+        email=payload.email,
+        role=payload.role
+    )
+    db.add(new_user)
+    try:
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database error during user registration: {str(e)}"
+        )
+
+
+@app.get("/users/by-email", response_model=UserOut)
+def get_user_by_email(email: str = Query(..., description="Email address to look up."), db: Session = Depends(get_db)) -> UserOut:
+    """
+    Retrieves user profile by email query parameter (auth simulation helper).
+
+    Inputs:
+        email (str): Target email parameter.
+        db (Session): Database session context.
+
+    Outputs:
+        UserOut: Serialized user details.
+    """
+    user = db.query(User).filter(User.email.ilike(email)).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found with this email.")
+    return user
+
+
+@app.get("/users/{id}", response_model=UserOut)
+def get_user(id: UUID, db: Session = Depends(get_db)) -> UserOut:
+    """
+    Retrieves a user by UUID.
+
+    Inputs:
+        id (UUID): User ID path parameter.
+        db (Session): Database session context.
+
+    Outputs:
+        UserOut: Serialized user details.
+    """
+    user = db.query(User).filter(User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found.")
+    return user
+
+
+@app.put("/users/{id}", response_model=UserOut)
+def update_user(id: UUID, payload: UserUpdate, db: Session = Depends(get_db)) -> UserOut:
+    """
+    Updates user details dynamically.
+
+    Inputs:
+        id (UUID): User ID path parameter.
+        payload (UserUpdate): Fields to update.
+        db (Session): Database session context.
+
+    Outputs:
+        UserOut: Updated user details.
+    """
+    user = db.query(User).filter(User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found.")
+
+    if payload.name is not None:
+        user.name = payload.name
+    if payload.email is not None:
+        # Check email uniqueness if modified
+        if payload.email.lower() != user.email.lower():
+            existing_user = db.query(User).filter(User.email.ilike(payload.email)).first()
+            if existing_user:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="A user with this email address already exists."
+                )
+        user.email = payload.email
+    if payload.role is not None:
+        user.role = payload.role
+
+    try:
+        db.commit()
+        db.refresh(user)
+        return user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update user profile: {str(e)}"
+        )
+
+
+@app.delete("/users/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(id: UUID, db: Session = Depends(get_db)):
+    """
+    Deletes a user account.
+
+    Inputs:
+        id (UUID): User ID path parameter.
+        db (Session): Database session context.
+    """
+    user = db.query(User).filter(User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found.")
+    
+    db.delete(user)
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete user profile: {str(e)}"
+        )
+
+
+# ==========================================
+# DOCTOR PROFILE CRUD ENDPOINTS
+# ==========================================
+
+@app.post("/doctors", response_model=DoctorOut, status_code=status.HTTP_201_CREATED)
+def create_doctor(payload: DoctorCreate, db: Session = Depends(get_db)) -> DoctorOut:
+    """
+    Links a new doctor profile card to an existing user account.
+
+    Inputs:
+        payload (DoctorCreate): Doctor profile parameters.
+        db (Session): Database session context.
+
+    Outputs:
+        DoctorOut: Newly created doctor record.
+    """
+    # 1. Verify user exists and is a Doctor
+    user = db.query(User).filter(User.id == payload.id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Associated user account not found.")
+    if user.role != "Doctor":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The associated user account must have the role 'Doctor' to have a provider profile."
+        )
+
+    # 2. Check if doctor profile already exists
+    existing_doctor = db.query(Doctor).filter(Doctor.id == payload.id).first()
+    if existing_doctor:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A doctor profile already exists for this user account."
+        )
+
+    new_doctor = Doctor(
+        id=payload.id,
+        specialty=payload.specialty,
+        clinic_address=payload.clinic_address,
+        zip_code=payload.zip_code,
+        accepted_insurances=payload.accepted_insurances,
+        photo_url=payload.photo_url,
+        rating=payload.rating
+    )
+    db.add(new_doctor)
+    try:
+        db.commit()
+        db.refresh(new_doctor)
+        return new_doctor
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database error during doctor profile creation: {str(e)}"
+        )
+
+
+@app.get("/doctors/{id}", response_model=DoctorOut)
+def get_doctor(id: UUID, db: Session = Depends(get_db)) -> DoctorOut:
+    """
+    Retrieves a doctor's detailed profile by UUID.
+
+    Inputs:
+        id (UUID): Doctor ID path parameter.
+        db (Session): Database session context.
+
+    Outputs:
+        DoctorOut: Serialized doctor profile.
+    """
+    doctor = db.query(Doctor).filter(Doctor.id == id).first()
+    if not doctor:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor profile not found.")
+    return doctor
+
+
+@app.put("/doctors/{id}", response_model=DoctorOut)
+def update_doctor(id: UUID, payload: DoctorUpdate, db: Session = Depends(get_db)) -> DoctorOut:
+    """
+    Updates doctor profile properties dynamically.
+
+    Inputs:
+        id (UUID): Doctor ID path parameter.
+        payload (DoctorUpdate): Fields to update.
+        db (Session): Database session context.
+
+    Outputs:
+        DoctorOut: Updated doctor profile.
+    """
+    doctor = db.query(Doctor).filter(Doctor.id == id).first()
+    if not doctor:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor profile not found.")
+
+    if payload.specialty is not None:
+        doctor.specialty = payload.specialty
+    if payload.clinic_address is not None:
+        doctor.clinic_address = payload.clinic_address
+    if payload.zip_code is not None:
+        doctor.zip_code = payload.zip_code
+    if payload.accepted_insurances is not None:
+        doctor.accepted_insurances = payload.accepted_insurances
+    if payload.photo_url is not None:
+        doctor.photo_url = payload.photo_url
+    if payload.rating is not None:
+        doctor.rating = payload.rating
+
+    try:
+        db.commit()
+        db.refresh(doctor)
+        return doctor
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update doctor profile: {str(e)}"
+        )
+
+
+@app.delete("/doctors/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_doctor(id: UUID, db: Session = Depends(get_db)):
+    """
+    Deletes a doctor profile.
+
+    Inputs:
+        id (UUID): Doctor ID path parameter.
+        db (Session): Database session context.
+    """
+    doctor = db.query(Doctor).filter(Doctor.id == id).first()
+    if not doctor:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor profile not found.")
+    
+    db.delete(doctor)
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete doctor profile: {str(e)}"
+        )
