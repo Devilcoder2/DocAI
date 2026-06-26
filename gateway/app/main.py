@@ -286,6 +286,66 @@ async def fetch_appointment(id: str, request: Request):
     return await proxy_request("GET", f"/appointments/{id}", request, headers=headers)
 
 
+@app.get("/api/v1/appointments/{id}/clinical-note")
+async def get_clinical_note(id: str, request: Request):
+    """
+    Proxies request to retrieve the clinical note draft or approved record for an appointment.
+
+    Inputs:
+        id (str): Appointment UUID path parameter.
+        request (Request): Original FastAPI request context.
+
+    Outputs:
+        JSONResponse: Proxy HTTP response containing clinical note details.
+    """
+    return await proxy_request("GET", f"/appointments/{id}/clinical-note", request)
+
+
+@app.put("/api/v1/appointments/{id}/clinical-note")
+async def update_clinical_note(id: str, request: Request):
+    """
+    Updates the clinical note draft text fields. Restricted to clinicians.
+
+    Inputs:
+        id (str): Appointment UUID path parameter.
+        request (Request): Original FastAPI request containing updated clinical note body.
+
+    Outputs:
+        JSONResponse: Proxy HTTP response containing updated clinical note.
+    """
+    if request.state.role != "Doctor":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access forbidden: Clinician role required to edit notes."
+        )
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body.")
+    return await proxy_request("PUT", f"/appointments/{id}/clinical-note", request, json_body=body)
+
+
+@app.post("/api/v1/appointments/{id}/clinical-note/approve")
+async def approve_clinical_note(id: str, request: Request):
+    """
+    Signs and locks the clinical note, changing appointment status to completed. Restricted to clinicians.
+
+    Inputs:
+        id (str): Appointment UUID path parameter.
+        request (Request): Original FastAPI request context.
+
+    Outputs:
+        JSONResponse: Proxy HTTP response containing locked clinical note.
+    """
+    if request.state.role != "Doctor":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access forbidden: Clinician role required to approve notes."
+        )
+    return await proxy_request("POST", f"/appointments/{id}/clinical-note/approve", request)
+
+
+
 # ==========================================
 # PROTECTED TELEHEALTH & WEBRTC PROXIES
 # ==========================================
