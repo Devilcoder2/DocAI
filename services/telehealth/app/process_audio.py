@@ -61,6 +61,22 @@ def process_appointment_audio(appointment_id: str, room_name: str, is_mock: bool
         pat_exists = os.path.exists(patient_file)
         doc_exists = os.path.exists(doctor_file)
 
+        import shutil
+        ffmpeg_available = shutil.which("ffmpeg") is not None
+        if not ffmpeg_available:
+            print("[*] Warning: FFmpeg executable was not found in host system PATH. Using python file concatenation fallbacks.")
+
+        def fallback_concat():
+            try:
+                with open(output_file, "wb") as outfile:
+                    with open(patient_file, "rb") as pf:
+                        outfile.write(pf.read())
+                    with open(doctor_file, "rb") as df:
+                        outfile.write(df.read())
+                print("[*] Fallback concatenation completed successfully.")
+            except Exception as fe:
+                print(f"[-] Fallback concatenation failed: {fe}")
+
         if not pat_exists and not doc_exists:
             # Create a silent placeholder file if no audio was captured at all
             with open(output_file, "w") as f:
@@ -68,47 +84,57 @@ def process_appointment_audio(appointment_id: str, room_name: str, is_mock: bool
             print("[*] No audio captured. Silent placeholder written.")
         elif pat_exists and not doc_exists:
             # Only patient spoke, copy patient file
-            try:
-                subprocess.run(["ffmpeg", "-y", "-i", patient_file, output_file], check=True)
-                print("[*] Only patient audio found. Copied to mixed output.")
-            except Exception as e:
-                print(f"[-] FFmpeg copy error: {e}. Fallback: rename patient file.")
-                os.rename(patient_file, output_file)
+            if ffmpeg_available:
+                try:
+                    subprocess.run(["ffmpeg", "-y", "-i", patient_file, output_file], check=True)
+                    print("[*] Only patient audio found. Copied to mixed output.")
+                except Exception as e:
+                    print(f"[-] FFmpeg copy error: {e}. Fallback: rename patient file.")
+                    os.rename(patient_file, output_file)
+            else:
+                print("[*] FFmpeg missing. Fallback: renaming patient file.")
+                try:
+                    os.rename(patient_file, output_file)
+                except Exception as e:
+                    print(f"[-] Rename failed: {e}")
         elif doc_exists and not pat_exists:
             # Only doctor spoke, copy doctor file
-            try:
-                subprocess.run(["ffmpeg", "-y", "-i", doctor_file, output_file], check=True)
-                print("[*] Only doctor audio found. Copied to mixed output.")
-            except Exception as e:
-                print(f"[-] FFmpeg copy error: {e}. Fallback: rename doctor file.")
-                os.rename(doctor_file, output_file)
+            if ffmpeg_available:
+                try:
+                    subprocess.run(["ffmpeg", "-y", "-i", doctor_file, output_file], check=True)
+                    print("[*] Only doctor audio found. Copied to mixed output.")
+                except Exception as e:
+                    print(f"[-] FFmpeg copy error: {e}. Fallback: rename doctor file.")
+                    os.rename(doctor_file, output_file)
+            else:
+                print("[*] FFmpeg missing. Fallback: renaming doctor file.")
+                try:
+                    os.rename(doctor_file, output_file)
+                except Exception as e:
+                    print(f"[-] Rename failed: {e}")
         else:
             # Both channels exist. Merge into stereo using FFmpeg amerge
             # Left channel = Patient, Right channel = Doctor
-            try:
-                # Command mixes two inputs into stereo
-                cmd = [
-                    "ffmpeg", "-y",
-                    "-i", patient_file,
-                    "-i", doctor_file,
-                    "-filter_complex", "[0:a][1:a]amerge=inputs=2[a]",
-                    "-ac", "2",
-                    "-map", "[a]",
-                    output_file
-                ]
-                subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                print("[*] FFmpeg successfully merged patient and doctor channels into stereo.")
-            except Exception as e:
-                print(f"[-] FFmpeg merging failed: {e}. Falling back to simple concat file.")
-                # Python fallback concat in case FFmpeg is missing on user environment
+            if ffmpeg_available:
                 try:
-                    with open(output_file, "wb") as outfile:
-                        with open(patient_file, "rb") as pf:
-                            outfile.write(pf.read())
-                        with open(doctor_file, "rb") as df:
-                            outfile.write(df.read())
-                except Exception as fe:
-                    print(f"[-] Fallback concatenation failed: {fe}")
+                    # Command mixes two inputs into stereo
+                    cmd = [
+                        "ffmpeg", "-y",
+                        "-i", patient_file,
+                        "-i", doctor_file,
+                        "-filter_complex", "[0:a][1:a]amerge=inputs=2[a]",
+                        "-ac", "2",
+                        "-map", "[a]",
+                        output_file
+                    ]
+                    subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    print("[*] FFmpeg successfully merged patient and doctor channels into stereo.")
+                except Exception as e:
+                    print(f"[-] FFmpeg merging failed: {e}. Falling back to simple concat file.")
+                    fallback_concat()
+            else:
+                print("[*] FFmpeg missing. Falling back to simple concat file.")
+                fallback_concat()
 
     # 2. Encrypt the mixed audio file using AES-256 (Fernet)
     try:
