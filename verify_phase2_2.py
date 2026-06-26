@@ -87,8 +87,8 @@ def run_integration_tests():
         assert res.json()["name"] == "Updated Test Patient", "Updated name did not persist."
 
         # 8. Fetch detailed doctor public profile
-        print("\nTest 8: GET /api/v1/doctors/{id} (Public Doctor Profile Lookup)...")
-        res = client.get(f"{GATEWAY_URL}/api/v1/doctors/{doctor_id}")
+        print("\nTest 8: GET /api/v1/public/doctors/{id} (Public Doctor Profile Lookup)...")
+        res = client.get(f"{GATEWAY_URL}/api/v1/public/doctors/{doctor_id}")
         print(f"  Status: {res.status_code} | Doctor: {res.json()['user']['name']} ({res.json()['specialty']})")
         assert res.status_code == 200, "Doctor profile fetch failed."
 
