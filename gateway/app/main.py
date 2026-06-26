@@ -276,6 +276,20 @@ async def book_appointment(request: Request):
     return await proxy_request("POST", "/appointments", request, headers=headers, json_body=body)
 
 
+@app.get("/api/v1/appointments")
+async def list_appointments(request: Request):
+    """
+    Proxies request to list appointments with filters.
+
+    Inputs:
+        request (Request): Original FastAPI request context containing query parameters.
+
+    Outputs:
+        JSONResponse: Proxy HTTP response containing list of appointments.
+    """
+    return await proxy_request("GET", "/appointments", request)
+
+
 @app.get("/api/v1/appointments/{id}")
 async def fetch_appointment(id: str, request: Request):
     """
