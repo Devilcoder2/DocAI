@@ -19,6 +19,15 @@ class UserCreate(UserBase):
     pass
 
 
+class UserUpdate(BaseModel):
+    """
+    Input schema to update an existing user profile.
+    """
+    name: Optional[str] = Field(None, description="Updated full name of the user.")
+    email: Optional[str] = Field(None, description="Updated email address.")
+    role: Optional[str] = Field(None, description="Updated role claim (Patient, Doctor, Admin).")
+
+
 class UserOut(UserBase):
     """
     Response schema returning user properties with unique UUID.
@@ -39,6 +48,25 @@ class DoctorBase(BaseModel):
     accepted_insurances: List[str] = Field(..., description="JSON-serializable list of accepted insurance carrier names.")
     photo_url: Optional[str] = Field(None, description="URL of the doctor's profile picture.")
     rating: float = Field(0.0, description="Average rating scored from verified reviews.")
+
+
+class DoctorCreate(DoctorBase):
+    """
+    Input schema to link a doctor profile to an existing User.
+    """
+    id: UUID = Field(..., description="UUID of the corresponding User account.")
+
+
+class DoctorUpdate(BaseModel):
+    """
+    Input schema to update an existing doctor profile.
+    """
+    specialty: Optional[str] = Field(None, description="Updated medical specialty.")
+    clinic_address: Optional[str] = Field(None, description="Updated street address.")
+    zip_code: Optional[str] = Field(None, description="Updated ZIP code.")
+    accepted_insurances: Optional[List[str]] = Field(None, description="Updated list of accepted insurances.")
+    photo_url: Optional[str] = Field(None, description="Updated profile photo URL.")
+    rating: Optional[float] = Field(None, description="Updated rating.")
 
 
 class DoctorOut(DoctorBase):
