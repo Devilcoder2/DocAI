@@ -457,3 +457,89 @@ async def proxy_livekit_webhook(request: Request):
         service_url=settings.SERVICE_TELEHEALTH_URL
     )
 
+
+@app.websocket("/api/v1/appointments/{id}/companion/chat")
+async def gateway_companion_chat_websocket(id: str, websocket: WebSocket):
+    """
+    WebSocket proxy endpoint routing Care Companion chat frames securely to Scribe service on port 8003.
+    """
+    await websocket.accept()
+    logger.info(f"[*] Gateway received Care Companion WebSocket connection for appointment: {id}")
+    
+    import websockets
+    import json
+    import asyncio
+    
+    downstream_ws_url = settings.SERVICE_SCRIBE_URL.replace("http://", "ws://").replace("https://", "wss://") + "/companion"
+    logger.info(f"[*] Proxying WebSocket connection downstream to: {downstream_ws_url}")
+    
+    try:
+        async with websockets.connect(downstream_ws_url) as downstream_ws:
+            # Initialize connection downstream
+            await downstream_ws.send(json.dumps({"appointment_id": id}))
+            
+            # Read first connection acknowledgment
+            downstream_init = await downstream_ws.recv()
+            await websocket.send_text(downstream_init)
+            
+            async def forward_to_downstream():
+                try:
+                    while True:
+                        client_msg = await websocket.receive_text()
+                        await downstream_ws.send(client_msg)
+                except Exception:
+                    pass
+
+            async def forward_to_client():
+                try:
+                    while True:
+                        server_msg = await downstream_ws.recv()
+                        await websocket.send_text(server_msg)
+                except Exception:
+                    pass
+
+            await asyncio.gather(forward_to_downstream(), forward_to_client())
+            
+    except WebSocketDisconnect:
+        logger.info(f"[*] Gateway WebSocket disconnect for appointment: {id}")
+    except Exception as e:
+        logger.error(f"[-] Gateway WebSocket proxy error: {e}")
+        try:
+            await websocket.close()
+        except Exception:
+            pass
+
+
+@app.post("/api/v1/public/booking/twilio")
+async def proxy_twilio_webhook(request: Request):
+    """
+    Public proxy forwarding Twilio webhook Form data and returning XML TwiML content.
+    """
+    form_data = await request.form()
+    form_dict = {key: value for key, value in form_data.items()}
+    
+    is_voice = request.query_params.get("is_voice", "false").lower() == "true"
+    
+    url = f"{settings.SERVICE_SCRIBE_URL}/booking/twilio"
+    params = {"is_voice": "true" if is_voice else "false"}
+    
+    try:
+        response = await http_client.post(url, data=form_dict, params=params)
+        from fastapi import Response
+        return Response(
+            content=response.text,
+            media_type="application/xml",
+            status_code=response.status_code
+        )
+    except Exception as e:
+        logger.error(f"[-] Gateway failed to proxy Twilio request to Scribe: {e}")
+        twiml_fallback = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            "<Response>\n"
+            "    <Message>The clinic booking system is temporarily offline. Please call the front desk directly.</Message>\n"
+            "</Response>"
+        )
+        from fastapi import Response
+        return Response(content=twiml_fallback, media_type="application/xml", status_code=200)
+
+
