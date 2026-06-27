@@ -103,10 +103,7 @@ def run_integration_tests():
             "doctor_id": doctor_id,
             "appointment_time": booking_slot,
             "consult_type": "telehealth",
-            "reason_for_visit": "Marketplace Integration Verification.",
-            "insurance_carrier": "Aetna",
-            "insurance_plan": "Bronze Choice",
-            "insurance_policy_number": "AET-998811"
+            "reason_for_visit": "Marketplace Integration Verification."
         }
         res = client.post(f"{GATEWAY_URL}/api/v1/appointments", headers=headers, json=booking_payload)
         print(f"  Status: {res.status_code}")
