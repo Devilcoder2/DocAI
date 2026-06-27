@@ -10,6 +10,12 @@ class UserBase(BaseModel):
     name: str = Field(..., description="Full name of the user account.")
     email: str = Field(..., description="Unique email address for authentication.")
     role: str = Field(..., description="Role claim: Patient, Doctor, or Admin.")
+    age: Optional[int] = Field(None, description="Age of the patient.")
+    weight: Optional[float] = Field(None, description="Weight of the patient in kg.")
+    height: Optional[float] = Field(None, description="Height of the patient in cm.")
+    gender: Optional[str] = Field(None, description="Gender of the patient.")
+    allergies: Optional[str] = Field(None, description="Allergies profile description.")
+    chronic_illnesses: Optional[str] = Field(None, description="Chronic illnesses description.")
 
 
 class UserCreate(UserBase):
@@ -34,6 +40,12 @@ class UserUpdate(BaseModel):
     name: Optional[str] = Field(None, description="Updated full name of the user.")
     email: Optional[str] = Field(None, description="Updated email address.")
     role: Optional[str] = Field(None, description="Updated role claim (Patient, Doctor, Admin).")
+    age: Optional[int] = Field(None, description="Updated age of the patient.")
+    weight: Optional[float] = Field(None, description="Updated weight of the patient in kg.")
+    height: Optional[float] = Field(None, description="Updated height of the patient in cm.")
+    gender: Optional[str] = Field(None, description="Updated gender of the patient.")
+    allergies: Optional[str] = Field(None, description="Updated allergies profile description.")
+    chronic_illnesses: Optional[str] = Field(None, description="Updated chronic illnesses description.")
 
 
 class UserOut(UserBase):
