@@ -32,7 +32,6 @@ interface Appointment {
   status: "pending" | "confirmed" | "completed" | "cancelled";
   consult_type: "in_person" | "telehealth";
   reason_for_visit: string;
-  insurance_carrier: string;
 }
 
 /**
