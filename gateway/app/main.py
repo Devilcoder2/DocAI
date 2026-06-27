@@ -179,7 +179,7 @@ async def auth_register(request: Request):
 @app.post("/api/v1/public/auth/login")
 async def auth_login(request: Request):
     """
-    Simulates logging in by email to check user presence and issue a JWT.
+    Authenticates a user via email & password, or by email alone (for simulated SSO/legacy scripts).
     """
     try:
         body = await request.json()
@@ -187,16 +187,24 @@ async def auth_login(request: Request):
         raise HTTPException(status_code=400, detail="Invalid request JSON payload.")
 
     email = body.get("email")
+    password = body.get("password")
     if not email:
         raise HTTPException(status_code=400, detail="Email parameter is required.")
 
-    # Look up user dynamically by email
-    response = await proxy_request("GET", "/users/by-email", request, params={"email": email})
-    if response.status_code != 200:
-        raise HTTPException(status_code=401, detail="User account not found with this email.")
-
     import json
-    user_json = json.loads(response.body.decode("utf-8"))
+    if password:
+        # Verify credentials downstream in scheduling service
+        response = await proxy_request("POST", "/users/verify-password", request, json_body={"email": email, "password": password})
+        if response.status_code != 200:
+            raise HTTPException(status_code=401, detail="Incorrect email or password.")
+        res_data = json.loads(response.body.decode("utf-8"))
+        user_json = res_data["user"]
+    else:
+        # Simulated SSO or legacy email lookup
+        response = await proxy_request("GET", "/users/by-email", request, params={"email": email})
+        if response.status_code != 200:
+            raise HTTPException(status_code=401, detail="User account not found with this email.")
+        user_json = json.loads(response.body.decode("utf-8"))
     
     # Sign JWT token using local settings
     payload = {
