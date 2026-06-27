@@ -14,7 +14,7 @@ from app.schemas import (
     ClinicalNoteCreate, ClinicalNoteUpdate, ClinicalNoteOut, UserVerify
 )
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 app = FastAPI(
     title="Scheduling & Booking Microservice",
