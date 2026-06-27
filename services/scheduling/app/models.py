@@ -18,6 +18,14 @@ class User(Base):
     role = Column(String, nullable=False)  # Patient, Doctor, Admin
     password_hash = Column(String, nullable=True)
     
+    # Medical profile fields (for Patients)
+    age = Column(Integer, nullable=True)
+    weight = Column(Float, nullable=True)
+    height = Column(Float, nullable=True)
+    gender = Column(String, nullable=True)
+    allergies = Column(Text, nullable=True)
+    chronic_illnesses = Column(Text, nullable=True)
+    
     # Relationships
     doctor_profile = relationship("Doctor", uselist=False, back_populates="user", cascade="all, delete-orphan")
     appointments = relationship("Appointment", back_populates="patient", cascade="all, delete-orphan")
