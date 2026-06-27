@@ -78,7 +78,7 @@ async def test_integration():
     # ----------------------------------------------------
     print_step(3, "Verifying local Qdrant collection point insertion")
     
-    q_client = QdrantClient(path=QDRANT_PATH)
+    q_client = QdrantClient(url="http://localhost:6333")
     scroll_res = q_client.scroll(
         collection_name="care_plans",
         scroll_filter=Filter(
