@@ -5,10 +5,19 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { 
   ArrowLeft, Search, Save, CheckCircle, Lock, 
-  User, Calendar, Clock, Sparkles, AlertCircle, FileText, Check
+  User, Calendar, Clock, Sparkles, AlertCircle, FileText, Check,
+  History, AlertTriangle, ChevronDown, ChevronUp, Activity
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+
+interface Doctor {
+  id: string;
+  specialty: string;
+  user: {
+    name: string;
+  };
+}
 
 interface ClinicalNote {
   id: string;
@@ -59,6 +68,11 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const [saveStatus, setSaveStatus] = useState<"SAVED" | "SAVING" | "ERROR">("SAVED");
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // History panel states
+  const [isHistoryOpen, setIsHistoryOpen] = useState(true);
+  const [historySearch, setHistorySearch] = useState("");
+  const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null);
+
   // 1. Fetch Appointment Context
   const { data: appointment, isLoading: isLoadingApp } = useQuery<Appointment>({
     queryKey: ["appointment-scribe", appointmentId],
@@ -88,6 +102,33 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
       return response.json();
     },
     enabled: !!patientId
+  });
+
+  // Fetch patient's past appointments timeline
+  const { data: patientHistory = [] } = useQuery<any[]>({
+    queryKey: ["patient-history-timeline", patientId],
+    queryFn: async () => {
+      const response = await fetch(`http://localhost:8000/api/v1/appointments?patient_id=${patientId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!response.ok) {
+        throw new Error("Failed to load historical consults.");
+      }
+      return response.json();
+    },
+    enabled: !!token && !!patientId
+  });
+
+  // Fetch doctors directory to match names
+  const { data: doctorsCatalog = [] } = useQuery<Doctor[]>({
+    queryKey: ["doctors-catalog"],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:8000/api/v1/public/doctors");
+      if (!response.ok) {
+        throw new Error("Failed to load doctors list.");
+      }
+      return response.json();
+    }
   });
 
   // 3. Fetch Clinical Note
