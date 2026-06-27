@@ -174,6 +174,43 @@ def process_event(event_data: Dict[str, Any]) -> bool:
         return False
 
 
+def process_note_approved_event(event_data: Dict[str, Any]) -> bool:
+    """
+    Consumer handler for note_approved events.
+    Fetches the finalized clinical note and indexes it into Qdrant vector DB.
+    """
+    appointment_id = event_data.get("appointment_id")
+    if not appointment_id:
+        logger.error("Missing appointment_id in note_approved event payload.")
+        return False
+        
+    logger.info(f"Processing note_approved indexing for Appointment: {appointment_id}")
+    try:
+        # Fetch approved clinical note from scheduling service
+        note_url = f"{settings.SERVICE_SCHEDULING_URL}/appointments/{appointment_id}/clinical-note"
+        resp = requests.get(note_url, timeout=5.0)
+        if resp.status_code != 200:
+            logger.error(f"Failed to fetch approved note for indexing. Status: {resp.status_code}")
+            return False
+            
+        note_data = resp.json()
+        
+        # Import companion indexer
+        from app.companion import index_care_plan
+        index_care_plan(
+            appointment_id=appointment_id,
+            subjective=note_data.get("subjective", ""),
+            objective=note_data.get("objective", ""),
+            assessment=note_data.get("assessment", ""),
+            plan=note_data.get("plan", ""),
+            patient_summary=note_data.get("patient_summary", "")
+        )
+        return True
+    except Exception as exc:
+        logger.error(f"Error indexing approved note: {exc}", exc_info=True)
+        return False
+
+
 def main():
     """
     Main loop function initiating RabbitMQ listener, handling reconnects automatically.
@@ -204,6 +241,14 @@ def main():
                         else:
                             # Re-queue on failure for retries
                             logger.warning("[-] Processing failed. Re-queuing message event.")
+                            ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+                    elif payload.get("event") == "note_approved":
+                        success = process_note_approved_event(payload)
+                        if success:
+                            ch.basic_ack(delivery_tag=method.delivery_tag)
+                            logger.info("[*] Acknowledged note_approved message event.")
+                        else:
+                            logger.warning("[-] Note indexing failed. Re-queuing message event.")
                             ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
                     else:
                         # Ignore other event types cleanly
