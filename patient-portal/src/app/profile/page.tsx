@@ -627,9 +627,9 @@ export default function ProfilePage() {
                                 )}
                               </div>
 
-                              {/* Companion Navigation Redirect Link */}
-                              {appt.status === "completed" && (
-                                <div className="pt-2 flex justify-end">
+                              {/* Companion & Telehealth redirects */}
+                              <div className="pt-2 flex justify-end gap-3">
+                                {appt.status === "completed" && (
                                   <Link
                                     href={`/appointments/${appt.id}/companion`}
                                     className="text-[10px] font-bold text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1.5"
@@ -637,8 +637,17 @@ export default function ProfilePage() {
                                     Chat with Care Companion for this visit
                                     <ArrowLeft className="w-3 h-3 rotate-180" />
                                   </Link>
-                                </div>
-                              )}
+                                )}
+                                {(appt.status === "confirmed" || appt.status === "pending") && appt.consult_type === "telehealth" && (
+                                  <Link
+                                    href={`/appointments/${appt.id}/room`}
+                                    className="text-[10px] font-bold text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1.5"
+                                  >
+                                    Join Telehealth Room
+                                    <ArrowLeft className="w-3 h-3 rotate-180" />
+                                  </Link>
+                                )}
+                              </div>
 
                             </div>
                           )}
