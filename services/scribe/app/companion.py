@@ -15,8 +15,7 @@ from langgraph.graph import StateGraph, END
 logger = logging.getLogger(__name__)
 
 # Config setup for local Qdrant instance
-QDRANT_PATH = "/tmp/medical_ai_qdrant_local"
-qdrant_client = QdrantClient(path=QDRANT_PATH)
+qdrant_client = QdrantClient(url="http://localhost:6333")
 
 # Initialize Qdrant Collection
 COLLECTION_NAME = "care_plans"
