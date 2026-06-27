@@ -136,5 +136,14 @@ This file is used to log and track the completion status of the development phas
   * [x] Built the responsive visual settings screen [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/profile/page.tsx) calculating patient BMI and rendering expandable previous consultation timelines with SOAP layouts.
   * [x] Integrated Patient Profile search details modal inside doctor Consult Queue [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctor/dashboard/page.tsx) and split-screen EHR scribe workspace [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctor/appointments/%5Bid%5D/scribe/page.tsx).
 
+### Phase 8: Patient Medical History, Past Consultations Summary, and Doctor-facing EHR Views
+* **Status**: [/] In Progress
+* **Sub-Phase 8.1: Historical Appointments Timeline**: [x] Completed (June 27, 2026)
+* **Sub-Phase 8.1 Verification Status**: PASSED (Verified via Next.js compilation builds and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
+* **Sub-Phase 8.1 Delivered Tasks**:
+  * [x] Programmed chronological timelines displaying patient appointments inside the `/profile` settings screen.
+  * [x] Linked completed accordion items to display full clinical SOAP transcription note summaries.
+  * [x] Embedded virtual room meeting links (`Join Telehealth Room` buttons) dynamically inside future/confirmed telehealth appointments.
+
 
 
