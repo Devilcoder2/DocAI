@@ -13,10 +13,12 @@ def send_appointment_emails(appointment_id: str):
     Looks up booking meta, formatting confirmation mail alerts to Patient & Doctor.
     Executed inside background threads to prevent web endpoint latency blockages.
     """
+    import uuid
     db = SessionLocal()
     try:
         # Fetch appointment details
-        appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
+        app_uuid = uuid.UUID(appointment_id) if isinstance(appointment_id, str) else appointment_id
+        appointment = db.query(Appointment).filter(Appointment.id == app_uuid).first()
         if not appointment:
             logger.error(f"Appointment {appointment_id} not found for email dispatch.")
             return
