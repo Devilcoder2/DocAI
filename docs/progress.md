@@ -152,5 +152,12 @@ This file is used to log and track the completion status of the development phas
   * [x] Formatted the Care Summary view to parse raw transcripts into readable discussion lists, medicine checklists, and disease summaries.
   * [x] Formatted precautions, lifestyle tips, and clinical check-in suggestions in checklist formats.
 
+* **Sub-Phase 8.3: Doctor-facing EHR & History Sidebar**: [x] Completed (June 27, 2026)
+* **Sub-Phase 8.3 Verification Status**: PASSED (Verified via Next.js compilation builds and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
+* **Sub-Phase 8.3 Delivered Tasks**:
+  * [x] Designed collapsible EHR side drawers sliding inside the split-screen scribe workspace.
+  * [x] Programmed active vital constants summaries (Age, Weight, Height, BMI) and safety warnings for allergies and chronic alerts.
+  * [x] Implemented searchable past consultations accordions displaying inline previous SOAP plans.
+
 
 
