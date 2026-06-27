@@ -38,21 +38,18 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
   // Search state variables
   const [specialtyInput, setSpecialtyInput] = useState("");
   const [zipInput, setZipInput] = useState("");
-  const [insuranceInput, setInsuranceInput] = useState("");
   
   // Active search query variables sent to API
   const [specialtyQuery, setSpecialtyQuery] = useState("");
   const [zipQuery, setZipQuery] = useState("");
-  const [insuranceQuery, setInsuranceQuery] = useState("");
 
   // Fetch doctors matching active filters from gateway public endpoint
   const { data: doctors = [], isLoading, isError, refetch } = useQuery<Doctor[]>({
-    queryKey: ["doctors", specialtyQuery, zipQuery, insuranceQuery],
+    queryKey: ["doctors", specialtyQuery, zipQuery],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (specialtyQuery) params.append("specialty", specialtyQuery);
       if (zipQuery) params.append("zip_code", zipQuery);
-      if (insuranceQuery) params.append("insurance_carrier", insuranceQuery);
       
       const response = await fetch(`http://localhost:8000/api/v1/public/doctors?${params.toString()}`);
       if (!response.ok) {
@@ -66,16 +63,13 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
     e.preventDefault();
     setSpecialtyQuery(specialtyInput);
     setZipQuery(zipInput);
-    setInsuranceQuery(insuranceInput);
   };
 
   const handleClearFilters = () => {
     setSpecialtyInput("");
     setZipInput("");
-    setInsuranceInput("");
     setSpecialtyQuery("");
     setZipQuery("");
-    setInsuranceQuery("");
   };
 
   return (
@@ -118,7 +112,7 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
           <Search className="text-teal-400 w-5 h-5" />
           Find Your Healthcare Provider
         </h2>
-        <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="relative">
             <Search className="absolute left-4 top-3.5 text-slate-400 w-5 h-5" />
             <input
@@ -139,18 +133,8 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
               className="w-full bg-slate-900 border border-slate-700 rounded-2xl py-3 pl-12 pr-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
             />
           </div>
-          <div className="relative">
-            <Shield className="absolute left-4 top-3.5 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Insurance (e.g. Blue Cross, Aetna...)"
-              value={insuranceInput}
-              onChange={(e) => setInsuranceInput(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-2xl py-3 pl-12 pr-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all"
-            />
-          </div>
-          <div className="md:col-span-3 flex justify-end gap-3 mt-2">
-            {(specialtyQuery || zipQuery || insuranceQuery) && (
+          <div className="md:col-span-2 flex justify-end gap-3 mt-2">
+            {(specialtyQuery || zipQuery) && (
               <button
                 type="button"
                 onClick={handleClearFilters}
@@ -175,7 +159,7 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
           <h3 className="text-lg font-bold text-slate-300">
             Available Providers ({doctors.length})
           </h3>
-          {(specialtyQuery || zipQuery || insuranceQuery) && (
+          {(specialtyQuery || zipQuery) && (
             <span className="text-xs bg-slate-800 text-slate-400 px-3 py-1 rounded-full border border-slate-700">
               Filtered Search
             </span>
@@ -215,7 +199,6 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
               <DoctorCard 
                 key={doc.id} 
                 doctor={doc} 
-                insuranceFilter={insuranceQuery}
                 onSelect={onSelectDoctor} 
               />
             ))}
@@ -228,11 +211,10 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
 
 interface DoctorCardProps {
   doctor: Doctor;
-  insuranceFilter: string;
   onSelect: (doctorId: string, selectedSlot?: string) => void;
 }
 
-function DoctorCard({ doctor, insuranceFilter, onSelect }: DoctorCardProps) {
+function DoctorCard({ doctor, onSelect }: DoctorCardProps) {
   // Format initials
   const initials = doctor.user.name
     .split(" ")
@@ -253,11 +235,6 @@ function DoctorCard({ doctor, insuranceFilter, onSelect }: DoctorCardProps) {
 
   const nextThreeSlots = slots.slice(0, 3);
 
-  // Check if doctor accepts the filtered insurance
-  const isInNetwork = insuranceFilter 
-    ? doctor.accepted_insurances.some(ins => ins.toLowerCase().includes(insuranceFilter.toLowerCase()))
-    : true;
-
   return (
     <div className="bg-slate-800/35 hover:bg-slate-800/60 border border-slate-800 hover:border-slate-700/80 rounded-3xl p-6 flex flex-col lg:flex-row justify-between gap-6 transition-all duration-300 shadow-lg">
       <div className="flex gap-5 items-start">
@@ -270,15 +247,6 @@ function DoctorCard({ doctor, insuranceFilter, onSelect }: DoctorCardProps) {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h4 className="text-xl font-bold text-slate-100">{doctor.user.name}</h4>
-            {insuranceFilter && (
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                isInNetwork 
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
-                  : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-              }`}>
-                {isInNetwork ? "In Network" : "Out of Network"}
-              </span>
-            )}
           </div>
           <p className="text-teal-400 font-medium text-sm mt-0.5">{doctor.specialty}</p>
 
