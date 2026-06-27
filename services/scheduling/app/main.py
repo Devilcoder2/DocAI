@@ -7,11 +7,14 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.database import get_db
 from app.models import User, Doctor, Appointment, ScheduleException, ClinicalNote, SystemEvent
+from passlib.context import CryptContext
 from app.schemas import (
     DoctorOut, AppointmentOut, AppointmentCreate, ScheduleExceptionOut,
     UserCreate, UserUpdate, UserOut, DoctorCreate, DoctorUpdate,
-    ClinicalNoteCreate, ClinicalNoteUpdate, ClinicalNoteOut
+    ClinicalNoteCreate, ClinicalNoteUpdate, ClinicalNoteOut, UserVerify
 )
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI(
     title="Scheduling & Booking Microservice",
@@ -267,10 +270,15 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)) -> UserOut:
             detail="A user with this email address already exists."
         )
 
+    password_hash = None
+    if payload.password:
+        password_hash = pwd_context.hash(payload.password)
+
     new_user = User(
         name=payload.name,
         email=payload.email,
-        role=payload.role
+        role=payload.role,
+        password_hash=password_hash
     )
     db.add(new_user)
     try:
@@ -283,6 +291,25 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)) -> UserOut:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Database error during user registration: {str(e)}"
         )
+
+
+@app.post("/users/verify-password", status_code=status.HTTP_200_OK)
+def verify_password(payload: UserVerify, db: Session = Depends(get_db)):
+    """
+    Verifies a user's password credentials.
+    """
+    user = db.query(User).filter(User.email.ilike(payload.email)).first()
+    if not user or not user.password_hash:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password."
+        )
+    if not pwd_context.verify(payload.password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password."
+        )
+    return {"status": "success", "user": user}
 
 
 @app.get("/users/by-email", response_model=UserOut)
