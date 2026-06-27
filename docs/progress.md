@@ -9,6 +9,7 @@ This file is used to log and track the completion status of the development phas
 * **Phase 4: AI Clinical Scribe Pipeline & Doctor Portal Approval** — **[x] Completed** (June 26, 2026)
 * **Phase 5: Post-Visit AI Care Companion & Conversational Booking Agent** — **[x] Completed** (June 27, 2026)
 * **Phase 6: Future Capabilities Integration (Roadmap)** — **[ ] Pending**
+* **Phase 7: Authenticated Portal Gating, User/Doctor Profile CRUD, and Insurance Removal** — **[/] In Progress**
 
 ---
 
@@ -100,4 +101,18 @@ This file is used to log and track the completion status of the development phas
   * [x] Developed SMS/Voice Twilio booking webhook endpoint [`booking_agent.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scribe/app/booking_agent.py) performing real-time slot checking and reservation.
   * [x] Built the stateful dark-mode Care Companion page in Next.js at [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/appointments/%5Bid%5D/companion/page.tsx) routing to Gateway WebSockets.
   * [x] Wrote automated E2E integration test suite [`verify_phase5.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase5.py) validating the complete agent, search, triage, and booking loops.
+
+### Phase 7: Authenticated Portal Gating, User/Doctor Profile CRUD, and Insurance Removal
+* **Status**: [/] In Progress
+* **Sub-Phase 7.1: Database Schema Refactor & Insurance Field Removal**: [x] Completed (June 27, 2026)
+* **Sub-Phase 7.1 Verification Status**: PASSED (Verified via [verify_scheduling.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/verify_scheduling.py), [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py), and [verify_phase4.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase4.py))
+* **Sub-Phase 7.1 Delivered Tasks**:
+  * [x] Deleted column `accepted_insurances` from Doctor database model and `insurance_carrier`, `insurance_plan`, `insurance_policy_number` from Appointment model in [`models.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/models.py).
+  * [x] Removed all insurance serialization fields from Doctor/Appointment schemas in [`schemas.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/schemas.py).
+  * [x] Programmed and applied batch Alembic database migration to alter SQLite layout and drop insurance columns.
+  * [x] Refactored appointment booking route in [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/main.py) to remove insurance parsing and automatically determine returning patient status from historical appointments.
+  * [x] Removed insurance search inputs and network tags from Next.js provider discovery marketplace in [`SearchDashboard.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/SearchDashboard.tsx).
+  * [x] Overhauled checkout experience in [`BookingWizard.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/BookingWizard.tsx) to a streamlined 3-step checkout workflow (Visit Details, Scribe/ToS Consent, Confirmation), completely removing guest sign-up steps, patient classifications, and alert radios.
+  * [x] Cleaned up interface definitions and layout descriptions in [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctors/%5Bid%5D/page.tsx) and [`layout.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/layout.tsx).
+
 
