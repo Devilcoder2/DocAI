@@ -115,4 +115,17 @@ This file is used to log and track the completion status of the development phas
   * [x] Overhauled checkout experience in [`BookingWizard.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/BookingWizard.tsx) to a streamlined 3-step checkout workflow (Visit Details, Scribe/ToS Consent, Confirmation), completely removing guest sign-up steps, patient classifications, and alert radios.
   * [x] Cleaned up interface definitions and layout descriptions in [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctors/%5Bid%5D/page.tsx) and [`layout.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/layout.tsx).
 
+* **Sub-Phase 7.2: Portal Gating & Aesthetic Landing Page**: [x] Completed (June 27, 2026)
+* **Sub-Phase 7.2 Verification Status**: PASSED (Verified via Next.js compilation builds and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
+* **Sub-Phase 7.2 Delivered Tasks**:
+  * [x] Added `password_hash` column to the SQLAlchemy `User` model in [`models.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/models.py).
+  * [x] Created and executed structural migration in SQLite via Alembic scripts.
+  * [x] Implemented cryptographically secure `pbkdf2_sha256` hashing contexts using `passlib` to support credential sign-ups.
+  * [x] Programmed credential password verification endpoints on the scheduling microservice in [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/main.py) and seeded default accounts with fallback credentials.
+  * [x] Refactored gateway authentication routes in [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/app/main.py) to execute downstream credential checking while remaining backwards-compatible with email-only mock scripts.
+  * [x] Built the high-aesthetic Next.js introductory portal landing page [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/welcome/page.tsx) with tabbed sign-in forms and brand Google/Facebook SSO buttons.
+  * [x] Built the client-side gating component [`AuthGatingProvider.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/AuthGatingProvider.tsx) enforcing role restrictions and redirecting guest sessions to the landing page.
+  * [x] Fixed dynamic type importing constraints in playrooms to compile clean Turbopack bundles successfully.
+
+
 
