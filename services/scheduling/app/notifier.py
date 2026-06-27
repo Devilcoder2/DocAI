@@ -2,17 +2,18 @@ import smtplib
 import logging
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from sqlalchemy.orm import Session
 from app.config import settings
+from app.database import SessionLocal
 from app.models import Appointment, User, Doctor
 
 logger = logging.getLogger("notifier")
 
-def send_appointment_emails(db: Session, appointment_id: str):
+def send_appointment_emails(appointment_id: str):
     """
     Looks up booking meta, formatting confirmation mail alerts to Patient & Doctor.
     Executed inside background threads to prevent web endpoint latency blockages.
     """
+    db = SessionLocal()
     try:
         # Fetch appointment details
         appointment = db.query(Appointment).filter(Appointment.id == appointment_id).first()
@@ -121,6 +122,8 @@ def send_appointment_emails(db: Session, appointment_id: str):
 
     except Exception as e:
         logger.exception(f"Unexpected error in send_appointment_emails: {e}")
+    finally:
+        db.close()
 
 def _dispatch_email(recipient_email: str, subject: str, html_content: str):
     # If no SMTP configured, log/mock the print and exit gracefully (no crash)
