@@ -137,7 +137,7 @@ This file is used to log and track the completion status of the development phas
   * [x] Integrated Patient Profile search details modal inside doctor Consult Queue [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctor/dashboard/page.tsx) and split-screen EHR scribe workspace [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctor/appointments/%5Bid%5D/scribe/page.tsx).
 
 ### Phase 8: Patient Medical History, Past Consultations Summary, and Doctor-facing EHR Views
-* **Status**: [/] In Progress
+* **Status**: [x] Completed (June 27, 2026)
 * **Sub-Phase 8.1: Historical Appointments Timeline**: [x] Completed (June 27, 2026)
 * **Sub-Phase 8.1 Verification Status**: PASSED (Verified via Next.js compilation builds and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
 * **Sub-Phase 8.1 Delivered Tasks**:
@@ -158,6 +158,13 @@ This file is used to log and track the completion status of the development phas
   * [x] Designed collapsible EHR side drawers sliding inside the split-screen scribe workspace.
   * [x] Programmed active vital constants summaries (Age, Weight, Height, BMI) and safety warnings for allergies and chronic alerts.
   * [x] Implemented searchable past consultations accordions displaying inline previous SOAP plans.
+
+* **Sub-Phase 8.4: Booking Notification Service (Emails)**: [x] Completed (June 27, 2026)
+* **Sub-Phase 8.4 Verification Status**: PASSED (Verified via mock email dispatch console outputs and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
+* **Sub-Phase 8.4 Delivered Tasks**:
+  * [x] Created `notifier.py` dispatcher client importing smtplib, supporting HTML formatting template dispatches and mock logs during local testing.
+  * [x] Configured real SMTP settings parsing variables inside `config.py` and `.env.example`.
+  * [x] Hooked background dispatches to appointment checkout routes inside `main.py` via thread-safe `BackgroundTasks` queue.
 
 
 
