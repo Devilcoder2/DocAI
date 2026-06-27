@@ -59,8 +59,8 @@ def seed_phase4_data() -> None:
             db.commit()
             db.refresh(patient_user)
 
-        # Seed specific doctor for Twilio booking bot (11111111-1111-1111-1111-111111111111)
-        twilio_doc_id = uuid.UUID("11111111-1111-1111-1111-111111111111")
+        # Seed specific doctor for Twilio booking bot (11111111-1111-1111-1111-11111111111a)
+        twilio_doc_id = uuid.UUID("11111111-1111-1111-1111-11111111111a")
         twilio_doc_user = db.query(User).filter(User.id == twilio_doc_id).first()
         if not twilio_doc_user:
             print("Creating Twilio specialist...")
@@ -88,8 +88,8 @@ def seed_phase4_data() -> None:
             db.add(twilio_doc)
             db.commit()
 
-        # Seed specific patient for Twilio booking bot (22222222-2222-2222-2222-222222222222)
-        twilio_pat_id = uuid.UUID("22222222-2222-2222-2222-222222222222")
+        # Seed specific patient for Twilio booking bot (22222222-2222-2222-2222-22222222222b)
+        twilio_pat_id = uuid.UUID("22222222-2222-2222-2222-22222222222b")
         twilio_pat_user = db.query(User).filter(User.id == twilio_pat_id).first()
         if not twilio_pat_user:
             print("Creating Twilio patient user...")
