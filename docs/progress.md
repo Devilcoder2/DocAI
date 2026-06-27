@@ -145,5 +145,12 @@ This file is used to log and track the completion status of the development phas
   * [x] Linked completed accordion items to display full clinical SOAP transcription note summaries.
   * [x] Embedded virtual room meeting links (`Join Telehealth Room` buttons) dynamically inside future/confirmed telehealth appointments.
 
+* **Sub-Phase 8.2: Past Consultation Summary View**: [x] Completed (June 27, 2026)
+* **Sub-Phase 8.2 Verification Status**: PASSED (Verified via Next.js compilation builds and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
+* **Sub-Phase 8.2 Delivered Tasks**:
+  * [x] Created a double-tabbed accordion sub-panel separating Care Summary from raw Clinical SOAP notes.
+  * [x] Formatted the Care Summary view to parse raw transcripts into readable discussion lists, medicine checklists, and disease summaries.
+  * [x] Formatted precautions, lifestyle tips, and clinical check-in suggestions in checklist formats.
+
 
 
