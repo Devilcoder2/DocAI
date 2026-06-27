@@ -16,6 +16,7 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     role = Column(String, nullable=False)  # Patient, Doctor, Admin
+    password_hash = Column(String, nullable=True)
     
     # Relationships
     doctor_profile = relationship("Doctor", uselist=False, back_populates="user", cascade="all, delete-orphan")
