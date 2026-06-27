@@ -1,7 +1,7 @@
 # Project Development Phases Overview
 ## Project Name: Medical AI Platform (Doctor Booking + AI Clinical Scribe & Companion)
 
-To ensure a structured, testable, and compliant implementation, development is divided into 9 distinct, independent phases. Each phase is detailed in its respective document:
+To ensure a structured, testable, and compliant implementation, development is divided into 10 distinct, independent phases. Each phase is detailed in its respective document:
 
 * [Phase 1: Foundation Setup & Central API Gateway](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_1.md)
 * [Phase 2: Core Booking Marketplace & Scheduling Engine](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_2.md)
@@ -11,4 +11,5 @@ To ensure a structured, testable, and compliant implementation, development is d
 * [Phase 6: Future Capabilities Integration (Roadmap)](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_6.md)
 * [Phase 7: Authenticated Portal Gating, User/Doctor Profile CRUD, and Insurance Removal](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_7.md)
 * [Phase 8: Patient Medical History, Past Consultations Summary, and Doctor-facing EHR Views](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_8.md)
-* [Phase 9: Conversational Web Voice AI Agent & Full System UI/UX Light/Dark Theme Revamp](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_9.md)
+* [Phase 9: Conversational LiveKit Voice AI Agent](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_9.md)
+* [Phase 10: Premium UI/UX Design Overhaul & Light/Dark Mode Toggle](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/phases/phase_10.md)
