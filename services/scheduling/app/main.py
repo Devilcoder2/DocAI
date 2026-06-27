@@ -379,6 +379,18 @@ def update_user(id: UUID, payload: UserUpdate, db: Session = Depends(get_db)) ->
         user.email = payload.email
     if payload.role is not None:
         user.role = payload.role
+    if payload.age is not None:
+        user.age = payload.age
+    if payload.weight is not None:
+        user.weight = payload.weight
+    if payload.height is not None:
+        user.height = payload.height
+    if payload.gender is not None:
+        user.gender = payload.gender
+    if payload.allergies is not None:
+        user.allergies = payload.allergies
+    if payload.chronic_illnesses is not None:
+        user.chronic_illnesses = payload.chronic_illnesses
 
     try:
         db.commit()
