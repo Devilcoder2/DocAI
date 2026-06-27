@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { Search, MapPin, Shield, Star, Calendar, ArrowRight, UserCheck } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -89,12 +90,20 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
                 <span className="text-xs text-slate-400">Signed In</span>
                 <span className="text-sm font-semibold text-teal-300">{user.name}</span>
               </div>
-              <button 
-                onClick={clearAuth}
-                className="text-xs font-semibold text-rose-400 hover:text-rose-300 hover:underline transition-all"
-              >
-                Sign Out
-              </button>
+              <div className="flex flex-col items-end gap-0.5 border-l border-slate-750 pl-3">
+                <Link
+                  href="/profile"
+                  className="text-xs font-semibold text-teal-400 hover:text-teal-300 transition-all"
+                >
+                  Edit Profile
+                </Link>
+                <button 
+                  onClick={clearAuth}
+                  className="text-xs font-semibold text-rose-400 hover:text-rose-300 transition-all"
+                >
+                  Sign Out
+                </button>
+              </div>
             </div>
           ) : (
             <div className="flex items-center gap-2 bg-teal-500/10 text-teal-400 px-3 py-1.5 rounded-lg border border-teal-500/20 text-xs font-semibold">
