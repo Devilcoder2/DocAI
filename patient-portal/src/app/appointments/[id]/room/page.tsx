@@ -152,7 +152,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
         
         // Bind local camera track to display
         if (localVideoRef.current) {
-          const localVideoTrack = lkRoom.localParticipant.getTrackPublication("video");
+          const localVideoTrack = lkRoom.localParticipant.getTrackPublication("video" as any);
           if (localVideoTrack && localVideoTrack.track) {
             localVideoTrack.track.attach(localVideoRef.current);
           }
