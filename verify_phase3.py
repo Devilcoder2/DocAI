@@ -86,10 +86,7 @@ def run_telehealth_tests():
             "doctor_id": doctor_id,
             "appointment_time": target_slot,
             "consult_type": "telehealth",
-            "reason_for_visit": "Routine checkup for cardiovascular metrics.",
-            "insurance_carrier": "UnitedHealthcare",
-            "insurance_plan": "Choice Plus PPO",
-            "insurance_policy_number": "UHC-99881122"
+            "reason_for_visit": "Routine checkup for cardiovascular metrics."
         }
         book_res = client.post(
             f"{GATEWAY_URL}/api/v1/appointments",
