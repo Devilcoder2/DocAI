@@ -105,6 +105,7 @@ class ClinicalNoteBase(BaseModel):
     plan: Optional[str] = Field(None, description="SOAP Plan section.")
     patient_summary: Optional[str] = Field(None, description="Patient lay translation summary.")
     status: str = Field("draft", description="Document lock status (draft, approved).")
+    requires_escalation: bool = Field(False, description="Flag indicating if safety escalation protocol is active.")
 
 
 class ClinicalNoteCreate(ClinicalNoteBase):
@@ -125,6 +126,7 @@ class ClinicalNoteUpdate(BaseModel):
     plan: Optional[str] = Field(None, description="Updated Plan text.")
     patient_summary: Optional[str] = Field(None, description="Updated layman summary.")
     status: Optional[str] = Field(None, description="Update status key.")
+    requires_escalation: Optional[bool] = Field(None, description="Flag indicating safety escalation active state.")
 
 
 class ClinicalNoteOut(ClinicalNoteBase):
@@ -133,6 +135,33 @@ class ClinicalNoteOut(ClinicalNoteBase):
     """
     id: UUID
     signed_at: Optional[datetime] = Field(None, description="Physician electronic signature timestamp.")
+
+    class Config:
+        from_attributes = True
+
+
+class SystemEventBase(BaseModel):
+    """
+    Base properties of an audited system event.
+    """
+    appointment_id: Optional[UUID] = Field(None, description="UUID of the associated appointment.")
+    event_type: str = Field(..., description="Event classification (e.g., clinical_escalation).")
+    description: Optional[str] = Field(None, description="Descriptive context of the event.")
+
+
+class SystemEventCreate(SystemEventBase):
+    """
+    Input schema to record a new system event.
+    """
+    pass
+
+
+class SystemEventOut(SystemEventBase):
+    """
+    Response schema returning system event logs.
+    """
+    id: UUID
+    created_at: datetime
 
     class Config:
         from_attributes = True
