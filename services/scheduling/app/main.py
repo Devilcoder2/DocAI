@@ -645,10 +645,15 @@ def update_clinical_note(
         )
 
     if note.status == "approved":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Clinical note has already been approved and locked. Modifications are disabled."
+        has_other_updates = any(
+            v is not None for k, v in payload.dict(exclude_unset=True).items()
+            if k != "requires_escalation"
         )
+        if has_other_updates:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Clinical note has already been approved and locked. Modifications are disabled."
+            )
 
     # Dynamically apply updates
     if payload.raw_transcript is not None:
