@@ -1,5 +1,6 @@
 import sys
 import os
+import uuid
 from datetime import datetime, timedelta
 
 # Add app parent directory to sys.path to run directly from cmd line
@@ -59,11 +60,12 @@ def seed_phase4_data() -> None:
             db.refresh(patient_user)
 
         # Seed specific doctor for Twilio booking bot (11111111-1111-1111-1111-111111111111)
-        twilio_doc_user = db.query(User).filter(User.id == "11111111-1111-1111-1111-111111111111").first()
+        twilio_doc_id = uuid.UUID("11111111-1111-1111-1111-111111111111")
+        twilio_doc_user = db.query(User).filter(User.id == twilio_doc_id).first()
         if not twilio_doc_user:
             print("Creating Twilio specialist...")
             twilio_doc_user = User(
-                id="11111111-1111-1111-1111-111111111111",
+                id=twilio_doc_id,
                 name="Dr. Twilio Specialist",
                 email="twilio.doc@medical.com",
                 role="Doctor"
@@ -71,11 +73,11 @@ def seed_phase4_data() -> None:
             db.add(twilio_doc_user)
             db.commit()
             
-        twilio_doc = db.query(Doctor).filter(Doctor.id == "11111111-1111-1111-1111-111111111111").first()
+        twilio_doc = db.query(Doctor).filter(Doctor.id == twilio_doc_id).first()
         if not twilio_doc:
             print("Creating Twilio doctor profile...")
             twilio_doc = Doctor(
-                id="11111111-1111-1111-1111-111111111111",
+                id=twilio_doc_id,
                 specialty="General Practitioner",
                 clinic_address="456 Webhook Ave",
                 zip_code="90210",
@@ -87,11 +89,12 @@ def seed_phase4_data() -> None:
             db.commit()
 
         # Seed specific patient for Twilio booking bot (22222222-2222-2222-2222-222222222222)
-        twilio_pat_user = db.query(User).filter(User.id == "22222222-2222-2222-2222-222222222222").first()
+        twilio_pat_id = uuid.UUID("22222222-2222-2222-2222-222222222222")
+        twilio_pat_user = db.query(User).filter(User.id == twilio_pat_id).first()
         if not twilio_pat_user:
             print("Creating Twilio patient user...")
             twilio_pat_user = User(
-                id="22222222-2222-2222-2222-222222222222",
+                id=twilio_pat_id,
                 name="Twilio Patient",
                 email="twilio.patient@email.com",
                 role="Patient"
