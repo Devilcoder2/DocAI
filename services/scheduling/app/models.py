@@ -25,7 +25,7 @@ class User(Base):
 class Doctor(Base):
     """
     Healthcare provider profile model.
-    Contains specialty, address, zip code filters, accepted insurances, and links to base user tables.
+    Contains specialty, address, zip code filters, and links to base user tables.
     """
     __tablename__ = "doctors"
     
@@ -33,7 +33,6 @@ class Doctor(Base):
     specialty = Column(String, index=True, nullable=False)
     clinic_address = Column(String, nullable=False)
     zip_code = Column(String, index=True, nullable=False)
-    accepted_insurances = Column(JSON, nullable=False)  # Holds JSON list of string names
     photo_url = Column(String, nullable=True)
     rating = Column(Float, default=0.0)
     
@@ -46,7 +45,7 @@ class Doctor(Base):
 class Appointment(Base):
     """
     Consultation booking model.
-    Stores timestamps, checkout reasons, and insurance policy details.
+    Stores timestamps and checkout reasons.
     """
     __tablename__ = "appointments"
     
@@ -58,9 +57,6 @@ class Appointment(Base):
     status = Column(String, default="confirmed")  # pending, confirmed, completed, cancelled
     consult_type = Column(String, nullable=False)  # in_person, telehealth
     reason_for_visit = Column(Text, nullable=False)
-    insurance_carrier = Column(String, nullable=True)
-    insurance_plan = Column(String, nullable=True)
-    insurance_policy_number = Column(String, nullable=True)
     
     # Relationships
     doctor = relationship("Doctor", back_populates="appointments")
