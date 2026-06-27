@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "HealthCenter | Discover & Book Top-Rated Doctors Online",
-  description: "Browse nearby healthcare providers, filter by specialty, ZIP code, or accepted insurance carrier, and book in-person or virtual telehealth appointments securely.",
+  description: "Browse nearby healthcare providers, filter by specialty or ZIP code, and book in-person or virtual telehealth appointments securely.",
 };
 
 export default function RootLayout({
