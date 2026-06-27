@@ -50,6 +50,15 @@ interface Appointment {
   clinical_note: ClinicalNote | null;
 }
 
+const parseBullets = (text: string | null): string[] => {
+  if (!text) return [];
+  // Split by newline, asterisks, or dashes
+  return text
+    .split(/\n|\*|-|•/)
+    .map(line => line.trim())
+    .filter(line => line.length > 2);
+};
+
 export default function ProfilePage() {
   const router = useRouter();
   const { user, token, setAuth } = useAuthStore();
@@ -579,53 +588,145 @@ export default function ProfilePage() {
                                 </div>
 
                                 {appt.clinical_note ? (
-                                  <div className="bg-slate-900/60 border border-slate-850 rounded-xl p-4.5 space-y-3 shadow-inner">
-                                    {appt.clinical_note.patient_summary ? (
-                                      <div className="space-y-1">
-                                        <span className="block text-[9px] font-bold text-teal-400 uppercase tracking-wider">Patient translation Lay summary</span>
-                                        <p className="text-slate-200 italic font-medium leading-relaxed">
-                                          "{appt.clinical_note.patient_summary}"
-                                        </p>
-                                      </div>
-                                    ) : (
-                                      <div className="text-slate-500 italic">No summary translated by provider yet.</div>
-                                    )}
+                                   <div className="space-y-4">
+                                     {/* Tab Selectors */}
+                                     <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-850 w-fit">
+                                       <button
+                                         type="button"
+                                         onClick={() => setNoteTabs(prev => ({ ...prev, [appt.id]: "summary" }))}
+                                         className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                                           (noteTabs[appt.id] || "summary") === "summary"
+                                             ? "bg-teal-500 text-slate-950"
+                                             : "text-slate-400 hover:text-slate-200"
+                                         }`}
+                                       >
+                                         Care Summary
+                                       </button>
+                                       <button
+                                         type="button"
+                                         onClick={() => setNoteTabs(prev => ({ ...prev, [appt.id]: "soap" }))}
+                                         className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                                           (noteTabs[appt.id] || "summary") === "soap"
+                                             ? "bg-teal-500 text-slate-950"
+                                             : "text-slate-400 hover:text-slate-200"
+                                         }`}
+                                       >
+                                         Clinical SOAP Note
+                                       </button>
+                                     </div>
 
-                                    {/* SOAP Structure Details */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-slate-850/80">
-                                      <div className="space-y-0.5">
-                                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Subjective</span>
-                                        <p className="text-slate-350">{appt.clinical_note.subjective || "No notes."}</p>
-                                      </div>
-                                      <div className="space-y-0.5">
-                                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Objective</span>
-                                        <p className="text-slate-350">{appt.clinical_note.objective || "No notes."}</p>
-                                      </div>
-                                      <div className="space-y-0.5">
-                                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Assessment</span>
-                                        <p className="text-slate-350">{appt.clinical_note.assessment || "No notes."}</p>
-                                      </div>
-                                      <div className="space-y-0.5">
-                                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Care Plan</span>
-                                        <p className="text-slate-350">{appt.clinical_note.plan || "No notes."}</p>
-                                      </div>
-                                    </div>
+                                     {/* Tab Body */}
+                                     {(noteTabs[appt.id] || "summary") === "summary" ? (
+                                       <div className="bg-slate-900/50 border border-slate-850 rounded-2xl p-5 space-y-4 shadow-inner">
+                                         
+                                         {/* Disease Summary Card */}
+                                         <div className="bg-teal-500/5 border border-teal-500/10 rounded-xl p-4 space-y-1">
+                                           <span className="block text-[9px] font-bold text-teal-400 uppercase tracking-widest">Disease/Visit Summary</span>
+                                           <p className="text-slate-250 font-medium leading-relaxed italic text-xs">
+                                             "{appt.clinical_note.patient_summary || "No visit summary synthesized yet."}"
+                                           </p>
+                                         </div>
 
-                                    {/* Escalation Warnings */}
-                                    {appt.clinical_note.requires_escalation && (
-                                      <div className="bg-rose-500/10 border border-rose-500/25 p-3 rounded-lg flex items-center gap-2 mt-2">
-                                        <AlertTriangle className="w-4.5 h-4.5 text-rose-450 shrink-0" />
-                                        <span className="text-[10px] font-bold text-rose-400">
-                                          Attention: Safety escalation warning active for this consultation note. Review care companion guidelines.
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <div className="py-3 px-4 bg-slate-900/30 border border-slate-850 rounded-xl text-slate-500 italic text-[11px]">
-                                    No clinical summary notes are linked to this consultation ID. A summary is synthesized automatically following telehealth room calls.
-                                  </div>
-                                )}
+                                         {/* Discussion Bullet Points & Treatment Plan grid */}
+                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                           {/* Discussion Points */}
+                                           <div className="space-y-2">
+                                             <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Discussion Highlights</span>
+                                             <ul className="space-y-1.5 list-disc pl-4 text-xs text-slate-350 leading-relaxed">
+                                               {parseBullets(appt.clinical_note.subjective).length > 0 ? (
+                                                 parseBullets(appt.clinical_note.subjective).map((bullet, idx) => (
+                                                   <li key={idx}>{bullet}</li>
+                                                 ))
+                                               ) : (
+                                                 <li>No specific discussion notes.</li>
+                                               )}
+                                             </ul>
+                                           </div>
+
+                                           {/* Recommended Care Plan */}
+                                           <div className="space-y-2">
+                                             <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Prescribed Plan & Recommended Medicine</span>
+                                             <div className="space-y-1.5">
+                                               {parseBullets(appt.clinical_note.plan).length > 0 ? (
+                                                 parseBullets(appt.clinical_note.plan).map((bullet, idx) => (
+                                                   <div key={idx} className="flex items-start gap-2">
+                                                     <div className="w-4 h-4 rounded bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 text-[9px] font-bold shrink-0 mt-0.5">✓</div>
+                                                     <span className="text-xs text-slate-350">{bullet}</span>
+                                                   </div>
+                                                 ))
+                                               ) : (
+                                                 <p className="text-xs text-slate-500 italic">No specific medicines or treatment plan logged.</p>
+                                               )}
+                                             </div>
+                                           </div>
+                                         </div>
+
+                                         {/* Precautions / Doctor Tips Checklist */}
+                                         <div className="space-y-2 pt-2 border-t border-slate-850/80">
+                                           <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Physician Precautions & Tips</span>
+                                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                                             {parseBullets(appt.clinical_note.objective).length > 0 ? (
+                                               parseBullets(appt.clinical_note.objective).map((bullet, idx) => (
+                                                 <div key={idx} className="flex items-start gap-2 p-2.5 rounded-xl bg-slate-950/40 border border-slate-850 shadow-inner">
+                                                   <div className="w-4 h-4 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-[9px] font-bold shrink-0 mt-0.5">!</div>
+                                                   <span className="text-[11px] text-slate-400 leading-normal">{bullet}</span>
+                                                 </div>
+                                               ))
+                                             ) : (
+                                               <>
+                                                 <div className="flex items-start gap-2 p-2.5 rounded-xl bg-slate-950/40 border border-slate-850">
+                                                   <div className="w-4 h-4 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-[9px] font-bold shrink-0 mt-0.5">!</div>
+                                                   <span className="text-[11px] text-slate-400">Regularly monitor symptom status; report anomalies.</span>
+                                                 </div>
+                                                 <div className="flex items-start gap-2 p-2.5 rounded-xl bg-slate-950/40 border border-slate-850">
+                                                   <div className="w-4 h-4 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-[9px] font-bold shrink-0 mt-0.5">!</div>
+                                                   <span className="text-[11px] text-slate-400">Reach out to the AI Care Companion check-in bot for safety guidelines.</span>
+                                                 </div>
+                                               </>
+                                             )}
+                                           </div>
+                                         </div>
+
+                                       </div>
+                                     ) : (
+                                       /* SOAP Note Tab Body */
+                                       <div className="bg-slate-900/50 border border-slate-850 rounded-2xl p-5 space-y-3 shadow-inner">
+                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                           <div className="space-y-0.5">
+                                             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Subjective</span>
+                                             <p className="text-slate-350 text-xs">{appt.clinical_note.subjective || "No notes."}</p>
+                                           </div>
+                                           <div className="space-y-0.5">
+                                             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Objective</span>
+                                             <p className="text-slate-350 text-xs">{appt.clinical_note.objective || "No notes."}</p>
+                                           </div>
+                                           <div className="space-y-0.5">
+                                             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Assessment</span>
+                                             <p className="text-slate-350 text-xs">{appt.clinical_note.assessment || "No notes."}</p>
+                                           </div>
+                                           <div className="space-y-0.5">
+                                             <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Care Plan</span>
+                                             <p className="text-slate-350 text-xs">{appt.clinical_note.plan || "No notes."}</p>
+                                           </div>
+                                         </div>
+                                       </div>
+                                     )}
+
+                                     {/* Escalation Warnings */}
+                                     {appt.clinical_note.requires_escalation && (
+                                       <div className="bg-rose-500/10 border border-rose-500/25 p-3 rounded-xl flex items-center gap-2 mt-2">
+                                         <AlertTriangle className="w-4.5 h-4.5 text-rose-450 shrink-0" />
+                                         <span className="text-[10px] font-bold text-rose-400">
+                                           Attention: Safety escalation warning active for this consultation note. Review care companion guidelines.
+                                         </span>
+                                       </div>
+                                     )}
+                                   </div>
+                                 ) : (
+                                   <div className="py-3 px-4 bg-slate-900/30 border border-slate-850 rounded-xl text-slate-500 italic text-[11px]">
+                                     No clinical summary notes are linked to this consultation ID. A summary is synthesized automatically following telehealth room calls.
+                                   </div>
+                                 )}
                               </div>
 
                               {/* Companion & Telehealth redirects */}
