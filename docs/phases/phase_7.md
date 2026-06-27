@@ -21,13 +21,14 @@
 * **Current Functionality / Progress**:
   * Next.js pages open directly without authentication gating, relying on mock store states.
 * **Expected Outcome**:
-  * High-aesthetic welcome landing page showcasing features. Gated login dashboard routing for doctor and patient roles.
+  * High-aesthetic welcome landing page showcasing features. Gated login dashboard routing for doctor and patient roles based on hashed password credentials and Google/Facebook SSO integrations.
 * **Definition of Done Checklist**:
   * [ ] Build modern, aesthetic welcomes and feature list on `/welcome` landing page.
-  * [ ] Implement Sign-in and Sign-up screens for both Doctor and Patient accounts.
+  * [ ] Implement Sign-in and Sign-up screens for both Doctor and Patient accounts with password input and Google/Facebook SSO buttons.
+  * [ ] Develop backend signup/login endpoints with password hashing using bcrypt (`passlib`).
   * [ ] Program routing guards and middleware to redirect unauthorized sessions to `/welcome`.
 * **Verification Plan**:
-  * Open a fresh browser window and attempt to access `/doctor/dashboard` or `/profile` directly. Verify it redirects to `/welcome`.
+  * Register a new test patient account with a password; verify that a hashed record is saved to the database users table. Try to log in with an incorrect password and confirm access is denied (401).
 * **Handoff for Next Phase**:
   * Shared React authentication store and hook utilities.
 
@@ -39,7 +40,7 @@
 * **Expected Outcome**:
   * Patient profile dashboard supporting age, weight, height, gender, allergies, and chronic illness metrics.
 * **Definition of Done Checklist**:
-  * [ ] Add age, weight, height, gender, allergies, and chronic illnesses to the User schema.
+  * [ ] Add `password_hash`, age, weight, height, gender, allergies, and chronic illnesses to the User schema.
   * [ ] Implement profile GET and PUT endpoints in the scheduling and gateway services.
   * [ ] Build the profile form card layout on the patient dashboard.
 * **Verification Plan**:
