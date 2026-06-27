@@ -1,5 +1,6 @@
 import uuid
-from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, Text, JSON, Index, text
+from datetime import datetime
+from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, Text, JSON, Index, text, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
@@ -113,9 +114,27 @@ class ClinicalNote(Base):
     patient_summary = Column(Text, nullable=True)
     status = Column(String, default="draft")  # draft, approved
     signed_at = Column(DateTime, nullable=True)
+    requires_escalation = Column(Boolean, default=False, nullable=False)
     
     # Relationships
     appointment = relationship("Appointment", back_populates="clinical_note")
+
+
+class SystemEvent(Base):
+    """
+    SystemEvent model.
+    Stores audited system activities, including safety triggers and clinical escalations.
+    """
+    __tablename__ = "system_events"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    appointment_id = Column(UUID(as_uuid=True), ForeignKey("appointments.id", ondelete="CASCADE"), nullable=True)
+    event_type = Column(String, nullable=False)  # e.g., clinical_escalation
+    description = Column(Text, nullable=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    # Relationships
+    appointment = relationship("Appointment")
 
 
 # PostgreSQL Partial Unique Index
