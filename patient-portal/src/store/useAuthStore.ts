@@ -8,6 +8,12 @@ export interface UserProfile {
   name: string;   // Full name of the user.
   email: string;  // Unique email address.
   role: string;   // System role (Patient, Doctor, Admin).
+  age?: number | null;
+  weight?: number | null;
+  height?: number | null;
+  gender?: string | null;
+  allergies?: string | null;
+  chronic_illnesses?: string | null;
 }
 
 /**
