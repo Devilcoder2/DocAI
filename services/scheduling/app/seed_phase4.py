@@ -58,6 +58,47 @@ def seed_phase4_data() -> None:
             db.commit()
             db.refresh(patient_user)
 
+        # Seed specific doctor for Twilio booking bot (11111111-1111-1111-1111-111111111111)
+        twilio_doc_user = db.query(User).filter(User.id == "11111111-1111-1111-1111-111111111111").first()
+        if not twilio_doc_user:
+            print("Creating Twilio specialist...")
+            twilio_doc_user = User(
+                id="11111111-1111-1111-1111-111111111111",
+                name="Dr. Twilio Specialist",
+                email="twilio.doc@medical.com",
+                role="Doctor"
+            )
+            db.add(twilio_doc_user)
+            db.commit()
+            
+        twilio_doc = db.query(Doctor).filter(Doctor.id == "11111111-1111-1111-1111-111111111111").first()
+        if not twilio_doc:
+            print("Creating Twilio doctor profile...")
+            twilio_doc = Doctor(
+                id="11111111-1111-1111-1111-111111111111",
+                specialty="General Practitioner",
+                clinic_address="456 Webhook Ave",
+                zip_code="90210",
+                accepted_insurances=["Blue Cross", "Cigna", "Aetna"],
+                photo_url="https://images.example.com/twilio.jpg",
+                rating=4.8
+            )
+            db.add(twilio_doc)
+            db.commit()
+
+        # Seed specific patient for Twilio booking bot (22222222-2222-2222-2222-222222222222)
+        twilio_pat_user = db.query(User).filter(User.id == "22222222-2222-2222-2222-222222222222").first()
+        if not twilio_pat_user:
+            print("Creating Twilio patient user...")
+            twilio_pat_user = User(
+                id="22222222-2222-2222-2222-222222222222",
+                name="Twilio Patient",
+                email="twilio.patient@email.com",
+                role="Patient"
+            )
+            db.add(twilio_pat_user)
+            db.commit()
+
         # 3. Clear existing appointments and clinical notes to prevent constraint violations
         print("Clearing historical clinical notes & appointments...")
         db.query(ClinicalNote).delete()
