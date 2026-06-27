@@ -10,7 +10,7 @@ from passlib.context import CryptContext
 from app.database import SessionLocal
 from app.models import User, Doctor, Appointment, ClinicalNote
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 def seed_phase4_data() -> None:
     """
