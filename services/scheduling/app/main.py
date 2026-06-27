@@ -6,7 +6,7 @@ from sqlalchemy import cast, String
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.database import get_db
-from app.models import User, Doctor, Appointment, ScheduleException, ClinicalNote
+from app.models import User, Doctor, Appointment, ScheduleException, ClinicalNote, SystemEvent
 from app.schemas import (
     DoctorOut, AppointmentOut, AppointmentCreate, ScheduleExceptionOut,
     UserCreate, UserUpdate, UserOut, DoctorCreate, DoctorUpdate,
@@ -665,6 +665,16 @@ def update_clinical_note(
         note.patient_summary = payload.patient_summary
     if payload.status is not None:
         note.status = payload.status
+    if payload.requires_escalation is not None:
+        note.requires_escalation = payload.requires_escalation
+        if payload.requires_escalation:
+            # Also log as persistent system event
+            event = SystemEvent(
+                appointment_id=id,
+                event_type="clinical_escalation",
+                description="Patient reported severe/worsening symptoms or requested off-plan info, triggering clinical escalation protocol."
+            )
+            db.add(event)
 
     try:
         db.commit()
@@ -716,6 +726,36 @@ def approve_clinical_note(id: UUID, db: Session = Depends(get_db)) -> ClinicalNo
     try:
         db.commit()
         db.refresh(note)
+        
+        # 4. Dispatch RabbitMQ message indicating note approval
+        try:
+            import pika
+            import json
+            from app.config import settings
+            params = pika.URLParameters(settings.RABBITMQ_URL)
+            connection = pika.BlockingConnection(params)
+            channel = connection.channel()
+            channel.queue_declare(queue="telehealth_events", durable=True)
+            
+            event_payload = {
+                "event": "note_approved",
+                "appointment_id": str(id),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            channel.basic_publish(
+                exchange="",
+                routing_key="telehealth_events",
+                body=json.dumps(event_payload),
+                properties=pika.BasicProperties(
+                    delivery_mode=2  # Persistent message
+                )
+            )
+            connection.close()
+            print(f"[*] Broadcasted 'note_approved' event to RabbitMQ for appointment: {id}")
+        except Exception as mq_err:
+            print(f"[-] RabbitMQ broadcast of note approval failed: {mq_err}")
+            
         return note
     except Exception as e:
         db.rollback()
