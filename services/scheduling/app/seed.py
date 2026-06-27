@@ -5,8 +5,11 @@ from datetime import datetime, timedelta
 # Add app parent directory to sys.path to run directly from cmd line
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from passlib.context import CryptContext
 from app.database import SessionLocal, Base, engine
 from app.models import User, Doctor, Appointment, ScheduleException
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def seed_database() -> None:
     """
@@ -30,15 +33,16 @@ def seed_database() -> None:
         db.commit()
 
         print("Seeding Users...")
+        hashed_password = pwd_context.hash("password123")
         # 1. Admin account
-        admin = User(name="System Admin", email="admin@medicalplatform.com", role="Admin")
+        admin = User(name="System Admin", email="admin@medicalplatform.com", role="Admin", password_hash=hashed_password)
         # 2. Patients accounts
-        p1 = User(name="John Doe", email="john.doe@email.com", role="Patient")
-        p2 = User(name="Jane Smith", email="jane.smith@email.com", role="Patient")
+        p1 = User(name="John Doe", email="john.doe@email.com", role="Patient", password_hash=hashed_password)
+        p2 = User(name="Jane Smith", email="jane.smith@email.com", role="Patient", password_hash=hashed_password)
         # 3. Doctor users
-        doc_u1 = User(name="Dr. Alice Heart", email="alice.heart@medical.com", role="Doctor")
-        doc_u2 = User(name="Dr. Bob Tooth", email="bob.tooth@medical.com", role="Doctor")
-        doc_u3 = User(name="Dr. Charlie General", email="charlie.general@medical.com", role="Doctor")
+        doc_u1 = User(name="Dr. Alice Heart", email="alice.heart@medical.com", role="Doctor", password_hash=hashed_password)
+        doc_u2 = User(name="Dr. Bob Tooth", email="bob.tooth@medical.com", role="Doctor", password_hash=hashed_password)
+        doc_u3 = User(name="Dr. Charlie General", email="charlie.general@medical.com", role="Doctor", password_hash=hashed_password)
 
         db.add_all([admin, p1, p2, doc_u1, doc_u2, doc_u3])
         db.commit()
