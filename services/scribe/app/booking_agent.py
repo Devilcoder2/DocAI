@@ -121,7 +121,8 @@ async def handle_twilio_booking_webhook(
             "doctor_id": doctor_id,
             "patient_id": patient_id,
             "appointment_time": "2026-07-15T09:00:00",
-            "description": "Annual physical booked via Twilio bot"
+            "consult_type": "in_person",
+            "reason_for_visit": "Annual physical booked via Twilio bot"
         }
         res = await call_scheduling_book(booking_payload)
         if res:
