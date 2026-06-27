@@ -240,6 +240,29 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
             <h2 className="text-sm font-bold text-slate-150">
               Clinical SOAP Documentation: {patientProfile?.name || "Patient Profile"}
             </h2>
+            {patientProfile && (
+              <div className="text-[11px] text-slate-450 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span>Age: <strong className="text-teal-400">{patientProfile.age ?? "--"} yrs</strong></span>
+                <span className="w-1 h-1 rounded-full bg-slate-800" />
+                <span>Gender: <strong className="text-teal-400">{patientProfile.gender ?? "--"}</strong></span>
+                <span className="w-1 h-1 rounded-full bg-slate-800" />
+                <span>Weight: <strong className="text-teal-400">{patientProfile.weight ? `${patientProfile.weight} kg` : "--"}</strong></span>
+                <span className="w-1 h-1 rounded-full bg-slate-800" />
+                <span>Height: <strong className="text-teal-400">{patientProfile.height ? `${patientProfile.height} cm` : "--"}</strong></span>
+                {patientProfile.allergies && (
+                  <>
+                    <span className="w-1 h-1 rounded-full bg-slate-800" />
+                    <span className="text-rose-450">Allergies: <strong>{patientProfile.allergies}</strong></span>
+                  </>
+                )}
+                {patientProfile.chronic_illnesses && (
+                  <>
+                    <span className="w-1 h-1 rounded-full bg-slate-800" />
+                    <span className="text-amber-450">Chronic: <strong>{patientProfile.chronic_illnesses}</strong></span>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
