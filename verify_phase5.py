@@ -25,24 +25,22 @@ async def test_integration():
     # Sign in as Doctor (Alice Heart)
     async with httpx.AsyncClient() as client:
         resp = await client.post(f"{GATEWAY_URL}/api/v1/public/auth/login", json={
-            "email": "alice.heart@medical.com",
-            "password": "dev_password_alice"
+            "email": "alice.heart@medical.com"
         })
         if resp.status_code != 200:
             print(f"[-] Doctor login failed: {resp.text}")
             sys.exit(1)
-        doc_token = resp.json()["access_token"]
+        doc_token = resp.json()["token"]
         print(f"[+] Doctor logged in. Token length: {len(doc_token)}")
 
-        # Sign in as Patient (Bob Customer)
+        # Sign in as Patient (John Doe)
         resp = await client.post(f"{GATEWAY_URL}/api/v1/public/auth/login", json={
-            "email": "bob.customer@gmail.com",
-            "password": "dev_password_bob"
+            "email": "john.doe@email.com"
         })
         if resp.status_code != 200:
             print(f"[-] Patient login failed: {resp.text}")
             sys.exit(1)
-        pat_token = resp.json()["access_token"]
+        pat_token = resp.json()["token"]
         print(f"[+] Patient logged in. Token length: {len(pat_token)}")
 
     # ----------------------------------------------------
