@@ -12,7 +12,6 @@ interface Doctor {
   specialty: string;
   clinic_address: string;
   zip_code: string;
-  accepted_insurances: string[];
   photo_url: string | null;
   rating: number;
   user: {
