@@ -105,7 +105,7 @@ async def handle_twilio_booking_webhook(
     elif "annual physical" in input_lower or "book" in input_lower or "physical" in input_lower:
         # Mock lookup: check availability for Doctor ID
         # In a real environment, we'd query doctors list first. We use a mock doctor id for testing.
-        doctor_id = "11111111-1111-1111-1111-111111111111"
+        doctor_id = "11111111-1111-1111-1111-11111111111a"
         date_str = "2026-07-15"
         slots = await call_scheduling_availability(doctor_id, date_str)
         if slots:
@@ -115,8 +115,8 @@ async def handle_twilio_booking_webhook(
     elif "confirm" in input_lower or "yes" in input_lower:
         # Perform slot booking
         # We fetch or mock user credentials for patient
-        doctor_id = "11111111-1111-1111-1111-111111111111"
-        patient_id = "22222222-2222-2222-2222-222222222222"
+        doctor_id = "11111111-1111-1111-1111-11111111111a"
+        patient_id = "22222222-2222-2222-2222-22222222222b"
         booking_payload = {
             "doctor_id": doctor_id,
             "patient_id": patient_id,
