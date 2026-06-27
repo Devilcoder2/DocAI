@@ -364,6 +364,180 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
       {/* Main Splitscreen Body */}
       <div className="flex flex-1 overflow-hidden">
         
+        {/* Collapsible EHR History Drawer */}
+        {isHistoryOpen && patientProfile && (
+          <div className="w-[340px] border-r border-slate-900 bg-slate-950 flex flex-col shrink-0 overflow-y-auto p-5 space-y-6 selection:bg-teal-500 selection:text-slate-950">
+            {/* Header */}
+            <div>
+              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-slate-800">
+                <User className="w-4 h-4 text-teal-400" />
+                Patient EHR Constants
+              </h3>
+            </div>
+
+            {/* Vital Signs Profile Card */}
+            <div className="bg-slate-900/40 border border-slate-850 rounded-2xl p-4 space-y-3.5 shadow-inner">
+              <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                  <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Age</span>
+                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5">{patientProfile.age ?? "--"} yrs</span>
+                </div>
+                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                  <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Gender</span>
+                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5 truncate">{patientProfile.gender ?? "--"}</span>
+                </div>
+                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                  <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Weight</span>
+                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5">{patientProfile.weight ?? "--"} kg</span>
+                </div>
+                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                  <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Height</span>
+                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5">{patientProfile.height ?? "--"} cm</span>
+                </div>
+              </div>
+
+              {/* BMI indicator */}
+              {patientProfile.weight && patientProfile.height && (
+                <div className="bg-emerald-500/5 border border-emerald-500/10 p-2.5 rounded-xl flex items-center justify-between text-[11px]">
+                  <span className="font-semibold text-slate-400">Calculated BMI:</span>
+                  <span className="font-bold text-emerald-400">
+                    {(Number(patientProfile.weight) / Math.pow(Number(patientProfile.height) / 100, 2)).toFixed(1)}
+                  </span>
+                </div>
+              )}
+
+              {/* Allergies Alerts */}
+              <div className="space-y-1.5 pt-1">
+                <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Allergies Warning</span>
+                {patientProfile.allergies ? (
+                  <div className="bg-rose-500/10 border border-rose-500/25 p-2.5 rounded-xl text-[11px] text-rose-450 font-semibold flex items-start gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    <span>{patientProfile.allergies}</span>
+                  </div>
+                ) : (
+                  <div className="bg-slate-950 p-2 text-center rounded-xl border border-slate-850 text-[10px] text-slate-500 italic">No allergies reported.</div>
+                )}
+              </div>
+
+              {/* Chronic profile details */}
+              <div className="space-y-1.5">
+                <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Chronic Pre-existing Conditions</span>
+                {patientProfile.chronic_illnesses ? (
+                  <div className="bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-xl text-[11px] text-amber-450 font-semibold">
+                    {patientProfile.chronic_illnesses}
+                  </div>
+                ) : (
+                  <div className="bg-slate-950 p-2 text-center rounded-xl border border-slate-850 text-[10px] text-slate-500 italic">No chronic illnesses reported.</div>
+                )}
+              </div>
+            </div>
+
+            {/* Searchable consultations queue */}
+            <div className="space-y-4 pt-4 border-t border-slate-850">
+              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-slate-800">
+                <Calendar className="w-4 h-4 text-teal-400" />
+                Previous consultations Timeline
+              </h3>
+              
+              <div className="relative">
+                <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-500" />
+                <input
+                  type="text"
+                  placeholder="Search past consults..."
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-800 focus:border-teal-500/50 rounded-xl pl-9 pr-3 py-2 text-[11px] text-slate-200 placeholder-slate-650 focus:outline-none transition-all"
+                />
+              </div>
+
+              <div className="space-y-3.5">
+                {patientHistory.filter(appt => appt.id !== appointmentId).length === 0 ? (
+                  <div className="text-center py-6 text-[10px] text-slate-500 italic">No historical visits logged.</div>
+                ) : (
+                  patientHistory
+                    .filter(appt => appt.id !== appointmentId)
+                    .filter(appt => {
+                      if (!historySearch) return true;
+                      const term = historySearch.toLowerCase();
+                      const reason = appt.reason_for_visit.toLowerCase();
+                      const diag = appt.clinical_note?.assessment?.toLowerCase() || "";
+                      return reason.includes(term) || diag.includes(term);
+                    })
+                    .map((appt) => {
+                      const isExpanded = expandedHistoryId === appt.id;
+                      const dateStr = new Date(appt.appointment_time).toLocaleDateString([], {
+                        month: 'short', day: 'numeric', year: 'numeric'
+                      });
+                      
+                      const doc = doctorsCatalog.find(d => d.id === appt.doctor_id);
+                      const docName = doc ? doc.user.name : "Consulting Provider";
+
+                      return (
+                        <div key={appt.id} className="bg-slate-900/60 border border-slate-850 rounded-xl overflow-hidden shadow">
+                          
+                          {/* Accordion header button */}
+                          <button
+                            type="button"
+                            onClick={() => setExpandedHistoryId(isExpanded ? null : appt.id)}
+                            className="w-full p-3 text-left hover:bg-slate-900 flex justify-between items-center transition-all"
+                          >
+                            <div>
+                              <p className="text-[11px] font-bold text-slate-250">{dateStr}</p>
+                              <p className="text-[9px] text-slate-500 font-semibold">{docName} • {appt.consult_type === "telehealth" ? "Virtual" : "In-Person"}</p>
+                            </div>
+                            {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
+                          </button>
+
+                          {/* Accordion Body details */}
+                          {isExpanded && (
+                            <div className="p-3 bg-slate-950 border-t border-slate-850 space-y-3 text-[11px] leading-relaxed text-slate-450">
+                              
+                              <div className="space-y-0.5">
+                                <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider block">Reason for visit</span>
+                                <p className="text-slate-350">{appt.reason_for_visit}</p>
+                              </div>
+
+                              {appt.clinical_note ? (
+                                <div className="space-y-2 border-t border-slate-850/80 pt-2">
+                                  {appt.clinical_note.patient_summary && (
+                                    <div className="space-y-0.5">
+                                      <span className="text-[8px] font-bold text-teal-400 uppercase tracking-wider block">Diagnosis Summary</span>
+                                      <p className="text-slate-300 italic">"{appt.clinical_note.patient_summary}"</p>
+                                    </div>
+                                  )}
+                                  <div className="grid grid-cols-1 gap-2 text-[10px]">
+                                    {appt.clinical_note.subjective && (
+                                      <div>
+                                        <span className="font-bold text-slate-500 uppercase tracking-wider block">Subjective Notes</span>
+                                        <p className="text-slate-400 line-clamp-2">{appt.clinical_note.subjective}</p>
+                                      </div>
+                                    )}
+                                    {appt.clinical_note.plan && (
+                                      <div>
+                                        <span className="font-bold text-slate-500 uppercase tracking-wider block">Plan & Medicines</span>
+                                        <p className="text-slate-400 line-clamp-2">{appt.clinical_note.plan}</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="text-[10px] text-slate-500 italic pt-1 border-t border-slate-850/50">No SOAP documentation notes linked.</div>
+                              )}
+
+                            </div>
+                          )}
+
+                        </div>
+                      );
+                    })
+                )}
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
         {/* LEFT COLUMN: Transcript Dialogues */}
         <div className="w-1/2 flex flex-col border-r border-slate-900 bg-slate-900/20">
           
