@@ -37,7 +37,7 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
 
   qdrant:
-    image: qdrant/qdrant:v1.9.0
+    image: qdrant/qdrant:latest
     container_name: medical_ai_qdrant
     restart: always
     ports:
