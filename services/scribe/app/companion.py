@@ -26,7 +26,7 @@ except Exception:
         collection_name=COLLECTION_NAME,
         vectors_config=VectorParams(size=384, distance=Distance.COSINE)
     )
-    logger.info(f"Initialized Qdrant collection '{COLLECTION_NAME}' at {QDRANT_PATH}")
+    logger.info(f"Initialized Qdrant collection '{COLLECTION_NAME}'")
 
 
 def get_embedding(text: str) -> List[float]:
