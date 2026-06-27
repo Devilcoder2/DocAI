@@ -101,9 +101,7 @@ try:
             "doctor_id": DR_HEART_ID,
             "appointment_time": booking_time_str,
             "consult_type": "telehealth",
-            "reason_for_visit": "Experiencing palpitations and chest pressure.",
-            "insurance_carrier": "Blue Cross",
-            "insurance_plan": "Silver PPO"
+            "reason_for_visit": "Experiencing palpitations and chest pressure."
         }
         res3 = client.post(
             f"{SERVER_URL}/appointments",
