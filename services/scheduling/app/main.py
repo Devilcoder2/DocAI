@@ -1,12 +1,13 @@
 from datetime import date, datetime, time, timedelta
 from typing import List, Optional
 from uuid import UUID
-from fastapi import FastAPI, Depends, HTTPException, Query, Header, status
+from fastapi import FastAPI, Depends, HTTPException, Query, Header, status, BackgroundTasks
 from sqlalchemy import cast, String
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from app.database import get_db
 from app.models import User, Doctor, Appointment, ScheduleException, ClinicalNote, SystemEvent
+from app.notifier import send_appointment_emails
 from passlib.context import CryptContext
 from app.schemas import (
     DoctorOut, AppointmentOut, AppointmentCreate, ScheduleExceptionOut,
@@ -135,6 +136,7 @@ def get_availability(
 @app.post("/appointments", response_model=AppointmentOut, status_code=status.HTTP_201_CREATED)
 def create_appointment(
     payload: AppointmentCreate,
+    background_tasks: BackgroundTasks,
     x_user_id: str = Header(..., alias="X-User-Id", description="Authenticated Patient UUID forwarded by Gateway."),
     db: Session = Depends(get_db)
 ) -> AppointmentOut:
@@ -192,6 +194,7 @@ def create_appointment(
     try:
         db.commit()
         db.refresh(new_appointment)
+        background_tasks.add_task(send_appointment_emails, str(new_appointment.id))
         return new_appointment
     except IntegrityError:
         db.rollback()
