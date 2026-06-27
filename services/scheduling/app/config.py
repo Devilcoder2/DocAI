@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://medical_ai_user:medical_ai_password@localhost:5432/medical_ai_db"
     JWT_SECRET_KEY: str = "dev_jwt_secret_key_change_me_in_production"
     JWT_ALGORITHM: str = "HS256"
+    RABBITMQ_URL: str = "amqp://medical_ai_mq_user:medical_ai_mq_password@localhost:5672/"
 
     class Config:
         env_file = env_path
