@@ -45,7 +45,6 @@ class DoctorBase(BaseModel):
     specialty: str = Field(..., description="Medical specialty (e.g. Cardiologist, Dentist).")
     clinic_address: str = Field(..., description="Street address of the physical clinic.")
     zip_code: str = Field(..., description="ZIP code where the clinic is located.")
-    accepted_insurances: List[str] = Field(..., description="JSON-serializable list of accepted insurance carrier names.")
     photo_url: Optional[str] = Field(None, description="URL of the doctor's profile picture.")
     rating: float = Field(0.0, description="Average rating scored from verified reviews.")
 
@@ -64,7 +63,6 @@ class DoctorUpdate(BaseModel):
     specialty: Optional[str] = Field(None, description="Updated medical specialty.")
     clinic_address: Optional[str] = Field(None, description="Updated street address.")
     zip_code: Optional[str] = Field(None, description="Updated ZIP code.")
-    accepted_insurances: Optional[List[str]] = Field(None, description="Updated list of accepted insurances.")
     photo_url: Optional[str] = Field(None, description="Updated profile photo URL.")
     rating: Optional[float] = Field(None, description="Updated rating.")
 
@@ -88,9 +86,6 @@ class AppointmentCreate(BaseModel):
     appointment_time: datetime = Field(..., description="Date and time of the desired slot.")
     consult_type: str = Field(..., description="Format: in_person or telehealth.")
     reason_for_visit: str = Field(..., description="Free-text description of patient symptoms.")
-    insurance_carrier: Optional[str] = Field(None, description="Name of the patient's insurance provider.")
-    insurance_plan: Optional[str] = Field(None, description="Specific plan title.")
-    insurance_policy_number: Optional[str] = Field(None, description="Member ID policy number.")
 
 
 class ClinicalNoteBase(BaseModel):
