@@ -133,8 +133,7 @@ def run_phase4_verification():
                 "doctor_id": doctor_id,
                 "appointment_time": target_slot,
                 "consult_type": "telehealth",
-                "reason_for_visit": "chronic sore throat with morning cold symptoms",
-                "insurance_carrier": "Blue Cross"
+                "reason_for_visit": "chronic sore throat with morning cold symptoms"
             }
             book_res = client.post(
                 f"{GATEWAY_URL}/api/v1/appointments",
