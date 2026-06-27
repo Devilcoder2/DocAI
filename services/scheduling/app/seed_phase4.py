@@ -6,8 +6,11 @@ from datetime import datetime, timedelta
 # Add app parent directory to sys.path to run directly from cmd line
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from passlib.context import CryptContext
 from app.database import SessionLocal
 from app.models import User, Doctor, Appointment, ClinicalNote
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def seed_phase4_data() -> None:
     """
@@ -30,7 +33,12 @@ def seed_phase4_data() -> None:
         doctor_user = db.query(User).filter(User.email == "alice.heart@medical.com").first()
         if not doctor_user:
             print("Doctor 'alice.heart@medical.com' not found. Creating...")
-            doctor_user = User(name="Dr. Alice Heart", email="alice.heart@medical.com", role="Doctor")
+            doctor_user = User(
+                name="Dr. Alice Heart",
+                email="alice.heart@medical.com",
+                role="Doctor",
+                password_hash=pwd_context.hash("password123")
+            )
             db.add(doctor_user)
             db.commit()
             db.refresh(doctor_user)
@@ -53,7 +61,12 @@ def seed_phase4_data() -> None:
         patient_user = db.query(User).filter(User.email == "john.doe@email.com").first()
         if not patient_user:
             print("Patient 'john.doe@email.com' not found. Creating...")
-            patient_user = User(name="John Doe", email="john.doe@email.com", role="Patient")
+            patient_user = User(
+                name="John Doe",
+                email="john.doe@email.com",
+                role="Patient",
+                password_hash=pwd_context.hash("password123")
+            )
             db.add(patient_user)
             db.commit()
             db.refresh(patient_user)
@@ -67,7 +80,8 @@ def seed_phase4_data() -> None:
                 id=twilio_doc_id,
                 name="Dr. Twilio Specialist",
                 email="twilio.doc@medical.com",
-                role="Doctor"
+                role="Doctor",
+                password_hash=pwd_context.hash("password123")
             )
             db.add(twilio_doc_user)
             db.commit()
@@ -95,7 +109,8 @@ def seed_phase4_data() -> None:
                 id=twilio_pat_id,
                 name="Twilio Patient",
                 email="twilio.patient@email.com",
-                role="Patient"
+                role="Patient",
+                password_hash=pwd_context.hash("password123")
             )
             db.add(twilio_pat_user)
             db.commit()
