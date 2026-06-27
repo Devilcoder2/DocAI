@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
+import AuthGatingProvider from "@/components/AuthGatingProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <QueryProvider>
-          {children}
+          <AuthGatingProvider>
+            {children}
+          </AuthGatingProvider>
         </QueryProvider>
       </body>
     </html>
