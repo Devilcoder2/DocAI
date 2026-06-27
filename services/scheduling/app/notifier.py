@@ -29,7 +29,7 @@ def send_appointment_emails(appointment_id: str):
             logger.error(f"Doctor profile not found for appointment {appointment_id}.")
             return
         
-        doctor_user = db.query(User).filter(User.id == doctor_profile.user_id).first()
+        doctor_user = doctor_profile.user
         if not patient or not doctor_user:
             logger.error(f"Patient or doctor user account missing for appointment {appointment_id}.")
             return
