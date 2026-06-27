@@ -58,6 +58,7 @@ export default function ProfilePage() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [expandedApptId, setExpandedApptId] = useState<string | null>(null);
+  const [noteTabs, setNoteTabs] = useState<Record<string, "summary" | "soap">>({});
 
   // Form Fields
   const [name, setName] = useState("");
