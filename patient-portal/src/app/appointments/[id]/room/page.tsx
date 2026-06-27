@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { 
   Video, VideoOff, Mic, MicOff, PhoneOff, AlertTriangle, 
-  MessageSquare, Send, ShieldAlert, Wifi, Camera, User, RefreshCw
+  MessageSquare, Send, ShieldAlert, Wifi, Camera, User, RefreshCw,
+  Bot
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -369,12 +370,23 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
               </p>
             </div>
             
-            {isSimulator && (
-              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-1.5 text-amber-400">
-                <Wifi className="w-4 h-4 animate-bounce" />
-                <span className="text-xs font-semibold">Simulator Fallback Active</span>
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              {appointment?.status === "completed" && (
+                <Link
+                  href={`/appointments/${appointmentId}/companion`}
+                  className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-slate-100 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md hover:scale-105"
+                >
+                  <Bot className="w-4 h-4 text-slate-200" />
+                  Chat with Care Companion
+                </Link>
+              )}
+              {isSimulator && (
+                <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-1.5 text-amber-400">
+                  <Wifi className="w-4 h-4 animate-bounce" />
+                  <span className="text-xs font-semibold">Simulator Fallback Active</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Video Grid Grid */}
