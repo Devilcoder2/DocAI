@@ -40,6 +40,27 @@ export default function DoctorDashboard() {
   const { token, user } = useAuthStore();
   const [filter, setFilter] = useState<"all" | "pending" | "approved">("all");
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Patient profile preview modal states
+  const [patientProfile, setPatientProfile] = useState<any>(null);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+  const handleViewPatientProfile = async (patientId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/users/${patientId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPatientProfile(data);
+        setProfileModalOpen(true);
+      } else {
+        alert("Failed to retrieve patient profile. Check HIPAA access claims.");
+      }
+    } catch (e) {
+      console.error("Profile lookup error:", e);
+    }
+  };
 
   // 1. Fetch doctor's appointments
   const { data: appointments, isLoading, error } = useQuery<Appointment[]>({
@@ -236,7 +257,15 @@ export default function DoctorDashboard() {
                         {/* Visit Reason */}
                         <td className="px-6 py-5 max-w-sm">
                           <p className="text-xs text-slate-200 font-medium line-clamp-1">{appt.reason_for_visit}</p>
-                          <p className="text-[10px] text-slate-500 mt-0.5 font-semibold">Patient ID: {appt.patient_id.substring(0, 8)}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-[10px] text-slate-500 font-semibold">Patient ID: {appt.patient_id.substring(0, 8)}</span>
+                            <button
+                              onClick={() => handleViewPatientProfile(appt.patient_id)}
+                              className="text-[9px] font-bold text-teal-400 hover:text-teal-300 hover:underline transition-all"
+                            >
+                              (View Clinical Profile)
+                            </button>
+                          </div>
                         </td>
 
                         {/* Note Status */}
@@ -318,6 +347,85 @@ export default function DoctorDashboard() {
           )}
         </div>
       </main>
+
+      {/* Patient Profile Overlay Modal */}
+      {profileModalOpen && patientProfile && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 relative selection:bg-teal-500 selection:text-slate-950">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-lg font-black text-slate-100">Patient Clinical Profile</h3>
+                <p className="text-xs text-slate-500">HIPAA Protected EHR Directory</p>
+              </div>
+              <button
+                onClick={() => { setProfileModalOpen(false); setPatientProfile(null); }}
+                className="w-8 h-8 rounded-lg bg-slate-950 hover:bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-200 transition-all text-xs"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Account info */}
+              <div className="bg-slate-950/40 p-4 rounded-2xl border border-slate-800 flex gap-4 items-center shadow-inner">
+                <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 font-extrabold text-lg">
+                  {patientProfile.name ? patientProfile.name.charAt(0).toUpperCase() : "P"}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-200">{patientProfile.name}</p>
+                  <p className="text-xs text-slate-500">{patientProfile.email}</p>
+                </div>
+              </div>
+
+              {/* Metrics constants grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
+                  <span className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">Age</span>
+                  <span className="text-sm font-extrabold text-teal-400 mt-1 block">{patientProfile.age ?? "--"} yrs</span>
+                </div>
+                <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
+                  <span className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">Gender</span>
+                  <span className="text-sm font-extrabold text-teal-400 mt-1 block truncate">{patientProfile.gender ?? "--"}</span>
+                </div>
+                <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
+                  <span className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">Weight</span>
+                  <span className="text-sm font-extrabold text-teal-400 mt-1 block">{patientProfile.weight ?? "--"} kg</span>
+                </div>
+                <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
+                  <span className="block text-[9px] font-bold text-slate-500 uppercase tracking-wider">Height</span>
+                  <span className="text-sm font-extrabold text-teal-400 mt-1 block">{patientProfile.height ?? "--"} cm</span>
+                </div>
+              </div>
+
+              {/* Calculated BMI */}
+              {patientProfile.weight && patientProfile.height && (
+                <div className="bg-emerald-500/5 border border-emerald-500/10 p-3.5 rounded-2xl flex items-center justify-between text-xs">
+                  <span className="font-semibold text-slate-400">Dynamically Calculated BMI:</span>
+                  <span className="font-black text-emerald-450">
+                    {(Number(patientProfile.weight) / Math.pow(Number(patientProfile.height) / 100, 2)).toFixed(1)}
+                  </span>
+                </div>
+              )}
+
+              {/* Allergies and Chronic Illnesses */}
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Allergies Profile</span>
+                  <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300 min-h-[45px]">
+                    {patientProfile.allergies || "No active allergies logged."}
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Chronic Illnesses & Pre-existing Parameters</span>
+                  <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300 min-h-[45px]">
+                    {patientProfile.chronic_illnesses || "No pre-existing conditions logged."}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
