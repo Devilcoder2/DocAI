@@ -10,11 +10,9 @@ print("=" * 60)
 print("Scheduling Microservice Integration & Concurrency Test")
 print("=" * 60)
 
-# Mocks and details mapped from seed outputs
-PATIENT_1_ID = "de4ee42a-fb20-4fd5-a988-2e3b9bc823f6"  # John Doe
-PATIENT_2_ID = "e16fd83b-6d82-4392-aecc-258b40304736"  # Jane Smith
-DR_HEART_ID = "a514729d-bb6b-4895-adea-ded6c2e5d35b"   # Cardiologist
-DR_TOOTH_ID = "6adaf1cf-0112-4735-8741-28b3c638b044"   # Dentist
+# Run seed script to prepare test database
+print("Running seed script to reset and seed database...")
+subprocess.run([sys.executable, "app/seed.py"], check=True)
 
 SERVER_URL = "http://127.0.0.1:8001"
 
@@ -23,7 +21,7 @@ env = os.environ.copy()
 env["PYTHONPATH"] = "."  # Ensure app module resolves locally
 
 process = subprocess.Popen(
-    ["../../venv/bin/python3", "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8001"],
+    [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8001"],
     cwd=".",
     stdout=subprocess.PIPE,
     stderr=subprocess.STDOUT,
@@ -47,6 +45,32 @@ success = True
 
 try:
     with httpx.Client(timeout=5.0) as client:
+        # Resolve IDs dynamically
+        print("Resolving Doctor and Patient IDs dynamically...")
+        
+        p1_res = client.get(f"{SERVER_URL}/users/by-email?email=john.doe@email.com")
+        assert p1_res.status_code == 200, "Patient 1 email lookup failed."
+        PATIENT_1_ID = p1_res.json()["id"]
+        
+        p2_res = client.get(f"{SERVER_URL}/users/by-email?email=jane.smith@email.com")
+        assert p2_res.status_code == 200, "Patient 2 email lookup failed."
+        PATIENT_2_ID = p2_res.json()["id"]
+        
+        docs_res = client.get(f"{SERVER_URL}/doctors")
+        assert docs_res.status_code == 200, "Doctors list fetch failed."
+        doctors_list = docs_res.json()
+        
+        cardiologist = next(d for d in doctors_list if d["specialty"] == "Cardiologist")
+        dentist = next(d for d in doctors_list if d["specialty"] == "Dentist")
+        DR_HEART_ID = cardiologist["id"]
+        DR_TOOTH_ID = dentist["id"]
+        
+        print(f"  PATIENT_1_ID: {PATIENT_1_ID}")
+        print(f"  PATIENT_2_ID: {PATIENT_2_ID}")
+        print(f"  DR_HEART_ID: {DR_HEART_ID}")
+        print(f"  DR_TOOTH_ID: {DR_TOOTH_ID}")
+        print("-" * 40)
+
         # Test 1: Fetch list of doctors (filter: Dentist)
         print("Test 1: GET /doctors?specialty=Dentist (Search Doctor)")
         res1 = client.get(f"{SERVER_URL}/doctors?specialty=Dentist")
