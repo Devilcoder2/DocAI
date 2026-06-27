@@ -98,9 +98,9 @@ def query_care_plan(appointment_id: str, query: str, limit: int = 5) -> List[str
     Searches Qdrant for segments matching the query, falling back to keyword lookup.
     """
     vector = get_embedding(query)
-    search_result = qdrant_client.search(
+    search_result = qdrant_client.query_points(
         collection_name=COLLECTION_NAME,
-        query_vector=vector,
+        query=vector,
         query_filter=Filter(
             must=[
                 FieldCondition(
@@ -112,7 +112,7 @@ def query_care_plan(appointment_id: str, query: str, limit: int = 5) -> List[str
         limit=limit
     )
     
-    results = [hit.payload["content"] for hit in search_result if hit.payload]
+    results = [hit.payload["content"] for hit in search_result.points if hit.payload]
     
     # Fallback/broadener logic for robust matching
     if not results or any(k in query.lower() for k in ["medication", "pill", "amoxicillin", "lisinopril", "take", "dose"]):
