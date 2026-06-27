@@ -50,12 +50,12 @@
 * **Current Functionality / Progress**:
   * No email alerts are sent upon booking confirmation.
 * **Expected Outcome**:
-  * Mail notifier triggers on booking confirmation, emailing details + meeting link to patient, and patient clinical summary to doctor.
+  * Mail notifier triggers on booking confirmation, sending actual emails to the patient and doctor using real SMTP server credential settings (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`).
 * **Definition of Done Checklist**:
-  * [ ] Implement booking email triggers sending confirmation emails.
-  * [ ] Format patient emails with booking confirmation and telehealth WebRTC room links.
-  * [ ] Format doctor emails with booking confirmation and patient medical files.
+  * [ ] Implement an SMTP-based mail client using python `smtplib` / `aiosmtplib` loading configuration variables from `.env`.
+  * [ ] Format and send patient emails with booking confirmation, doctor details, and virtual WebRTC room links.
+  * [ ] Format and send doctor emails with booking details, scheduled slot, and the patient's full medical history details.
 * **Verification Plan**:
-  * Book an appointment; check the server console output to confirm the notification emails are logged with correct details.
+  * Set SMTP environment variables (e.g., Mailtrap, Gmail SMTP, or local test SMTP relay) in the `.env` configuration file, trigger a booking, and verify both patient and doctor email addresses receive the confirmation emails.
 * **Handoff for Next Phase**:
   * Mail dispatcher module.
