@@ -309,6 +309,19 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
 
         {/* Status Indicators & Sign Button */}
         <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+            className={`px-3.5 py-1.5 rounded-xl text-[11px] font-bold border transition-all flex items-center gap-1.5 ${
+              isHistoryOpen
+                ? "bg-teal-500/10 text-teal-450 border-teal-500/25"
+                : "bg-slate-800 hover:bg-slate-750 text-slate-400 border-slate-750"
+            }`}
+          >
+            <History className="w-3.5 h-3.5" />
+            {isHistoryOpen ? "Hide EHR Drawer" : "View EHR Drawer"}
+          </button>
+
           {/* Save Status Indicators */}
           {!isApproved && (
             <div className="flex items-center gap-2">
