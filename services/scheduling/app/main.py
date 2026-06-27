@@ -82,7 +82,6 @@ def get_available_slots(target_date: date, doctor_id: UUID, db: Session) -> List
 def list_doctors(
     specialty: Optional[str] = Query(None, description="Filter doctors by medical specialty (contains)."),
     zip_code: Optional[str] = Query(None, description="Filter doctors by exact ZIP code match."),
-    insurance_carrier: Optional[str] = Query(None, description="Filter doctors by accepted insurance carrier name."),
     db: Session = Depends(get_db)
 ) -> List[DoctorOut]:
     """
@@ -91,7 +90,6 @@ def list_doctors(
     Inputs:
         specialty (str, optional): Specialty filter query parameter.
         zip_code (str, optional): Zip code filter query parameter.
-        insurance_carrier (str, optional): Insurance carrier name query parameter.
         db (Session): Database session context.
 
     Outputs:
@@ -103,10 +101,6 @@ def list_doctors(
         query = query.filter(Doctor.specialty.ilike(f"%{specialty}%"))
     if zip_code:
         query = query.filter(Doctor.zip_code == zip_code)
-    if insurance_carrier:
-        # Check if the carrier is contained in the accepted_insurances JSON list
-        # Using a raw string comparison in SQLite/Postgres for portability
-        query = query.filter(cast(Doctor.accepted_insurances, String).ilike(f"%{insurance_carrier}%"))
 
     return query.all()
 
@@ -188,10 +182,7 @@ def create_appointment(
         duration_minutes=30,
         status="confirmed",
         consult_type=payload.consult_type,
-        reason_for_visit=payload.reason_for_visit,
-        insurance_carrier=payload.insurance_carrier,
-        insurance_plan=payload.insurance_plan,
-        insurance_policy_number=payload.insurance_policy_number
+        reason_for_visit=payload.reason_for_visit
     )
 
     db.add(new_appointment)
