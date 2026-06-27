@@ -49,8 +49,8 @@ async def call_scheduling_book(payload: dict) -> Optional[dict]:
     try:
         async with httpx.AsyncClient() as client:
             url = f"{SERVICE_SCHEDULING_URL}/appointments"
-            # Add default mock patient or doctor user details
-            resp = await client.post(url, json=payload, timeout=5.0)
+            headers = {"X-User-Id": payload.get("patient_id")}
+            resp = await client.post(url, json=payload, headers=headers, timeout=5.0)
             if resp.status_code in [200, 201]:
                 return resp.json()
             logger.error(f"Failed booking appointment: {resp.status_code} - {resp.text}")
