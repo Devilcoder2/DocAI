@@ -103,7 +103,7 @@ This file is used to log and track the completion status of the development phas
   * [x] Wrote automated E2E integration test suite [`verify_phase5.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase5.py) validating the complete agent, search, triage, and booking loops.
 
 ### Phase 7: Authenticated Portal Gating, User/Doctor Profile CRUD, and Insurance Removal
-* **Status**: [/] In Progress
+* **Status**: [x] Completed (June 27, 2026)
 * **Sub-Phase 7.1: Database Schema Refactor & Insurance Field Removal**: [x] Completed (June 27, 2026)
 * **Sub-Phase 7.1 Verification Status**: PASSED (Verified via [verify_scheduling.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/verify_scheduling.py), [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py), and [verify_phase4.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase4.py))
 * **Sub-Phase 7.1 Delivered Tasks**:
@@ -126,6 +126,15 @@ This file is used to log and track the completion status of the development phas
   * [x] Built the high-aesthetic Next.js introductory portal landing page [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/welcome/page.tsx) with tabbed sign-in forms and brand Google/Facebook SSO buttons.
   * [x] Built the client-side gating component [`AuthGatingProvider.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/AuthGatingProvider.tsx) enforcing role restrictions and redirecting guest sessions to the landing page.
   * [x] Fixed dynamic type importing constraints in playrooms to compile clean Turbopack bundles successfully.
+
+* **Sub-Phase 7.3: User Profile & Health Parameters CRUD**: [x] Completed (June 27, 2026)
+* **Sub-Phase 7.3 Verification Status**: PASSED (Verified via Next.js compilation builds and [verify_phase3.py](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase3.py))
+* **Sub-Phase 7.3 Delivered Tasks**:
+  * [x] Extended `User` database model in [`models.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/models.py) with 6 vital constants (age, height, weight, gender, allergies, chronic illnesses).
+  * [x] Mapped health parameters into Pydantic models in [`schemas.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/schemas.py) and store variables in [`useAuthStore.ts`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/store/useAuthStore.ts).
+  * [x] Refactored database profile updates inside [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scheduling/app/main.py).
+  * [x] Built the responsive visual settings screen [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/profile/page.tsx) calculating patient BMI and rendering expandable previous consultation timelines with SOAP layouts.
+  * [x] Integrated Patient Profile search details modal inside doctor Consult Queue [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctor/dashboard/page.tsx) and split-screen EHR scribe workspace [`page.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/doctor/appointments/%5Bid%5D/scribe/page.tsx).
 
 
 
