@@ -55,7 +55,6 @@ def seed_database() -> None:
             specialty="Cardiologist",
             clinic_address="123 Cardiac Ave, Suite 100",
             zip_code="90210",
-            accepted_insurances=["Blue Cross", "Cigna", "Aetna"],
             photo_url="https://images.example.com/alice.jpg",
             rating=4.9
         )
@@ -65,7 +64,6 @@ def seed_database() -> None:
             specialty="Dentist",
             clinic_address="456 Dental Way",
             zip_code="10001",
-            accepted_insurances=["Cigna", "UnitedHealth"],
             photo_url="https://images.example.com/bob.jpg",
             rating=4.7
         )
@@ -75,7 +73,6 @@ def seed_database() -> None:
             specialty="General Practitioner",
             clinic_address="789 Care Blvd",
             zip_code="90210",
-            accepted_insurances=["Blue Cross", "Aetna", "UnitedHealth"],
             photo_url="https://images.example.com/charlie.jpg",
             rating=4.8
         )
