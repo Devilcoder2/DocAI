@@ -16,8 +16,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         path = request.url.path
         
-        # Exclude unprotected routes
-        if any(path.startswith(prefix) for prefix in UNPROTECTED_PREFIXES):
+        # Exclude unprotected routes and preflight OPTIONS requests
+        if request.method == "OPTIONS" or any(path.startswith(prefix) for prefix in UNPROTECTED_PREFIXES):
             request.state.user_id = None
             request.state.role = "Guest"
             return await call_next(request)
