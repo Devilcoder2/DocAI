@@ -43,7 +43,6 @@ def seed_phase4_data() -> None:
                 specialty="Cardiologist",
                 clinic_address="123 Cardiac Ave, Suite 100",
                 zip_code="90210",
-                accepted_insurances=["Blue Cross", "Cigna", "Aetna"],
                 photo_url="https://images.example.com/alice.jpg",
                 rating=4.9
             )
@@ -81,7 +80,6 @@ def seed_phase4_data() -> None:
                 specialty="General Practitioner",
                 clinic_address="456 Webhook Ave",
                 zip_code="90210",
-                accepted_insurances=["Blue Cross", "Cigna", "Aetna"],
                 photo_url="https://images.example.com/twilio.jpg",
                 rating=4.8
             )
@@ -123,8 +121,7 @@ def seed_phase4_data() -> None:
             duration_minutes=30,
             status="confirmed",
             consult_type="telehealth",
-            reason_for_visit="Chronic hypertension check and blood pressure log review",
-            insurance_carrier="Blue Cross"
+            reason_for_visit="Chronic hypertension check and blood pressure log review"
         )
         db.add(appt1)
         db.commit()
@@ -155,8 +152,7 @@ def seed_phase4_data() -> None:
             duration_minutes=30,
             status="confirmed",
             consult_type="telehealth",
-            reason_for_visit="Severe sore throat and wet cough with fever",
-            insurance_carrier="Blue Cross"
+            reason_for_visit="Severe sore throat and wet cough with fever"
         )
         db.add(appt2)
         db.commit()
@@ -187,8 +183,7 @@ def seed_phase4_data() -> None:
             duration_minutes=30,
             status="confirmed",
             consult_type="in_person",
-            reason_for_visit="Persistent lower back pain after lifting boxes",
-            insurance_carrier="Blue Cross"
+            reason_for_visit="Persistent lower back pain after lifting boxes"
         )
         db.add(appt3)
         db.commit()
@@ -219,8 +214,7 @@ def seed_phase4_data() -> None:
             duration_minutes=30,
             status="confirmed",
             consult_type="telehealth",
-            reason_for_visit="Routine physical wellness checkup",
-            insurance_carrier="Blue Cross"
+            reason_for_visit="Routine physical wellness checkup"
         )
         db.add(appt4)
 
@@ -233,8 +227,7 @@ def seed_phase4_data() -> None:
             duration_minutes=30,
             status="completed",
             consult_type="telehealth",
-            reason_for_visit="Follow-up on cholesterol medication and diet",
-            insurance_carrier="Blue Cross"
+            reason_for_visit="Follow-up on cholesterol medication and diet"
         )
         db.add(appt5)
         db.commit()
