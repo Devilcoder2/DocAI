@@ -428,7 +428,6 @@ def create_doctor(payload: DoctorCreate, db: Session = Depends(get_db)) -> Docto
         specialty=payload.specialty,
         clinic_address=payload.clinic_address,
         zip_code=payload.zip_code,
-        accepted_insurances=payload.accepted_insurances,
         photo_url=payload.photo_url,
         rating=payload.rating
     )
@@ -486,8 +485,6 @@ def update_doctor(id: UUID, payload: DoctorUpdate, db: Session = Depends(get_db)
         doctor.clinic_address = payload.clinic_address
     if payload.zip_code is not None:
         doctor.zip_code = payload.zip_code
-    if payload.accepted_insurances is not None:
-        doctor.accepted_insurances = payload.accepted_insurances
     if payload.photo_url is not None:
         doctor.photo_url = payload.photo_url
     if payload.rating is not None:
