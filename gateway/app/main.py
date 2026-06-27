@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, Request, HTTPException, status, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,6 +8,10 @@ import jwt
 from app.config import settings
 from app.middleware.auth import AuthMiddleware
 from app.middleware.audit import AuditMiddleware
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger("gateway.main")
 
 # Global AsyncClient to pool connections for downstream proxying
 http_client = httpx.AsyncClient(timeout=10.0)
