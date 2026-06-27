@@ -16,7 +16,15 @@ class UserCreate(UserBase):
     """
     Input schema to create a new user profile.
     """
-    pass
+    password: Optional[str] = Field(None, description="Optional raw password during sign up.")
+
+
+class UserVerify(BaseModel):
+    """
+    Schema for credentials validation request.
+    """
+    email: str
+    password: str
 
 
 class UserUpdate(BaseModel):
