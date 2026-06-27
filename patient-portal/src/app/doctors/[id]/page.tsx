@@ -144,11 +144,6 @@ export default function DoctorProfilePage({ params }: { params: Promise<{ id: st
                     <MapPin className="w-4 h-4 text-teal-400" />
                     {doctor.clinic_address} (ZIP {doctor.zip_code})
                   </span>
-                  <span className="hidden md:inline text-slate-600">|</span>
-                  <span className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-teal-400" />
-                    Accepts {doctor.accepted_insurances.join(", ")}
-                  </span>
                 </div>
               </div>
             </div>
