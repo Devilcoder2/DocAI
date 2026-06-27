@@ -4,15 +4,15 @@
 * **Current Functionality / Progress**:
   * Scribe consumer supports Twilio voice/SMS webhook, but the Patient Portal web app does not have a native web button to interact with the voice bot.
 * **Expected Outcome**:
-  * A "Talk to Voice Agent" button allows patients to initiate a microphone session, asking the voice agent to search past appointments, check availability, book slots, and general questions.
+  * A "Talk to Voice Agent" button allows patients to initiate a LiveKit WebRTC audio room session, streaming audio bi-directionally with a LiveKit voice agent worker to search past appointments, check availability, book slots, and answer clinic queries.
 * **Definition of Done Checklist**:
-  * [ ] Create a web voice agent API endpoint in the Scribe service.
-  * [ ] Integrate a floating microphone button on the Patient Portal.
-  * [ ] Program voice booking tools and pre-visit intake checks.
+  * [ ] Set up LiveKit server endpoint in the Scribe / Telehealth service to dispatch room connection tokens for voice agents.
+  * [ ] Integrate a floating microphone button on the Patient Portal using `@livekit/components-react` to join the LiveKit voice room.
+  * [ ] Build a LiveKit agent worker script implementing voice triage, calendar slot tool-calling, and out-of-bounds topic rejection.
 * **Verification Plan**:
-  * Click the Voice Agent icon, grant microphone permissions, and say *"When was my last appointment?"*. Verify the synthesized audio response returns the correct summary.
+  * Click the Voice Agent icon, verify it establishes WebRTC audio connection to LiveKit, and speak: *"Book me an appointment with the cardiologist next Monday"*. Verify the agent confirms availability and schedules it. Speak an out-of-bounds query (*"Who won the soccer world cup?"*); verify it politely declines to answer.
 * **Handoff for Next Phase**:
-  * Client microphone capture components.
+  * Client LiveKit voice component modules and agent worker configurations.
 
 ---
 
