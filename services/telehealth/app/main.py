@@ -215,6 +215,55 @@ async def get_room_token(
     )
 
 
+@app.get("/rooms/voice-token", response_model=TokenResponse)
+async def get_voice_agent_token(
+    user: dict = Depends(get_current_user)
+) -> TokenResponse:
+    """
+    Generates a signed LiveKit room JWT token for the user to connect to the
+    conversational voice agent room.
+    """
+    user_id = str(user["user_id"])
+    
+    # 1. Retrieve user display name from Scheduling service
+    user_url = f"{settings.SERVICE_SCHEDULING_URL}/users/{user_id}"
+    user_name = "Telehealth Voice User"
+    try:
+        async with httpx.AsyncClient() as client:
+            user_resp = await client.get(user_url, timeout=5.0)
+            if user_resp.status_code == 200:
+                user_name = user_resp.json().get("name", user_name)
+    except Exception:
+        pass
+
+    # 2. Generate LiveKit Room Token for the conversational voice agent session
+    room_name = f"voice_session_{user_id}"
+    
+    lk_payload = {
+        "iss": settings.LIVEKIT_API_KEY,
+        "sub": user_id,
+        "name": user_name,
+        "video": {
+            "room": room_name,
+            "roomJoin": True,
+            "canPublish": True,
+            "canSubscribe": True,
+            "canPublishData": True
+        },
+        "exp": int(time.time()) + 3600,  # Valid for 1 hour
+        "nbf": int(time.time()) - 60
+    }
+    
+    lk_token = jwt.encode(lk_payload, settings.LIVEKIT_API_SECRET, algorithm="HS256")
+    
+    return TokenResponse(
+        token=lk_token,
+        room_name=room_name,
+        identity=user_id,
+        name=user_name
+    )
+
+
 @app.post("/rooms/{room_name}/scribe/start", response_model=ScribeStartResponse)
 async def start_scribe(
     room_name: str,
