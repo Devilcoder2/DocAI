@@ -250,6 +250,18 @@ async def delete_me(request: Request):
     return await proxy_request("DELETE", f"/users/{user_id}", request)
 
 
+@app.get("/api/v1/users/{id}")
+async def get_user_profile(id: str, request: Request):
+    """
+    Retrieves a user profile by ID. Enforces role gating: only Doctors or self can view.
+    """
+    user_role = request.state.role
+    user_id = request.state.user_id
+    if user_role != "Doctor" and str(user_id) != id:
+        raise HTTPException(status_code=403, detail="Unauthorized access to patient record.")
+    return await proxy_request("GET", f"/users/{id}", request)
+
+
 @app.get("/api/v1/public/doctors/{id}")
 async def public_get_doctor_profile(id: str, request: Request):
     """
