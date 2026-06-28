@@ -166,5 +166,16 @@ This file is used to log and track the completion status of the development phas
   * [x] Configured real SMTP settings parsing variables inside `config.py` and `.env.example`.
   * [x] Hooked background dispatches to appointment checkout routes inside `main.py` via thread-safe `BackgroundTasks` queue.
 
+### Phase 9: Conversational LiveKit Voice AI Agent
+* **Status**: [/] In Progress
+* **Sub-Phase 9.1: LiveKit Voice Agent Token Server & Client Hookup**: [x] Completed (June 28, 2026)
+* **Sub-Phase 9.1 Verification Status**: PASSED (Verified via Gateway token proxies, verify_voice_token.py scratch test, and Next.js builds)
+* **Sub-Phase 9.1 Delivered Tasks**:
+  * [x] Implemented signed voice-token JWT endpoint `GET /rooms/voice-token` in telehealth service [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/telehealth/app/main.py).
+  * [x] Registered proxy route `GET /api/v1/telehealth/rooms/voice-token` inside Gateway [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/app/main.py).
+  * [x] Developed floating `VoiceAssistantButton` widget component in [`VoiceAssistantButton.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/VoiceAssistantButton.tsx) with sound-wave visualizer animations and state messages.
+  * [x] Implemented browser-level Web Speech API (SpeechRecognition & SpeechSynthesis) interactive simulator fallback paths inside the widget for zero-install evaluation.
+  * [x] Embedded voice widget inside portal RootLayout [`layout.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/layout.tsx).
+
 
 
