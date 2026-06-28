@@ -4,15 +4,18 @@
 * **Current Functionality / Progress**:
   * Telehealth service generates WebRTC tokens for doctor-patient video rooms, but no endpoint exists to authenticate and route users to a dedicated voice assistant session room.
 * **Expected Outcome**:
-  * Backend route generating voice agent session tokens. Next.js patient portal includes a floating microphone widget utilizing LiveKit components to connect to the audio channel.
+  * Telehealth microservice exposes `GET /rooms/voice-token` (proxied at Gateway `/api/v1/telehealth/rooms/voice-token`) signing audio-only tokens for the room `voice_session_{user_id}`.
+  * Next.js patient portal includes a floating microphone widget utilizing LiveKit components or falling back to browser-level speech synthesis.
 * **Definition of Done Checklist**:
   * [ ] Implement token generation endpoint `GET /rooms/voice-token` in telehealth service issuing LiveKit voice room tokens with audio-only permission claims.
+  * [ ] Add `/api/v1/telehealth/rooms/voice-token` proxy route to API Gateway.
   * [ ] Develop floating `VoiceAssistantButton` widget using `@livekit/components-react` handling microphone access and connecting to the LiveKit server.
-  * [ ] Integrate sound-wave CSS animations and state indicators showing connecting, talking, listening, and offline status.
+  * [ ] Integrate sound-wave CSS visualizer animations and state indicators showing connecting, talking, listening, and offline status.
+  * [ ] Implement **Browser Web Speech fallback mode** utilizing HTML5 Speech Recognition and Web Speech Synthesis APIs inside the client if the LiveKit server is unreachable/offline, connecting to our backend agent endpoint.
 * **Verification Plan**:
-  * Click the voice assistant button on the Patient Portal; verify that the console logs successful connection to the LiveKit audio room and visual waves ripple as user speaks.
+  * Click the voice assistant button on the Patient Portal; verify that if LiveKit is up, it joins the audio room. If LiveKit is down, verify it boots the Browser Web Speech Simulator fall-back cleanly and visual waves ripple.
 * **Handoff for Next Sub-Phase**:
-  * LiveKit audio room WebRTC endpoint.
+  * LiveKit audio room WebRTC endpoint & fallback chat endpoint.
 
 ---
 
@@ -24,11 +27,12 @@
 * **Definition of Done Checklist**:
   * [ ] Write `voice_agent_worker.py` utilizing the LiveKit Agents SDK (`livekit-agents`).
   * [ ] Bind STT plugin engine (Deepgram/Whisper) to transcribe incoming patient audio buffers.
-  * [ ] Bind TTS synthesis engine (ElevenLabs/Cartesia/EdgeTTS) to generate and play back agent voice frames.
+  * [ ] Bind TTS synthesis engine (ElevenLabs/OpenAI TTS) to generate and play back agent voice frames, falling back to free Edge-TTS.
+  * [ ] Expose an HTTP `/api/v1/agent/chat` conversational endpoint on the Scribe/Agent service to drive LLM responses for the browser speech fallback simulator.
 * **Verification Plan**:
   * Run the agent worker process; speak into the web portal microphone and check worker logs to confirm user audio is transcribed and synthesized voice returns.
 * **Handoff for Next Sub-Phase**:
-  * WebRTC bi-directional audio transcription stream.
+  * WebRTC bi-directional audio transcription stream & fallback HTTP chat handler.
 
 ---
 
@@ -40,8 +44,11 @@
 * **Definition of Done Checklist**:
   * [ ] Develop database tool callers (`search_doctors`, `check_availability`, `book_appointment`, `summarize_history`) linked to the scheduling microservice.
   * [ ] Write system prompt rules enforcing safety boundaries, triage blocks, and out-of-scope question rejection.
+  * [ ] **Emergency Triage Check**: If patient mentions red-flag symptoms (chest pain, shortness of breath, etc.), immediately warning user to call 911 and simply hang up/close the session.
+  * [ ] **Out-of-Scope Block**: Refuse queries unrelated to booking, scheduling, or past consultations (e.g. recipes, programming).
 * **Verification Plan**:
   * Ask the voice agent: *"Can I book an appointment with Dr. Alice next Monday?"*. Verify it queries scheduling slots and books the appointment.
+  * Ask: *"I have chest pain."*. Verify it warns to call 911 immediately and simply hangs up/closes the session.
   * Ask: *"What is the recipe for chocolate cake?"*. Verify it politely declines to answer.
 * **Handoff for Next Phase**:
   * Fully tested conversational LiveKit voice booking agent.
