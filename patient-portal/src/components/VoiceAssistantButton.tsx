@@ -172,16 +172,42 @@ export default function VoiceAssistantButton() {
       }, 120);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = async (event: any) => {
       const transcript = event.results[0][0].transcript;
       setUserSpeech(transcript);
       setMessages(prev => [...prev, { sender: "user", text: transcript }]);
 
-      // Process reply
-      const reply = generateMockAgentReply(transcript);
-      setTimeout(() => {
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/agent/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ message: transcript })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const reply = data.response;
+          
+          if (data.is_emergency) {
+            speakAgentText(reply);
+            setTimeout(() => {
+              setIsOpen(false);
+              if (synthRef.current) synthRef.current.cancel();
+            }, 8000);
+          } else {
+            speakAgentText(reply);
+          }
+        } else {
+          const reply = generateMockAgentReply(transcript);
+          speakAgentText(reply);
+        }
+      } catch (err) {
+        const reply = generateMockAgentReply(transcript);
         speakAgentText(reply);
-      }, 500);
+      }
     };
 
     recognition.onerror = () => {
