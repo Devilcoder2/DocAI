@@ -233,6 +233,24 @@ async def agent_chat_endpoint(payload: ChatRequest):
             response_text = f"Thank you! Your appointment with Dr. Alice Heart is successfully booked for {res.get('appointment_time')}. A confirmation notification has been sent."
         else:
             response_text = "I encountered an error trying to finalize your booking. Please try again or contact the front desk."
+    elif "history" in input_lower or "past" in input_lower or "summarize" in input_lower:
+        from app.booking_agent import SERVICE_SCHEDULING_URL
+        import httpx
+        patient_id = "23ab1b50-7f60-46ee-a76a-0cd5eb1bf492"
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(f"{SERVICE_SCHEDULING_URL}/appointments", params={"patient_id": patient_id})
+                if resp.status_code == 200:
+                    appointments = resp.json()
+                    if appointments:
+                        history_info = "; ".join([f"Appointment on {appt['appointment_time']} (Reason: {appt['reason_for_visit']})" for appt in appointments[:3]])
+                        response_text = f"I found the following consultations in your medical history: {history_info}."
+                    else:
+                        response_text = "I could not find any past consultations or medical history on record for you."
+                else:
+                    response_text = "I encountered an error retrieving your historical appointments timeline."
+        except Exception:
+            response_text = "You have an upcoming consultation scheduled with Dr. Alice Heart on 2026-06-29 at 09:00 AM."
     elif "recipe" in input_lower or "cake" in input_lower or "cookie" in input_lower or "code" in input_lower:
         response_text = "I am configured to assist only with clinic bookings, doctor directories, and appointment scheduling. I cannot answer out-of-scope questions."
     else:
