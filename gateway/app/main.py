@@ -471,6 +471,27 @@ async def proxy_scribe_status(room_name: str, request: Request):
 # PUBLIC WEBHOOK PROXIES
 # ==========================================
 
+@app.post("/api/v1/agent/chat")
+async def proxy_agent_chat(request: Request):
+    """
+    Proxies chat interaction queries to the Conversational Agent Engine.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body.")
+        
+    auth_header = request.headers.get("Authorization")
+    headers = {}
+    if auth_header:
+        headers["Authorization"] = auth_header
+
+    return await proxy_request(
+        "POST", "/api/v1/agent/chat", request,
+        headers=headers, json_body=body,
+        service_url=settings.SERVICE_SCRIBE_URL
+    )
+
 @app.post("/api/v1/public/telehealth/webhooks/livekit")
 async def proxy_livekit_webhook(request: Request):
     """
