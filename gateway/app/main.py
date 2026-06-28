@@ -399,6 +399,23 @@ async def proxy_telehealth_token(request: Request):
     )
 
 
+@app.get("/api/v1/telehealth/rooms/voice-token")
+async def proxy_telehealth_voice_token(request: Request):
+    """
+    Retrieves a WebRTC LiveKit token for the conversational voice agent room.
+    """
+    auth_header = request.headers.get("Authorization")
+    headers = {}
+    if auth_header:
+        headers["Authorization"] = auth_header
+
+    return await proxy_request(
+        "GET", "/rooms/voice-token", request,
+        headers=headers,
+        service_url=settings.SERVICE_TELEHEALTH_URL
+    )
+
+
 @app.post("/api/v1/telehealth/rooms/{room_name}/scribe/start")
 async def proxy_scribe_start(room_name: str, request: Request):
     """
