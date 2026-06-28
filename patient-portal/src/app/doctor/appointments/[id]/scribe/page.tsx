@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface Doctor {
   id: string;
@@ -258,14 +259,14 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-950 overflow-hidden font-sans">
+    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans transition-theme">
       
       {/* Workspace Sub Header */}
-      <div className="bg-slate-900/60 border-b border-slate-900 px-6 py-4 flex items-center justify-between z-10 backdrop-blur-xl">
+      <div className="bg-card-bg/60 border-b border-card-border px-6 py-4 flex items-center justify-between z-10 backdrop-blur-xl transition-theme">
         <div className="flex items-center gap-4">
           <Link 
             href="/doctor/dashboard"
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-slate-100 transition-colors"
+            className="p-2 rounded-xl bg-input-bg border border-input-border text-slate-500 hover:text-foreground transition-theme"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
@@ -309,6 +310,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
 
         {/* Status Indicators & Sign Button */}
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => setIsHistoryOpen(!isHistoryOpen)}
@@ -366,33 +368,33 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
         
         {/* Collapsible EHR History Drawer */}
         {isHistoryOpen && patientProfile && (
-          <div className="w-[340px] border-r border-slate-900 bg-slate-950 flex flex-col shrink-0 overflow-y-auto p-5 space-y-6 selection:bg-teal-500 selection:text-slate-950">
+          <div className="w-[340px] border-r border-card-border bg-sidebar-bg flex flex-col shrink-0 overflow-y-auto p-5 space-y-6 selection:bg-teal-500 selection:text-slate-950 transition-theme">
             {/* Header */}
             <div>
-              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-slate-800">
-                <User className="w-4 h-4 text-teal-400" />
+              <h3 className="text-xs font-bold text-foreground uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-card-border">
+                <User className="w-4 h-4 text-teal-500" />
                 Patient EHR Constants
               </h3>
             </div>
 
             {/* Vital Signs Profile Card */}
-            <div className="bg-slate-900/40 border border-slate-850 rounded-2xl p-4 space-y-3.5 shadow-inner">
+            <div className="bg-card-bg border border-card-border rounded-2xl p-4 space-y-3.5 shadow-sm transition-theme">
               <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                <div className="bg-input-bg p-2.5 rounded-xl border border-input-border transition-theme">
                   <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Age</span>
-                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5">{patientProfile.age ?? "--"} yrs</span>
+                  <span className="text-xs font-extrabold text-teal-500 block mt-0.5">{patientProfile.age ?? "--"} yrs</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                <div className="bg-input-bg p-2.5 rounded-xl border border-input-border transition-theme">
                   <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Gender</span>
-                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5 truncate">{patientProfile.gender ?? "--"}</span>
+                  <span className="text-xs font-extrabold text-teal-500 block mt-0.5 truncate">{patientProfile.gender ?? "--"}</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                <div className="bg-input-bg p-2.5 rounded-xl border border-input-border transition-theme">
                   <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Weight</span>
-                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5">{patientProfile.weight ?? "--"} kg</span>
+                  <span className="text-xs font-extrabold text-teal-500 block mt-0.5">{patientProfile.weight ?? "--"} kg</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                <div className="bg-input-bg p-2.5 rounded-xl border border-input-border transition-theme">
                   <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Height</span>
-                  <span className="text-xs font-extrabold text-teal-400 block mt-0.5">{patientProfile.height ?? "--"} cm</span>
+                  <span className="text-xs font-extrabold text-teal-500 block mt-0.5">{patientProfile.height ?? "--"} cm</span>
                 </div>
               </div>
 
@@ -433,20 +435,20 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
             </div>
 
             {/* Searchable consultations queue */}
-            <div className="space-y-4 pt-4 border-t border-slate-850">
-              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-slate-800">
-                <Calendar className="w-4 h-4 text-teal-400" />
+            <div className="space-y-4 pt-4 border-t border-card-border">
+              <h3 className="text-xs font-bold text-foreground uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-card-border">
+                <Calendar className="w-4 h-4 text-teal-500" />
                 Previous consultations Timeline
               </h3>
               
               <div className="relative">
-                <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-500" />
+                <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search past consults..."
                   value={historySearch}
                   onChange={(e) => setHistorySearch(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-800 focus:border-teal-500/50 rounded-xl pl-9 pr-3 py-2 text-[11px] text-slate-200 placeholder-slate-650 focus:outline-none transition-all"
+                  className="w-full bg-input-bg border border-input-border focus:border-teal-500/50 rounded-xl pl-9 pr-3 py-2 text-[11px] text-foreground placeholder-slate-405 focus:outline-none transition-theme"
                 />
               </div>
 
@@ -473,24 +475,24 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
                       const docName = doc ? doc.user.name : "Consulting Provider";
 
                       return (
-                        <div key={appt.id} className="bg-slate-900/60 border border-slate-850 rounded-xl overflow-hidden shadow">
+                        <div key={appt.id} className="bg-card-bg border border-card-border rounded-xl overflow-hidden shadow-sm transition-theme">
                           
                           {/* Accordion header button */}
                           <button
                             type="button"
                             onClick={() => setExpandedHistoryId(isExpanded ? null : appt.id)}
-                            className="w-full p-3 text-left hover:bg-slate-900 flex justify-between items-center transition-all"
+                            className="w-full p-3 text-left hover:bg-sidebar-bg/60 flex justify-between items-center transition-theme cursor-pointer"
                           >
                             <div>
-                              <p className="text-[11px] font-bold text-slate-250">{dateStr}</p>
-                              <p className="text-[9px] text-slate-500 font-semibold">{docName} • {appt.consult_type === "telehealth" ? "Virtual" : "In-Person"}</p>
+                              <p className="text-[11px] font-bold text-foreground">{dateStr}</p>
+                              <p className="text-[9px] text-slate-500 dark:text-slate-400 font-semibold">{docName} • {appt.consult_type === "telehealth" ? "Virtual" : "In-Person"}</p>
                             </div>
                             {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
                           </button>
 
                           {/* Accordion Body details */}
                           {isExpanded && (
-                            <div className="p-3 bg-slate-950 border-t border-slate-850 space-y-3 text-[11px] leading-relaxed text-slate-450">
+                            <div className="p-3 bg-sidebar-bg border-t border-card-border space-y-3 text-[11px] leading-relaxed text-slate-600 dark:text-slate-400 transition-theme">
                               
                               <div className="space-y-0.5">
                                 <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider block">Reason for visit</span>
@@ -539,26 +541,26 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
         )}
 
         {/* LEFT COLUMN: Transcript Dialogues */}
-        <div className="w-1/2 flex flex-col border-r border-slate-900 bg-slate-900/20">
+        <div className="w-1/2 flex flex-col border-r border-card-border bg-sidebar-bg/10 transition-theme">
           
           {/* Transcript Search Toolbar */}
-          <div className="p-4 border-b border-slate-900 bg-slate-900/40">
+          <div className="p-4 border-b border-card-border bg-card-bg/40 transition-theme">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-teal-400" />
-                <h3 className="font-bold text-xs uppercase tracking-wider text-slate-350">Conversational AI Transcript</h3>
+                <Sparkles className="w-4 h-4 text-teal-555" />
+                <h3 className="font-bold text-xs uppercase tracking-wider text-foreground">Conversational AI Transcript</h3>
               </div>
               <span className="text-[10px] text-slate-500 font-bold">{filteredTranscriptLines.length} lines</span>
             </div>
             
             <div className="relative">
-              <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-500" />
+              <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search transcript dialog..."
                 value={transcriptQuery}
                 onChange={(e) => setTranscriptQuery(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-850 focus:border-teal-500/50 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-200 placeholder-slate-650 focus:outline-none transition-all"
+                className="w-full bg-input-bg border border-input-border focus:border-teal-500/50 rounded-xl pl-10 pr-4 py-2 text-xs text-foreground placeholder-slate-400 focus:outline-none transition-theme"
               />
             </div>
           </div>
@@ -589,10 +591,10 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
                       {isDoc ? "Doctor" : "Patient"}
                     </span>
                     <div 
-                      className={`p-3.5 rounded-2xl text-xs leading-relaxed ${
+                      className={`p-3.5 rounded-2xl text-xs leading-relaxed transition-theme ${
                         isDoc 
-                          ? "bg-teal-500/10 text-teal-300 border border-teal-500/20 rounded-tr-none"
-                          : "bg-slate-900 text-slate-300 border border-slate-800/80 rounded-tl-none"
+                          ? "bg-teal-500/10 text-teal-500 border border-teal-500/20 rounded-tr-none"
+                          : "bg-card-bg text-foreground border border-card-border rounded-tl-none"
                       }`}
                     >
                       {cleanLine}
@@ -606,7 +608,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
         </div>
 
         {/* RIGHT COLUMN: Interactive SOAP Editor */}
-        <div className="w-1/2 flex flex-col bg-slate-950 overflow-y-auto p-6 space-y-6">
+        <div className="w-1/2 flex flex-col bg-background overflow-y-auto p-6 space-y-6 transition-theme">
           
           {/* Header instructions warning */}
           {isApproved && (
@@ -633,7 +635,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
               }}
               rows={4}
               placeholder="Patient reports, symptoms, history of present illness..."
-              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/30 transition-all disabled:opacity-70 resize-none leading-relaxed"
+              className="w-full bg-input-bg border border-input-border rounded-2xl p-4 text-xs text-foreground placeholder-slate-400 focus:outline-none focus:border-teal-500/30 transition-theme disabled:opacity-70 resize-none leading-relaxed"
             />
           </div>
 
@@ -649,7 +651,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
               }}
               rows={4}
               placeholder="Vitals, physical exam details, lab reports..."
-              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/30 transition-all disabled:opacity-70 resize-none leading-relaxed"
+              className="w-full bg-input-bg border border-input-border rounded-2xl p-4 text-xs text-foreground placeholder-slate-400 focus:outline-none focus:border-teal-500/30 transition-theme disabled:opacity-70 resize-none leading-relaxed"
             />
           </div>
 
@@ -665,7 +667,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
               }}
               rows={4}
               placeholder="Clinical impressions, diagnoses, differentials..."
-              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/30 transition-all disabled:opacity-70 resize-none leading-relaxed"
+              className="w-full bg-input-bg border border-input-border rounded-2xl p-4 text-xs text-foreground placeholder-slate-400 focus:outline-none focus:border-teal-500/30 transition-theme disabled:opacity-70 resize-none leading-relaxed"
             />
           </div>
 
@@ -681,7 +683,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
               }}
               rows={4}
               placeholder="Treatment details, prescription details, follow-up times..."
-              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/30 transition-all disabled:opacity-70 resize-none leading-relaxed"
+              className="w-full bg-input-bg border border-input-border rounded-2xl p-4 text-xs text-foreground placeholder-slate-400 focus:outline-none focus:border-teal-500/30 transition-theme disabled:opacity-70 resize-none leading-relaxed"
             />
           </div>
 
@@ -697,7 +699,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
               }}
               rows={4}
               placeholder="Lay translation explaining findings and directions in clear, simple terms..."
-              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500/30 transition-all disabled:opacity-70 resize-none leading-relaxed"
+              className="w-full bg-input-bg border border-input-border rounded-2xl p-4 text-xs text-foreground placeholder-slate-400 focus:outline-none focus:border-teal-500/30 transition-theme disabled:opacity-70 resize-none leading-relaxed"
             />
           </div>
 
