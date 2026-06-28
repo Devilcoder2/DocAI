@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { Search, MapPin, Shield, Star, Calendar, ArrowRight, UserCheck } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
+import ThemeToggle from "@/components/ThemeToggle";
 
 // Type definitions matching schemas
 interface Doctor {
@@ -84,6 +85,7 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
         </div>
         
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           {isAuthenticated && user ? (
             <div className="flex items-center gap-4 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
               <div className="flex flex-col text-right">
