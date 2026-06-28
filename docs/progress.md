@@ -167,7 +167,7 @@ This file is used to log and track the completion status of the development phas
   * [x] Hooked background dispatches to appointment checkout routes inside `main.py` via thread-safe `BackgroundTasks` queue.
 
 ### Phase 9: Conversational LiveKit Voice AI Agent
-* **Status**: [/] In Progress
+* **Status**: [x] Completed (June 28, 2026)
 * **Sub-Phase 9.1: LiveKit Voice Agent Token Server & Client Hookup**: [x] Completed (June 28, 2026)
 * **Sub-Phase 9.1 Verification Status**: PASSED (Verified via Gateway token proxies, verify_voice_token.py scratch test, and Next.js builds)
 * **Sub-Phase 9.1 Delivered Tasks**:
@@ -184,6 +184,14 @@ This file is used to log and track the completion status of the development phas
   * [x] Created conversational HTTP dialogue endpoint `POST /api/v1/agent/chat` on Scribe service [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scribe/app/main.py) routing fallback simulator chat traffic to real scheduling query tools.
   * [x] Configured gateway proxy path `POST /api/v1/agent/chat` in API Gateway [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/app/main.py).
   * [x] Connected frontend widget recognition inputs in [`VoiceAssistantButton.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/VoiceAssistantButton.tsx) to query Gateway agent endpoints dynamically.
+
+* **Sub-Phase 9.3: Dialogue Rules, Database Tool Callers & Guardrails**: [x] Completed (June 28, 2026)
+* **Sub-Phase 9.3 Verification Status**: PASSED (Verified via verify_phase9.py E2E integration checks, triage warning hang-ups, and out-of-scope rejections)
+* **Sub-Phase 9.3 Delivered Tasks**:
+  * [x] Programmed database scheduling microservice tool call integrations inside Scribe conversational main loop (`search_doctors`, `check_availability`, `book_appointment`, and `summarize_history`).
+  * [x] Implemented emergency triage check scanner inside [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scribe/app/main.py) issuing warning prompts on symptoms and terminating chat sessions.
+  * [x] Implemented out-of-scope blocking filters refusing queries unrelated to booking, directories, or consult history.
+  * [x] Created and executed verification E2E test suite [`verify_phase9.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/verify_phase9.py) validating history summaries, triage triggers, and doctor catalog results.
 
 
 
