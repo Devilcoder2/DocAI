@@ -37,8 +37,8 @@ This document lists test scenarios, validation steps, and progress logs for user
 
 | Scenario | Mode | Status | Bugs Found | Notes |
 |---|---|---|---|---|
-| Register Patient | Integration | `[ ] Pending` | None | Verify schema validity |
-| Register Physician | Integration | `[ ] Pending` | None | Verify schema validity |
-| Login Credentials | Integration | `[ ] Pending` | None | Check invalid password return |
-| Google Mock SSO | E2E | `[ ] Pending` | None | Check sandbox auto-login |
-| Role Guard checking | E2E | `[ ] Pending` | None | Gated pages redirect |
+| Register Patient | Integration | `[x] Passed` | None | Verified via verify_auth.py |
+| Register Physician | Integration | `[x] Passed` | None | Verified via verify_auth.py |
+| Login Credentials | Integration | `[x] Passed` | None | Correctly issues JWT |
+| Google Mock SSO | E2E | `[x] Passed` | None | Sandbox OAuth logs in |
+| Role Guard checking | E2E | `[x] Passed` | None | Gated patient profile request returned 403 |
