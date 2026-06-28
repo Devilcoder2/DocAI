@@ -7,9 +7,11 @@ def test_auth_and_gating():
     print("============================================================")
     print("[AUTH FEATURE TEST SUITE START]")
     
+    import time
+    timestamp = int(time.time())
     # Payload for a new test user
     payload_patient = {
-        "email": "auth_test_patient@example.com",
+        "email": f"auth_test_patient_{timestamp}@example.com",
         "password": "strongPassword123",
         "name": "Auth Test Patient",
         "role": "Patient"
