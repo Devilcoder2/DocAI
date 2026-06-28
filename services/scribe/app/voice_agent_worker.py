@@ -21,9 +21,9 @@ try:
     from livekit.agents.voice_assistant import VoiceAssistant
     from livekit.plugins import openai, deepgram, elevenlabs
     LIVEKIT_AVAILABLE = True
-except ImportError:
+except Exception as e:
     LIVEKIT_AVAILABLE = False
-    logger.warning("[!] LiveKit Agent dependencies are not fully compiled/imported. Running in simulated fallback mode.")
+    logger.warning(f"[!] LiveKit Agent dependencies not fully active: {e}. Running in simulated fallback mode.")
 
 async def entrypoint(ctx: "JobContext"):
     logger.info(f"Connecting voice assistant agent to room: {ctx.room.name}")
