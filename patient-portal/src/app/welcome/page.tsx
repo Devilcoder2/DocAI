@@ -7,6 +7,7 @@ import {
   Shield, Activity, Sparkles, Heart, Calendar, 
   Video, MessageSquare, Lock, ArrowRight, CheckCircle, AlertCircle
 } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function WelcomePage() {
   const router = useRouter();
@@ -154,9 +155,12 @@ export default function WelcomePage() {
             HealthCenter
           </h1>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold bg-slate-900/60 border border-slate-800 rounded-full px-4 py-1.5 backdrop-blur-md">
-          <Shield className="w-3.5 h-3.5 text-teal-400" />
-          HIPAA & PIPEDA Secure
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <div className="flex items-center gap-1.5 text-xs text-slate-550 font-semibold bg-slate-900/60 border border-slate-800 rounded-full px-4 py-1.5 backdrop-blur-md">
+            <Shield className="w-3.5 h-3.5 text-teal-400" />
+            HIPAA & PIPEDA Secure
+          </div>
         </div>
       </header>
 
