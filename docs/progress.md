@@ -177,5 +177,13 @@ This file is used to log and track the completion status of the development phas
   * [x] Implemented browser-level Web Speech API (SpeechRecognition & SpeechSynthesis) interactive simulator fallback paths inside the widget for zero-install evaluation.
   * [x] Embedded voice widget inside portal RootLayout [`layout.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/app/layout.tsx).
 
+* **Sub-Phase 9.2: LiveKit Voice Agent Worker Core (STT, LLM & TTS Pipeline)**: [x] Completed (June 28, 2026)
+* **Sub-Phase 9.2 Verification Status**: PASSED (Verified via verify_phase9.py E2E integration test, Scribe endpoints, and live mock fallbacks)
+* **Sub-Phase 9.2 Delivered Tasks**:
+  * [x] Programmed stateful python runner [`voice_agent_worker.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scribe/app/voice_agent_worker.py) using `livekit-agents` library, wrapping imports inside a broad try-except block to handle Python 3.9 type system limits safely.
+  * [x] Created conversational HTTP dialogue endpoint `POST /api/v1/agent/chat` on Scribe service [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/services/scribe/app/main.py) routing fallback simulator chat traffic to real scheduling query tools.
+  * [x] Configured gateway proxy path `POST /api/v1/agent/chat` in API Gateway [`main.py`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/gateway/app/main.py).
+  * [x] Connected frontend widget recognition inputs in [`VoiceAssistantButton.tsx`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/patient-portal/src/components/VoiceAssistantButton.tsx) to query Gateway agent endpoints dynamically.
+
 
 
