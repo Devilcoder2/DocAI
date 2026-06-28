@@ -2,7 +2,7 @@ import sys
 import httpx
 
 def run_e2e_checks():
-    print("============================================================\n[PHASE 9.2 E2E VERIFICATION SUITE START]")
+    print("============================================================\n[PHASE 9.3 E2E VERIFICATION SUITE START]")
     
     # 1. Register and login test patient
     login_payload = {
@@ -84,6 +84,15 @@ def run_e2e_checks():
     assert "call 9 1 1" in emergency_resp["response"] or "call 911" in emergency_resp["response"], "No emergency warn dispatched"
     print("[PASS] Triage safety checks verified.")
     
+    # Check 3e: Past Consultation History Summary
+    print("[*] Querying past consultation history summary...")
+    chat_resp = httpx.post(chat_url, headers=headers, json={"message": "summarize my medical history"})
+    assert chat_resp.status_code == 200, f"Chat failed: {chat_resp.text}"
+    history_text = chat_resp.json()["response"]
+    print(f"    Bot response: '{history_text}'")
+    assert "appointment" in history_text.lower() or "consultation" in history_text.lower(), "History response incorrect"
+    print("[PASS] History timeline summary verified.")
+    
     # 4. Clean up test user
     print("[*] Cleaning up test patient credentials...")
     del_url = "http://localhost:8000/api/v1/users/me"
@@ -91,7 +100,7 @@ def run_e2e_checks():
     assert del_resp.status_code == 204
     print("[PASS] User cleanup completed.")
     
-    print("\n============================================================\n[ALL PHASE 9.2 E2E VERIFICATION CHECKS PASSED SUCCESSFULLY]\n============================================================\n")
+    print("\n============================================================\n[ALL PHASE 9.3 E2E VERIFICATION CHECKS PASSED SUCCESSFULLY]\n============================================================\n")
 
 if __name__ == "__main__":
     run_e2e_checks()
