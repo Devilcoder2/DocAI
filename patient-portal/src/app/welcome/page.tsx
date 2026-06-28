@@ -139,7 +139,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-hidden relative selection:bg-teal-500 selection:text-slate-950">
+    <div className="min-h-screen bg-background text-foreground flex flex-col justify-between overflow-hidden relative selection:bg-teal-500 selection:text-slate-950 transition-theme">
       
       {/* Background visual glow blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
@@ -173,13 +173,13 @@ export default function WelcomePage() {
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-bold text-teal-400 uppercase tracking-widest">
               <Activity className="w-3 h-3" /> Introducing Platform V2
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-slate-100">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-foreground">
               Next-Gen Medical <br/>
-              <span className="bg-gradient-to-r from-teal-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-500 via-teal-450 to-indigo-500 bg-clip-text text-transparent">
                 Scheduling & Scribe
               </span>
             </h2>
-            <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-xl">
+            <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed max-w-xl">
               Discover local specialists, join high-fidelity virtual consultation rooms, and converse with state-of-the-art AI care companions powered by ambient note-taking pipelines.
             </p>
           </div>
@@ -188,44 +188,44 @@ export default function WelcomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
             
             {/* Feature 1 */}
-            <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 hover:border-slate-700/60 hover:bg-slate-900/60 transition-all duration-300 shadow-lg">
+            <div className="bg-card-bg/40 border border-card-border/80 rounded-2xl p-5 hover:border-teal-500/30 hover:bg-card-bg/60 transition-theme duration-300 shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-3.5 shadow-inner">
                 <Calendar className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-slate-200">Doctor Directory & Search</h3>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <h3 className="text-sm font-bold text-foreground">Doctor Directory & Search</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
                 Filter by specialty, zip code location, and rolling matrices to book appointments in seconds.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 hover:border-slate-700/60 hover:bg-slate-900/60 transition-all duration-300 shadow-lg">
+            <div className="bg-card-bg/40 border border-card-border/80 rounded-2xl p-5 hover:border-teal-500/30 hover:bg-card-bg/60 transition-theme duration-300 shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-3.5 shadow-inner">
                 <Video className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-slate-200">Telehealth Video Rooms</h3>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <h3 className="text-sm font-bold text-foreground">Telehealth Video Rooms</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
                 Secure virtual consultations with real-time text chats and automated HIPAA privacy access blocks.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 hover:border-slate-700/60 hover:bg-slate-900/60 transition-all duration-300 shadow-lg">
+            <div className="bg-card-bg/40 border border-card-border/80 rounded-2xl p-5 hover:border-teal-500/30 hover:bg-card-bg/60 transition-theme duration-300 shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-3.5 shadow-inner">
                 <Sparkles className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-slate-200">Ambient AI Clinical Scribe</h3>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <h3 className="text-sm font-bold text-foreground">Ambient AI Clinical Scribe</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
                 Transcribes audio transcripts and structures them into SOAP doctor clinical notes instantly.
               </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 hover:border-slate-700/60 hover:bg-slate-900/60 transition-all duration-300 shadow-lg">
+            <div className="bg-card-bg/40 border border-card-border/80 rounded-2xl p-5 hover:border-teal-500/30 hover:bg-card-bg/60 transition-theme duration-300 shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-3.5 shadow-inner">
                 <MessageSquare className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-slate-200">AI Care Companion Chat</h3>
+              <h3 className="text-sm font-bold text-foreground">AI Care Companion Chat</h3>
               <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
                 Review care directions, retrieve safety guidelines, and escalate triage concerns via secure chats.
               </p>
@@ -236,18 +236,18 @@ export default function WelcomePage() {
 
         {/* Right Side: Authentication Control Card */}
         <section className="lg:col-span-5 flex justify-center">
-          <div className="w-full max-w-md bg-slate-900/70 border border-slate-800 rounded-3xl p-6 md:p-8 backdrop-blur-xl shadow-2xl space-y-6 flex flex-col justify-between">
+          <div className="w-full max-w-md bg-card-bg/70 border border-card-border rounded-3xl p-6 md:p-8 backdrop-blur-xl shadow-2xl space-y-6 flex flex-col justify-between transition-theme">
             
             {/* Tab Toggles: Patient vs Doctor Portal */}
             <div>
-              <div className="grid grid-cols-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+              <div className="grid grid-cols-2 bg-input-bg p-1.5 rounded-2xl border border-input-border transition-theme">
                 <button
                   type="button"
                   onClick={() => { setActiveTab("patient"); setErrorMsg(null); setSuccessMsg(null); }}
-                  className={`py-2 rounded-xl text-xs font-bold transition-all ${
+                  className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     activeTab === "patient" 
                       ? "bg-teal-500 text-slate-950" 
-                      : "text-slate-400 hover:text-slate-200"
+                      : "text-slate-500 dark:text-slate-400 hover:text-teal-500"
                   }`}
                 >
                   Patient Portal
@@ -255,10 +255,10 @@ export default function WelcomePage() {
                 <button
                   type="button"
                   onClick={() => { setActiveTab("doctor"); setErrorMsg(null); setSuccessMsg(null); }}
-                  className={`py-2 rounded-xl text-xs font-bold transition-all ${
+                  className={`py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     activeTab === "doctor" 
                       ? "bg-teal-500 text-slate-950" 
-                      : "text-slate-400 hover:text-slate-200"
+                      : "text-slate-500 dark:text-slate-400 hover:text-teal-500"
                   }`}
                 >
                   Physician Access
@@ -268,7 +268,7 @@ export default function WelcomePage() {
 
             {/* Title / Description */}
             <div className="text-center space-y-1">
-              <h3 className="text-lg font-bold text-slate-100">
+              <h3 className="text-lg font-bold text-foreground">
                 {authMode === "login" ? "Welcome Back" : "Register Credentials"}
               </h3>
               <p className="text-xs text-slate-500">
@@ -305,7 +305,7 @@ export default function WelcomePage() {
                     placeholder="e.g. John Doe"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 px-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500 text-sm transition-all"
+                    className="w-full bg-input-bg border border-input-border rounded-2xl py-3 px-4 text-foreground placeholder-slate-450 focus:outline-none focus:border-teal-500 text-sm transition-theme"
                   />
                 </div>
               )}
@@ -318,7 +318,7 @@ export default function WelcomePage() {
                   placeholder={activeTab === "doctor" ? "alice.heart@medical.com" : "john.doe@email.com"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 px-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500 text-sm transition-all"
+                  className="w-full bg-input-bg border border-input-border rounded-2xl py-3 px-4 text-foreground placeholder-slate-450 focus:outline-none focus:border-teal-500 text-sm transition-theme"
                 />
               </div>
 
@@ -330,7 +330,7 @@ export default function WelcomePage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 px-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-teal-500 text-sm transition-all"
+                  className="w-full bg-input-bg border border-input-border rounded-2xl py-3 px-4 text-foreground placeholder-slate-450 focus:outline-none focus:border-teal-500 text-sm transition-theme"
                 />
               </div>
 
@@ -377,7 +377,7 @@ export default function WelcomePage() {
               <button
                 type="button"
                 onClick={() => handleMockSSO("google")}
-                className="bg-slate-950 hover:bg-slate-850 border border-slate-800 rounded-2xl py-3 text-xs text-slate-300 font-semibold flex items-center justify-center gap-2 transition-all"
+                className="bg-input-bg hover:bg-card-bg border border-input-border rounded-2xl py-3 text-xs text-foreground font-semibold flex items-center justify-center gap-2 transition-theme cursor-pointer"
               >
                 {/* SVG Google icon */}
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -388,7 +388,7 @@ export default function WelcomePage() {
               <button
                 type="button"
                 onClick={() => handleMockSSO("facebook")}
-                className="bg-slate-950 hover:bg-slate-850 border border-slate-800 rounded-2xl py-3 text-xs text-slate-300 font-semibold flex items-center justify-center gap-2 transition-all"
+                className="bg-input-bg hover:bg-card-bg border border-input-border rounded-2xl py-3 text-xs text-foreground font-semibold flex items-center justify-center gap-2 transition-theme cursor-pointer"
               >
                 {/* SVG Facebook icon */}
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
