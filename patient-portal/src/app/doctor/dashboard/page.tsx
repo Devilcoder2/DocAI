@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface Appointment {
   id: string;
@@ -80,7 +81,7 @@ export default function DoctorDashboard() {
   // Access check
   if (!token || user?.role !== "Doctor") {
     return (
-      <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 transition-theme">
         <div className="bg-rose-500/10 border border-rose-500/20 rounded-3xl p-8 max-w-md text-center">
           <ShieldAlert className="w-12 h-12 text-rose-400 mx-auto mb-4" />
           <h3 className="text-xl font-bold mb-2">Access Denied</h3>
@@ -111,9 +112,9 @@ export default function DoctorDashboard() {
   }) || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans pb-12">
+    <div className="min-h-screen bg-background text-foreground font-sans pb-12 transition-theme">
       {/* Header Banner */}
-      <header className="border-b border-slate-900 bg-slate-900/40 backdrop-blur-xl sticky top-0 z-50">
+      <header className="border-b border-card-border bg-card-bg/40 backdrop-blur-xl sticky top-0 z-50 transition-theme">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-teal-500/10 p-2.5 rounded-xl border border-teal-500/20 text-teal-400">
@@ -126,11 +127,12 @@ export default function DoctorDashboard() {
           </div>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-bold text-slate-200">{user.name}</p>
-              <p className="text-[11px] text-teal-400 font-semibold uppercase tracking-wider">{user.role}</p>
+              <p className="text-sm font-bold text-foreground">{user.name}</p>
+              <p className="text-[11px] text-teal-450 font-semibold uppercase tracking-wider">{user.role}</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-teal-400">
+            <div className="w-10 h-10 rounded-xl bg-input-bg border border-input-border flex items-center justify-center font-bold text-teal-500 transition-theme shadow-sm">
               {user.name.split(" ").map(n => n[0]).join("")}
             </div>
           </div>
@@ -141,37 +143,119 @@ export default function DoctorDashboard() {
       <main className="max-w-7xl mx-auto px-6 mt-8">
         
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-900/40 border border-slate-900 rounded-3xl p-8 mb-8">
-          <h2 className="text-2xl font-bold mb-2">Welcome Back, {user.name.split(" ")[0]}</h2>
-          <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
+        <div className="bg-card-bg border border-card-border rounded-3xl p-8 mb-8 transition-theme shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+          <h2 className="text-2xl font-extrabold text-foreground mb-2">Welcome Back, {user.name.split(" ")[0]}</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
             Review patient consult list, view active telehealth rooms, or open the AI Scribe Split-Screen workspace to sign and approve clinical documentation.
           </p>
+        </div>
+
+        {/* Frameless Consultation Analytics Dashboard Stats */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          
+          {/* Card 1: Key Metrics */}
+          <div className="bg-card-bg border border-card-border rounded-3xl p-6 transition-theme shadow-sm flex flex-col justify-between">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Today's Overview</span>
+            <div className="flex justify-between items-end">
+              <div>
+                <span className="text-3xl font-black text-foreground">8</span>
+                <span className="text-xs text-emerald-500 font-semibold ml-2 inline-flex items-center gap-0.5">
+                  +12% vs yesterday
+                </span>
+              </div>
+              <span className="text-[10px] text-teal-500 font-bold bg-teal-500/10 px-2 py-0.5 rounded-md border border-teal-500/20">Consults</span>
+            </div>
+            <div className="border-t border-card-border mt-4 pt-4 flex justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Completed: 6</span>
+              <span>In Queue: 2</span>
+            </div>
+          </div>
+
+          {/* Card 2: Average Duration */}
+          <div className="bg-card-bg border border-card-border rounded-3xl p-6 transition-theme shadow-sm flex flex-col justify-between">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">EHR Documentation Speed</span>
+            <div className="flex justify-between items-end">
+              <div>
+                <span className="text-3xl font-black text-foreground">2.4m</span>
+                <span className="text-xs text-teal-500 font-semibold ml-2 inline-flex items-center gap-0.5">
+                  92% AI-assisted
+                </span>
+              </div>
+              <span className="text-[10px] text-indigo-500 font-bold bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20">Avg. Scribe Note Draft</span>
+            </div>
+            <div className="border-t border-card-border mt-4 pt-4 flex justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Time saved: 4.8 hrs</span>
+              <span>Accuracy: 98.4%</span>
+            </div>
+          </div>
+
+          {/* Card 3: Interactive Consultation Analytics Chart */}
+          <div className="bg-card-bg border border-card-border rounded-3xl p-6 transition-theme shadow-sm flex flex-col justify-between">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-2">Hourly Consultations Volume</span>
+            
+            {/* Frameless CSS Bar Chart */}
+            <div className="flex items-end justify-between h-16 px-2">
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-5 bg-teal-500/20 dark:bg-teal-500/10 hover:bg-teal-500/40 rounded-t-md h-8 transition-all duration-300 relative group cursor-pointer">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap mb-1">2 Consults</div>
+                </div>
+                <span className="text-[8px] text-slate-450 dark:text-slate-400 font-bold">9 AM</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-5 bg-teal-500/40 dark:bg-teal-500/30 hover:bg-teal-500/60 rounded-t-md h-12 transition-all duration-300 relative group cursor-pointer">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap mb-1">3 Consults</div>
+                </div>
+                <span className="text-[8px] text-slate-450 dark:text-slate-400 font-bold">11 AM</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-5 bg-teal-500/80 dark:bg-teal-500/60 hover:bg-teal-500 rounded-t-md h-16 transition-all duration-300 relative group cursor-pointer">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap mb-1">5 Consults</div>
+                </div>
+                <span className="text-[8px] text-slate-450 dark:text-slate-400 font-bold">1 PM</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-5 bg-teal-500/30 dark:bg-teal-500/20 hover:bg-teal-500/50 rounded-t-md h-10 transition-all duration-300 relative group cursor-pointer">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap mb-1">2 Consults</div>
+                </div>
+                <span className="text-[8px] text-slate-450 dark:text-slate-400 font-bold">3 PM</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 flex-1">
+                <div className="w-5 bg-teal-500/10 dark:bg-teal-500/5 hover:bg-teal-500/20 rounded-t-md h-4 transition-all duration-300 relative group cursor-pointer">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap mb-1">1 Consult</div>
+                </div>
+                <span className="text-[8px] text-slate-450 dark:text-slate-400 font-bold">5 PM</span>
+              </div>
+            </div>
+            
+          </div>
+
         </div>
 
         {/* Filters and Search */}
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
           {/* Tab buttons */}
-          <div className="flex bg-slate-900/80 p-1 rounded-2xl border border-slate-850 w-full md:w-auto">
+          <div className="flex bg-input-bg p-1 rounded-2xl border border-input-border w-full md:w-auto transition-theme">
             <button
               onClick={() => setFilter("all")}
-              className={`flex-1 md:flex-initial px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                filter === "all" ? "bg-teal-500 text-slate-950" : "text-slate-400 hover:text-slate-200"
+              className={`flex-1 md:flex-initial px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                filter === "all" ? "bg-teal-500 text-slate-950" : "text-slate-500 dark:text-slate-400 hover:text-teal-550"
               }`}
             >
               All Appointments
             </button>
             <button
               onClick={() => setFilter("pending")}
-              className={`flex-1 md:flex-initial px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                filter === "pending" ? "bg-teal-500 text-slate-950" : "text-slate-400 hover:text-slate-200"
+              className={`flex-1 md:flex-initial px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                filter === "pending" ? "bg-teal-500 text-slate-950" : "text-slate-500 dark:text-slate-400 hover:text-teal-550"
               }`}
             >
               Pending Approval (Drafts)
             </button>
             <button
               onClick={() => setFilter("approved")}
-              className={`flex-1 md:flex-initial px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                filter === "approved" ? "bg-teal-500 text-slate-950" : "text-slate-400 hover:text-slate-200"
+              className={`flex-1 md:flex-initial px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                filter === "approved" ? "bg-teal-500 text-slate-950" : "text-slate-500 dark:text-slate-400 hover:text-teal-550"
               }`}
             >
               Completed & Approved
@@ -180,19 +264,19 @@ export default function DoctorDashboard() {
 
           {/* Search bar */}
           <div className="relative w-full md:w-80">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search by reason..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-800 focus:border-teal-500/50 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-slate-100 placeholder-slate-650 focus:outline-none transition-all"
+              className="w-full bg-input-bg border border-input-border focus:border-teal-500/50 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-foreground placeholder-slate-400 focus:outline-none transition-theme"
             />
           </div>
         </div>
 
         {/* Appointments Queue Table */}
-        <div className="bg-slate-900/30 border border-slate-900 rounded-3xl overflow-hidden backdrop-blur-md">
+        <div className="bg-card-bg border border-card-border rounded-3xl overflow-hidden shadow-sm transition-theme">
           {isLoading ? (
             <div className="py-20 text-center">
               <div className="w-10 h-10 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin mx-auto mb-4"></div>
@@ -212,7 +296,7 @@ export default function DoctorDashboard() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-900 bg-slate-900/50 text-[10px] uppercase tracking-wider text-slate-400 font-bold">
+                  <tr className="border-b border-card-border bg-sidebar-bg/60 text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold transition-theme">
                     <th className="px-6 py-4">Time</th>
                     <th className="px-6 py-4">Type</th>
                     <th className="px-6 py-4">Visit Reason</th>
@@ -220,7 +304,7 @@ export default function DoctorDashboard() {
                     <th className="px-6 py-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-900">
+                <tbody className="divide-y divide-card-border transition-theme">
                   {filteredAppointments.map((appt) => {
                     const apptTime = new Date(appt.appointment_time);
                     const formattedTime = apptTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -229,14 +313,14 @@ export default function DoctorDashboard() {
                     const noteStatus = appt.clinical_note?.status || "none";
 
                     return (
-                      <tr key={appt.id} className="hover:bg-slate-900/40 transition-colors group">
+                      <tr key={appt.id} className="hover:bg-sidebar-bg/40 transition-theme group">
                         {/* Time */}
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-3">
                             <Clock className="w-4 h-4 text-teal-400" />
                             <div>
-                              <p className="text-xs font-bold text-slate-200">{formattedTime}</p>
-                              <p className="text-[10px] text-slate-500 font-semibold">{formattedDate}</p>
+                              <p className="text-xs font-bold text-foreground">{formattedTime}</p>
+                              <p className="text-[10px] text-slate-550 dark:text-slate-400 font-semibold">{formattedDate}</p>
                             </div>
                           </div>
                         </td>
@@ -256,9 +340,9 @@ export default function DoctorDashboard() {
 
                         {/* Visit Reason */}
                         <td className="px-6 py-5 max-w-sm">
-                          <p className="text-xs text-slate-200 font-medium line-clamp-1">{appt.reason_for_visit}</p>
+                          <p className="text-xs text-foreground font-medium line-clamp-1">{appt.reason_for_visit}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-[10px] text-slate-500 font-semibold">Patient ID: {appt.patient_id.substring(0, 8)}</span>
+                            <span className="text-[10px] text-slate-550 dark:text-slate-400 font-semibold">Patient ID: {appt.patient_id.substring(0, 8)}</span>
                             <button
                               onClick={() => handleViewPatientProfile(appt.patient_id)}
                               className="text-[9px] font-bold text-teal-400 hover:text-teal-300 hover:underline transition-all"
@@ -350,16 +434,16 @@ export default function DoctorDashboard() {
 
       {/* Patient Profile Overlay Modal */}
       {profileModalOpen && patientProfile && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 relative selection:bg-teal-500 selection:text-slate-950">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg bg-card-bg border border-card-border rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 relative selection:bg-teal-500 selection:text-slate-950 transition-theme">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-black text-slate-100">Patient Clinical Profile</h3>
-                <p className="text-xs text-slate-500">HIPAA Protected EHR Directory</p>
+                <h3 className="text-lg font-black text-foreground">Patient Clinical Profile</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">HIPAA Protected EHR Directory</p>
               </div>
               <button
                 onClick={() => { setProfileModalOpen(false); setPatientProfile(null); }}
-                className="w-8 h-8 rounded-lg bg-slate-950 hover:bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-200 transition-all text-xs"
+                className="w-8 h-8 rounded-xl bg-input-bg hover:bg-sidebar-bg border border-input-border flex items-center justify-center text-slate-550 hover:text-foreground transition-theme text-xs cursor-pointer"
               >
                 ✕
               </button>
