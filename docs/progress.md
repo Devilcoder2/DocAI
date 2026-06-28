@@ -214,4 +214,18 @@ This file is used to log and track the completion status of the development phas
   * [x] Overhauled Scribe split-screen documentation workspace (patient EHR constants, previous consultations timeline drawer, conversational transcripts, fields) to react to theme toggles dynamically.
   * [x] Embedded `<ThemeToggle />` widget actions inside both the doctor dashboard header and the Scribe subheader tools panel.
 
+### E2E System Testing Plan
+* **Status**: [x] Completed (June 28, 2026)
+* **Testing Plan Delivered Tasks**:
+  * [x] Created `docs/testing/` folder context.
+  * [x] Wrote [`features.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features.md) cataloging all application modules (Auth, Scheduling, Telehealth, AI Scribe, Voice Agent, and Design System layout variables).
+  * [x] Drafted [`strategy.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/strategy.md) detailing unit, integration, and user journey end-to-end strategy schemas.
+  * [x] Created detailed test specifications files for each module:
+    * [`auth.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features/auth.md)
+    * [`scheduling.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features/scheduling.md)
+    * [`telehealth.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features/telehealth.md)
+    * [`scribe.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features/scribe.md)
+    * [`voice_agent.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features/voice_agent.md)
+    * [`design_system.md`](file:///Users/ramandeepsingh/Developer/Personal%20Projects/Medical%20AI/docs/testing/features/design_system.md)
+
 
