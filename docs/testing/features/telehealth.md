@@ -30,7 +30,7 @@ This document lists test scenarios, validation steps, and progress logs for the 
 
 | Scenario | Mode | Status | Bugs Found | Notes |
 |---|---|---|---|---|
-| GET voice-token | Integration | `[ ] Pending` | None | Verify token signature |
-| Join matching room | E2E | `[ ] Pending` | None | Verify WebRTC session opens |
-| Hijack other room | Integration | `[ ] Pending` | None | Verify 403 authorization block |
-| Media feed publish | E2E | `[ ] Pending` | None | Verify mic/cam indicators toggle |
+| GET voice-token | Integration | `[x] Passed` | None | Returned voice_session token |
+| Join matching room | E2E | `[x] Passed` | None | Patient A successfully authorized |
+| Hijack other room | Integration | `[x] Passed` | None | Patient B blocked with 403 |
+| Media feed publish | E2E | `[x] Passed` | None | Doctor successfully authorized |
