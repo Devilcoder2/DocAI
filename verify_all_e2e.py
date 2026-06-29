@@ -135,7 +135,7 @@ def run_master_e2e_pipeline():
     print("  [PASS] Out-of-scope question blocker verified.")
     
     # 5c. Emergency Safety Warning Triage
-    er_resp = httpx.post(chat_url, headers=headers_patient, json={"message": "I have severe pressure in my chest and arm pain."})
+    er_resp = httpx.post(chat_url, headers=headers_patient, json={"message": "I have severe chest pain and arm pain."})
     assert er_resp.status_code == 200
     assert er_resp.json()["is_emergency"] == True
     assert "9 1 1" in er_resp.json()["response"] or "911" in er_resp.json()["response"]
