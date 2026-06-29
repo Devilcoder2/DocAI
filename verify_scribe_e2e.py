@@ -55,6 +55,7 @@ def run_scribe_e2e_tests():
     print("[*] Scenario 1: Initializing clinical note draft as Physician...")
     note_url = f"{GATEWAY_URL}/api/v1/appointments/{appointment_id}/clinical-note"
     note_payload = {
+        "appointment_id": appointment_id,
         "raw_transcript": "Doctor: Hello, how are you? Patient: I have had mild chest pain and fatigue for 3 days.",
         "subjective": "Patient reports mild chest pain and fatigue for 3 days.",
         "objective": "Heart rate 72 bpm, blood pressure 120/80 mmHg.",
