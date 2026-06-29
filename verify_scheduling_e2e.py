@@ -46,7 +46,7 @@ def run_scheduling_e2e_tests():
     # 3. Fetch Doctor Availability slots via Gateway public endpoint
     # target date: next week Monday
     target_date = "2026-07-06"
-    print(f"[*] Scenario 2: Querying availability slots for Dr. {doctor['name']} on {target_date}...")
+    print(f"[*] Scenario 2: Querying availability slots for Dr. {doctor['user']['name']} on {target_date}...")
     avail_url = f"{GATEWAY_URL}/api/v1/public/doctors/{doctor_id}/availability"
     avail_resp = httpx.get(avail_url, params={"date": target_date})
     assert avail_resp.status_code == 250 or avail_resp.status_code == 200, f"Avail failed: {avail_resp.text}"
