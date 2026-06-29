@@ -41,7 +41,7 @@ def run_scheduling_e2e_tests():
     
     doctor = doctors[0]
     doctor_id = doctor["id"]
-    print(f"[PASS] Found doctor: Dr. {doctor['name']} ({doctor['specialty']}) | ID: {doctor_id}")
+    print(f"[PASS] Found doctor: Dr. {doctor['user']['name']} ({doctor['specialty']}) | ID: {doctor_id}")
 
     # 3. Fetch Doctor Availability slots via Gateway public endpoint
     # target date: next week Monday
