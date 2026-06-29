@@ -32,8 +32,8 @@ This document lists test scenarios, validation steps, and progress logs for UI/U
 
 | Scenario | Mode | Status | Bugs Found | Notes |
 |---|---|---|---|---|
-| Outfit / Inter fonts | Visual | `[ ] Pending` | None | Inspect layout font-family |
-| Light/Dark toggling | Visual | `[ ] Pending` | None | Verify welcome & scribe pages |
-| Legibility checks | Visual | `[ ] Pending` | None | Check input text contrast |
-| Bar chart render | Visual | `[ ] Pending` | None | Verify CSS height ranges |
-| Chart hover tooltip | Visual | `[ ] Pending` | None | Check details visible on hover |
+| Outfit / Inter fonts | Visual | `[x] Passed` | None | Verified via verify_design_system.py |
+| Light/Dark toggling | Visual | `[x] Passed` | None | Verified via Next.js theme provider |
+| Legibility checks | Visual | `[x] Passed` | None | Verified layout contrast checks |
+| Bar chart render | Visual | `[x] Passed` | None | Rendered frameless bar charts correctly |
+| Chart hover tooltip | Visual | `[x] Passed` | None | Verify CSS height variables |
