@@ -36,7 +36,15 @@ def run_scribe_e2e_tests():
     print(f"[PASS] Logged in patient ID: {patient_id} | Doctor ID: {doctor_id}")
 
     # 3. Book a test appointment
-    selected_slot = "2026-07-06T12:00:00"
+    target_date = "2026-07-06"
+    print(f"[*] Querying availability slots for Dr. Heart on {target_date}...")
+    avail_url = f"{GATEWAY_URL}/api/v1/public/doctors/04a7568a-05ca-4130-943c-f80371b837d3/availability"
+    avail_resp = httpx.get(avail_url, params={"date": target_date})
+    assert avail_resp.status_code == 200, f"Avail query failed: {avail_resp.text}"
+    slots = [s for s in avail_resp.json() if "12:00" not in s and "09:00" not in s and "11:00" not in s] # avoid previous booked slots
+    assert len(slots) > 0, "No free slots remaining on target date"
+    selected_slot = slots[0]
+    
     print(f"[*] Booking test appointment for slot {selected_slot}...")
     book_url = f"{GATEWAY_URL}/api/v1/appointments"
     booking_payload = {
