@@ -325,6 +325,18 @@ async def fetch_appointment(id: str, request: Request):
     return await proxy_request("GET", f"/appointments/{id}", request, headers=headers)
 
 
+@app.post("/api/v1/appointments/{id}/clinical-note")
+async def create_clinical_note(id: str, request: Request):
+    """
+    Initializes a clinical note draft for the appointment.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body.")
+    return await proxy_request("POST", f"/appointments/{id}/clinical-note", request, json_body=body)
+
+
 @app.get("/api/v1/appointments/{id}/clinical-note")
 async def get_clinical_note(id: str, request: Request):
     """
