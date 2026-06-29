@@ -7,7 +7,27 @@ def run_voice_agent_e2e_tests():
     print("============================================================")
     print("[CONVERSATIONAL VOICE AGENT E2E TEST SUITE START]")
     
-    headers = {}
+    # Register & Login Test Patient
+    import time
+    timestamp = int(time.time())
+    payload_patient = {
+        "email": f"voice_test_patient_{timestamp}@example.com",
+        "password": "securepassword123",
+        "name": "Voice Test Patient",
+        "role": "Patient"
+    }
+    
+    print("[*] Registering test patient...")
+    reg_url = f"{GATEWAY_URL}/api/v1/public/auth/register"
+    try:
+        reg_resp = httpx.post(reg_url, json=payload_patient, timeout=5.0)
+    except Exception as e:
+        print(f"[FAIL] API Gateway not reachable at {GATEWAY_URL}: {e}")
+        sys.exit(1)
+        
+    assert reg_resp.status_code in (200, 201), f"Reg failed: {reg_resp.text}"
+    token = reg_resp.json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
     chat_url = f"{GATEWAY_URL}/api/v1/agent/chat"
     
     # 1. Scenario 1: General Greeting check
@@ -52,6 +72,13 @@ def run_voice_agent_e2e_tests():
     print(f"    Agent Response: '{history_text}'")
     assert len(history_text) > 0, "Empty history summary response"
     print("[PASS] Consult history summary flow verified.")
+
+    # Cleanup test user
+    print("[*] Cleaning up test patient records...")
+    del_url = f"{GATEWAY_URL}/api/v1/users/me"
+    del_resp = httpx.delete(del_url, headers=headers)
+    assert del_resp.status_code == 204
+    print("[PASS] E2E cleanup completed.")
 
     print("\n============================================================")
     print("[ALL CONVERSATIONAL VOICE AGENT E2E CHECKS PASSED]")
