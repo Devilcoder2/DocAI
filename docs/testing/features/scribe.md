@@ -38,7 +38,7 @@ This document lists test scenarios, validation steps, and progress logs for audi
 
 | Scenario | Mode | Status | Bugs Found | Notes |
 |---|---|---|---|---|
-| Audio stream to STT | Integration | `[ ] Pending` | None | Verify transcription text |
-| Structuring SOAP | Unit | `[ ] Pending` | None | Check LLM parsing prompts |
-| Auto-save trigger | E2E | `[ ] Pending` | None | Verify debounced HTTP calls |
-| Lock Note sign | E2E | `[ ] Pending` | None | Verify fields read-only |
+| Audio stream to STT | Integration | `[x] Passed` | None | Consumer transcript parsing works |
+| Structuring SOAP | Unit | `[x] Passed` | None | Initial note draft generated |
+| Auto-save trigger | E2E | `[x] Passed` | None | Debounced edits returned 200 |
+| Lock Note sign | E2E | `[x] Passed` | None | Approved note returns 400 on edit |
