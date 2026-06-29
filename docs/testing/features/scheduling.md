@@ -32,8 +32,8 @@ This document lists test scenarios, validation steps, and progress logs for the 
 
 | Scenario | Mode | Status | Bugs Found | Notes |
 |---|---|---|---|---|
-| Search specialty | Integration | `[ ] Pending` | None | Verify list matches DB |
-| Search ZIP code | Integration | `[ ] Pending` | None | Verify list matches DB |
-| Get doctor slots | Integration | `[ ] Pending` | None | Verify slot array structure |
-| Book slot | E2E | `[ ] Pending` | None | Verify db entry created |
-| Conflict booking | Unit | `[ ] Pending` | None | Verify double-booking rejected |
+| Search specialty | Integration | `[x] Passed` | None | Returned Dr. Alice Heart |
+| Search ZIP code | Integration | `[x] Passed` | None | Verified list matches DB |
+| Get doctor slots | Integration | `[x] Passed` | None | Retrieved 16 open slots |
+| Book slot | E2E | `[x] Passed` | None | Booking ID successfully created |
+| Conflict booking | Unit | `[x] Passed` | None | Double-booking returned 409 |
