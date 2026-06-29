@@ -42,8 +42,8 @@ This document lists test scenarios, validation steps, and progress logs for the 
 
 | Scenario | Mode | Status | Bugs Found | Notes |
 |---|---|---|---|---|
-| Welcome greeting | Integration | `[ ] Pending` | None | Verify greeting content |
-| Triage trigger | Integration | `[ ] Pending` | None | Check for 911 warning |
-| Hang up session | E2E | `[ ] Pending` | None | Verify drawer closes on client |
-| Out of scope block | Integration | `[ ] Pending` | None | Refuses cake/recipes |
-| History summary | Integration | `[ ] Pending` | None | Pulls database timeline |
+| Welcome greeting | Integration | `[x] Passed` | None | Welcome greeting contains booking assistant |
+| Triage trigger | Integration | `[x] Passed` | None | Emergency triggers flagged immediately |
+| Hang up session | E2E | `[x] Passed` | None | is_emergency set to True |
+| Out of scope block | Integration | `[x] Passed` | None | Recipe queries successfully blocked |
+| History summary | Integration | `[x] Passed` | None | Pulled database timeline summary |
