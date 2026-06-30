@@ -11,6 +11,13 @@
   --color-sidebar-bg: var(--sidebar-bg);
   --color-input-bg: var(--input-bg);
   --color-input-border: var(--input-border);
+
+  --color-medical-blue-dark: #004bba;
+  --color-medical-blue-soft: #e6f0ff;
+  --color-success-green: #10b981;
+  --color-warning-amber: #f59e0b;
+  --color-danger-red: #ef4444;
+  --color-primary-container: #0066ff;
 }
 
 :root {
@@ -61,4 +68,46 @@ html.dark .glass-effect {
 
 .transition-theme {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(15px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+.animate-float-up {
+  animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(194, 198, 216, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.04);
+}
+
+html.dark .glass-card {
+  background: rgba(17, 23, 38, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-mesh {
+  background: radial-gradient(circle at 70% 30%, #e6f0ff 0%, transparent 50%),
+              radial-gradient(circle at 10% 80%, #d3e4fe 0%, transparent 40%);
+}
+
+html.dark .hero-mesh {
+  background: radial-gradient(circle at 70% 30%, #0d1730 0%, transparent 50%),
+              radial-gradient(circle at 10% 80%, #0c1120 0%, transparent 40%);
 }
