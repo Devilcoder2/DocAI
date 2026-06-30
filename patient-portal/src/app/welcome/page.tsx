@@ -8,7 +8,7 @@ import {
   Video, MessageSquare, ArrowRight, CheckCircle, 
   Mic, Users, TrendingUp, Send, Globe
 } from "lucide-react";
-import ThemeToggle from "@/components/ThemeToggle";
+
 
 export default function WelcomePage() {
   const router = useRouter();
@@ -39,7 +39,6 @@ export default function WelcomePage() {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <ThemeToggle />
           <button 
             onClick={handleNavigateToLogin}
             className="bg-medical-blue-dark hover:bg-primary-container text-white px-5 py-2.5 rounded-xl font-label-md text-label-md transition-all active:scale-95 shadow-md shadow-medical-blue-dark/10 cursor-pointer"
