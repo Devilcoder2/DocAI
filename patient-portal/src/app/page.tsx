@@ -9,7 +9,7 @@ import {
   HelpCircle, LogOut, Search, Bell, Settings, Brain, 
   Calendar, CheckCircle, ChevronRight, ArrowRight, User, Shield
 } from "lucide-react";
-import ThemeToggle from "@/components/ThemeToggle";
+
 import SearchDashboard from "@/components/SearchDashboard";
 
 interface Appointment {
@@ -110,7 +110,6 @@ export default function HomePage() {
         </div>
 
         <div className="flex items-center gap-4">
-          <ThemeToggle />
           <button className="text-slate-500 hover:text-foreground hover:bg-sidebar-bg/80 p-2 rounded-full transition-colors relative cursor-pointer">
             <Bell className="w-5 h-5" />
             {upcomingAppointments.length > 0 && (
