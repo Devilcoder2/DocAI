@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
-import ThemeToggle from "@/components/ThemeToggle";
+
 
 interface Appointment {
   id: string;
@@ -127,10 +127,9 @@ export default function DoctorDashboard() {
           </div>
 
           <div className="flex items-center gap-4">
-            <ThemeToggle />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-bold text-foreground">{user.name}</p>
-              <p className="text-[11px] text-teal-450 font-semibold uppercase tracking-wider">{user.role}</p>
+              <p className="text-[11px] text-teal-500 font-semibold uppercase tracking-wider">{user.role}</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-input-bg border border-input-border flex items-center justify-center font-bold text-teal-500 transition-theme shadow-sm">
               {user.name.split(" ").map(n => n[0]).join("")}
