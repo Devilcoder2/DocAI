@@ -111,3 +111,30 @@ html.dark .hero-mesh {
   background: radial-gradient(circle at 70% 30%, #0d1730 0%, transparent 50%),
               radial-gradient(circle at 10% 80%, #0c1120 0%, transparent 40%);
 }
+
+/* Custom Floating Label styles */
+.floating-label-group {
+  position: relative;
+}
+.floating-label-group input::placeholder {
+  color: transparent;
+}
+.floating-label-group label {
+  transition: all 0.2s ease-out;
+}
+.floating-label-group input:placeholder-shown ~ label {
+  transform: translateY(14px) scale(1);
+  color: #727687;
+}
+.floating-label-group input:focus ~ label,
+.floating-label-group input:not(:placeholder-shown) ~ label {
+  transform: translateY(-8px) scale(0.85);
+  color: #0066ff;
+  background-color: var(--card-bg);
+  padding: 0 6px;
+}
+
+html.dark .floating-label-group input:focus ~ label,
+html.dark .floating-label-group input:not(:placeholder-shown) ~ label {
+  color: #2dd4bf;
+}
