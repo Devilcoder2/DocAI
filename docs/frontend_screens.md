@@ -4,6 +4,20 @@ This document catalogs all the frontend screens required for the Medical AI Plat
 
 ---
 
+## Key Application Features
+
+Before diving into individual screens, here is an overview of the platform's core functional units:
+
+1. **User Authentication & Access Gating**: Secure credentials and sandbox Google/Facebook SSO login flows that establish role-based access tokens (Patient vs. Doctor).
+2. **Clinic Directory Search & Slot Scheduling**: A provider catalog filterable by medical specialty and ZIP codes, with an interactive calendar to select open slots.
+3. **Secure WebRTC Telehealth Rooms**: Full-screen audio-video consult rooms protected by strict HIPAA-compliant token guards (only the assigned doctor and patient can enter).
+4. **AI Ambient Scribe & Clinical SOAP Editor**: Captures raw audio transcripts during consultations and uses LLMs to structure them into Subjective, Objective, Assessment, and Plan (SOAP) segments.
+5. **Post-Visit Care Companion**: A patient-facing chat interface backed by a LangGraph agent that answers questions about recovery plans using the approved clinical note as context.
+6. **Conversational Voice Assistant**: A voice-activated chatbot with emergency triage checkers (detects red-flag symptoms and advises calling 911) and out-of-scope question blockers.
+7. **Premium UI/UX Design System**: Custom fonts (Outfit & Inter), native light/dark theme variables, and interactive, CSS-only analytics bar charts.
+
+---
+
 ## 1. Authentication & Role Gateway
 
 ### Screen 1: Sandbox SSO & Role Gate
