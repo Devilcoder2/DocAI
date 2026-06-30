@@ -35,7 +35,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="min-h-full bg-slate-900 text-slate-100 selection:bg-teal-500 selection:text-slate-900"
+        className="min-h-full bg-slate-50 text-slate-900 selection:bg-teal-500 selection:text-slate-900"
         suppressHydrationWarning
       >
         <QueryProvider>
