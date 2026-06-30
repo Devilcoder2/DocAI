@@ -31,17 +31,6 @@
   --input-border: #cbd5e1;
 }
 
-html.dark {
-  /* Rich deep modern Dark Theme */
-  --background: #090d16;
-  --foreground: #f1f5f9;
-  --card-bg: #111726;
-  --card-border: #1e293b;
-  --sidebar-bg: #0f1524;
-  --input-bg: #0d1220;
-  --input-border: #1e293b;
-}
-
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -58,12 +47,6 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-html.dark .glass-effect {
-  background: rgba(17, 23, 38, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.8);
 }
 
 .transition-theme {
@@ -95,21 +78,9 @@ html.dark .glass-effect {
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.04);
 }
 
-html.dark .glass-card {
-  background: rgba(17, 23, 38, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.3);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
-}
-
 .hero-mesh {
   background: radial-gradient(circle at 70% 30%, #e6f0ff 0%, transparent 50%),
               radial-gradient(circle at 10% 80%, #d3e4fe 0%, transparent 40%);
-}
-
-html.dark .hero-mesh {
-  background: radial-gradient(circle at 70% 30%, #0d1730 0%, transparent 50%),
-              radial-gradient(circle at 10% 80%, #0c1120 0%, transparent 40%);
 }
 
 /* Custom Floating Label styles */
@@ -134,7 +105,4 @@ html.dark .hero-mesh {
   padding: 0 6px;
 }
 
-html.dark .floating-label-group input:focus ~ label,
-html.dark .floating-label-group input:not(:placeholder-shown) ~ label {
-  color: #2dd4bf;
-}
+
