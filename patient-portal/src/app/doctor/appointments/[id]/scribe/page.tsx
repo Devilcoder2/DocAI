@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
-import ThemeToggle from "@/components/ThemeToggle";
+
 
 interface Doctor {
   id: string;
@@ -310,7 +310,6 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
 
         {/* Status Indicators & Sign Button */}
         <div className="flex items-center gap-4">
-          <ThemeToggle />
           <button
             type="button"
             onClick={() => setIsHistoryOpen(!isHistoryOpen)}
