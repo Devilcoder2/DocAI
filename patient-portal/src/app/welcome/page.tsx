@@ -1,33 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { 
   Shield, Activity, Sparkles, Heart, Calendar, 
-  Video, MessageSquare, Lock, ArrowRight, CheckCircle, 
-  AlertCircle, Mic, Users, TrendingUp, Send, Globe,
-  Loader2, X
+  Video, MessageSquare, ArrowRight, CheckCircle, 
+  Mic, Users, TrendingUp, Send, Globe
 } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function WelcomePage() {
   const router = useRouter();
-  const { setAuth, token, user } = useAuthStore();
+  const { token, user } = useAuthStore();
   
-  // Auth Modal State
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"patient" | "doctor">("patient");
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
-  
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
   // Redirect if already logged in
   useEffect(() => {
     if (token && user) {
@@ -35,115 +21,8 @@ export default function WelcomePage() {
     }
   }, [token, user, router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
-    setSuccessMsg(null);
-
-    if (!email.trim() || !password.trim()) {
-      setErrorMsg("Please fill out all email and password parameters.");
-      return;
-    }
-
-    if (authMode === "register" && !name.trim()) {
-      setErrorMsg("Full name is required during registration.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      if (authMode === "register") {
-        const response = await fetch("http://localhost:8000/api/v1/public/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-            role: activeTab === "patient" ? "Patient" : "Doctor"
-          })
-        });
-
-        const data = await response.json();
-        setLoading(false);
-
-        if (!response.ok) {
-          setErrorMsg(data.detail || "Registration failed.");
-          return;
-        }
-
-        setAuth(data.token, data.user);
-        setSuccessMsg("Account successfully created!");
-        setTimeout(() => {
-          setIsAuthModalOpen(false);
-          router.push(data.user.role === "Doctor" ? "/doctor/dashboard" : "/");
-        }, 800);
-      } else {
-        const response = await fetch("http://localhost:8000/api/v1/public/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-        setLoading(false);
-
-        if (!response.ok) {
-          setErrorMsg(data.detail || "Authentication credentials invalid.");
-          return;
-        }
-
-        if (activeTab === "doctor" && data.user.role !== "Doctor") {
-          setErrorMsg("Patient credentials cannot access the Physician Dashboard.");
-          return;
-        }
-        if (activeTab === "patient" && data.user.role === "Doctor") {
-          setErrorMsg("Physician credentials must log in through Doctor portal.");
-          return;
-        }
-
-        setAuth(data.token, data.user);
-        setSuccessMsg("Login successful!");
-        setTimeout(() => {
-          setIsAuthModalOpen(false);
-          router.push(data.user.role === "Doctor" ? "/doctor/dashboard" : "/");
-        }, 800);
-      }
-    } catch (err) {
-      setLoading(false);
-      setErrorMsg("Failed to establish server connection. Check API Gateway status.");
-    }
-  };
-
-  const handleMockSSO = async (ssoType: "google" | "facebook") => {
-    setLoading(true);
-    setErrorMsg(null);
-    try {
-      const email = activeTab === "doctor" ? "alice.heart@medical.com" : "john.doe@email.com";
-      const response = await fetch("http://localhost:8000/api/v1/public/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-
-      const data = await response.json();
-      setLoading(false);
-
-      if (!response.ok) {
-        setErrorMsg("Failed to authorize simulated SSO credentials.");
-        return;
-      }
-
-      setAuth(data.token, data.user);
-      setSuccessMsg(`Simulated ${ssoType === "google" ? "Google" : "Facebook"} OAuth successful!`);
-      setTimeout(() => {
-        setIsAuthModalOpen(false);
-        router.push(data.user.role === "Doctor" ? "/doctor/dashboard" : "/");
-      }, 800);
-    } catch (err) {
-      setLoading(false);
-      setErrorMsg("SSO validation failed. Gateway is unreachable.");
-    }
+  const handleNavigateToLogin = () => {
+    router.push("/login");
   };
 
   return (
@@ -162,7 +41,7 @@ export default function WelcomePage() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <button 
-            onClick={() => setIsAuthModalOpen(true)}
+            onClick={handleNavigateToLogin}
             className="bg-medical-blue-dark hover:bg-primary-container text-white px-5 py-2.5 rounded-xl font-label-md text-label-md transition-all active:scale-95 shadow-md shadow-medical-blue-dark/10 cursor-pointer"
           >
             Sign In
@@ -185,13 +64,16 @@ export default function WelcomePage() {
               </p>
               <div className="flex gap-4 mt-4">
                 <button 
-                  onClick={() => setIsAuthModalOpen(true)}
+                  onClick={handleNavigateToLogin}
                   className="bg-primary-container hover:bg-medical-blue-dark text-white px-8 py-4 rounded-xl font-label-md text-label-md hover:shadow-xl transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
                 >
                   Get Started
                   <ArrowRight className="w-4 h-4" />
                 </button>
-                <button className="bg-card-bg text-primary dark:text-teal-400 hover:bg-sidebar-bg px-8 py-4 rounded-xl border border-card-border font-label-md text-label-md hover:shadow-md transition-all cursor-pointer">
+                <button 
+                  onClick={handleNavigateToLogin}
+                  className="bg-card-bg text-primary dark:text-teal-400 hover:bg-sidebar-bg px-8 py-4 rounded-xl border border-card-border font-label-md text-label-md hover:shadow-md transition-all cursor-pointer"
+                >
                   View Demo
                 </button>
               </div>
@@ -226,7 +108,7 @@ export default function WelcomePage() {
           <div className="max-w-[1200px] mx-auto">
             <div className="text-center mb-16 space-y-4">
               <h2 className="font-headline-lg text-headline-lg text-foreground font-bold">Integrated Clinical Units</h2>
-              <p className="font-body-md text-body-md text-slate-500 dark:text-slate-450 max-w-xl mx-auto">
+              <p className="font-body-md text-body-md text-slate-500 dark:text-slate-455 max-w-xl mx-auto">
                 One unified platform for the modern healthcare professional, built with the Single-Unit UX philosophy.
               </p>
             </div>
@@ -241,7 +123,7 @@ export default function WelcomePage() {
                       <Mic className="w-7 h-7" />
                     </div>
                     <h3 className="font-headline-md text-headline-md text-foreground font-bold">AI Ambient Scribe</h3>
-                    <p className="font-body-md text-body-md text-slate-550 dark:text-slate-400 max-w-md leading-relaxed">
+                    <p className="font-body-md text-body-md text-slate-555 dark:text-slate-400 max-w-md leading-relaxed">
                       Automatically captures consultation transcripts and generates structured SOAP notes, allowing you to focus entirely on the patient.
                     </p>
                   </div>
@@ -252,8 +134,8 @@ export default function WelcomePage() {
                   />
                 </div>
                 <div className="mt-8 flex gap-4">
-                  <span className="bg-sidebar-bg text-slate-650 dark:text-slate-400 px-3 py-1 rounded-full font-label-sm text-label-sm border border-card-border/60">NLP-Powered</span>
-                  <span className="bg-sidebar-bg text-slate-650 dark:text-slate-400 px-3 py-1 rounded-full font-label-sm text-label-sm border border-card-border/60">EHR Integrated</span>
+                  <span className="bg-sidebar-bg text-slate-655 dark:text-slate-400 px-3 py-1 rounded-full font-label-sm text-label-sm border border-card-border/60">NLP-Powered</span>
+                  <span className="bg-sidebar-bg text-slate-655 dark:text-slate-400 px-3 py-1 rounded-full font-label-sm text-label-sm border border-card-border/60">EHR Integrated</span>
                 </div>
               </div>
 
@@ -263,7 +145,7 @@ export default function WelcomePage() {
                   <Video className="w-7 h-7" />
                 </div>
                 <h3 className="font-headline-md text-headline-md text-foreground font-bold">Secure Telehealth</h3>
-                <p className="font-body-md text-body-md text-slate-550 dark:text-slate-400 leading-relaxed">
+                <p className="font-body-md text-body-md text-slate-555 dark:text-slate-400 leading-relaxed">
                   HIPAA-compliant WebRTC rooms with crystal-clear audio-video and low-latency diagnostic streaming.
                 </p>
                 <div className="pt-4 border-t border-card-border/55">
@@ -280,7 +162,7 @@ export default function WelcomePage() {
                   <Users className="w-7 h-7" />
                 </div>
                 <h3 className="font-headline-md text-headline-md text-foreground font-bold">Clinic Directory</h3>
-                <p className="font-body-md text-body-md text-slate-550 dark:text-slate-400 leading-relaxed">
+                <p className="font-body-md text-body-md text-slate-555 dark:text-slate-400 leading-relaxed">
                   Hyper-accurate filtering for specialists by proximity, insurance provider, and live availability.
                 </p>
                 <div className="w-full h-32 bg-sidebar-bg rounded-2xl overflow-hidden mt-4 border border-card-border/50 relative">
@@ -298,10 +180,13 @@ export default function WelcomePage() {
                     <MessageSquare className="w-7 h-7" />
                   </div>
                   <h3 className="font-headline-md text-headline-md text-foreground font-bold">Care Companion</h3>
-                  <p className="font-body-md text-body-md text-slate-550 dark:text-slate-400 leading-relaxed">
+                  <p className="font-body-md text-body-md text-slate-555 dark:text-slate-400 leading-relaxed">
                     An empathetic post-visit AI chat helping patients understand recovery plans and manage medication schedules seamlessly.
                   </p>
-                  <button className="bg-primary-container text-white hover:bg-medical-blue-dark px-6 py-2.5 rounded-xl font-label-md text-label-md shadow-sm transition-all cursor-pointer">
+                  <button 
+                    onClick={handleNavigateToLogin}
+                    className="bg-primary-container text-white hover:bg-medical-blue-dark px-6 py-2.5 rounded-xl font-label-md text-label-md shadow-sm transition-all cursor-pointer"
+                  >
                     Learn About Companion
                   </button>
                 </div>
@@ -330,7 +215,7 @@ export default function WelcomePage() {
           <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <h2 className="font-headline-lg text-headline-lg text-foreground font-bold">Measurable Clinical Efficiency</h2>
-              <p className="font-body-lg text-body-lg text-slate-550 dark:text-slate-400 leading-relaxed">
+              <p className="font-body-lg text-body-lg text-slate-555 dark:text-slate-400 leading-relaxed">
                 MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
               </p>
               
@@ -394,7 +279,7 @@ export default function WelcomePage() {
                     </div>
                     <div>
                       <p className="font-label-md text-label-md text-foreground font-bold">Enterprise Encryption</p>
-                      <p className="font-body-sm text-body-sm text-slate-550 dark:text-slate-400 mt-0.5">AES-256 Bit Data Protection Standard</p>
+                      <p className="font-body-sm text-body-sm text-slate-555 dark:text-slate-400 mt-0.5">AES-256 Bit Data Protection Standard</p>
                     </div>
                   </div>
                 </div>
@@ -419,12 +304,15 @@ export default function WelcomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
                 <button 
-                  onClick={() => setIsAuthModalOpen(true)}
+                  onClick={handleNavigateToLogin}
                   className="bg-white text-medical-blue-dark hover:bg-slate-100 px-10 py-5 rounded-2xl font-headline-md text-headline-md hover:shadow-xl transition-all active:scale-95 font-bold cursor-pointer"
                 >
                   Get Started Now
                 </button>
-                <button className="bg-transparent border-2 border-white/30 text-white hover:border-white/60 px-10 py-5 rounded-2xl font-headline-md text-headline-md hover:bg-white/10 transition-all font-bold cursor-pointer">
+                <button 
+                  onClick={handleNavigateToLogin}
+                  className="bg-transparent border-2 border-white/30 text-white hover:border-white/60 px-10 py-5 rounded-2xl font-headline-md text-headline-md hover:bg-white/10 transition-all font-bold cursor-pointer"
+                >
                   Schedule a Demo
                 </button>
               </div>
@@ -459,20 +347,20 @@ export default function WelcomePage() {
           <div>
             <h5 className="font-label-md text-label-md text-foreground mb-6 font-bold">Platform</h5>
             <ul className="space-y-4 font-body-sm text-body-sm text-slate-500 dark:text-slate-400">
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">AI Scribe</a></li>
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Telehealth Pro</a></li>
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Care Companion</a></li>
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Directory Services</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">AI Scribe</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Telehealth Pro</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Care Companion</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Directory Services</a></li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-label-md text-label-md text-foreground mb-6 font-bold">Support</h5>
             <ul className="space-y-4 font-body-sm text-body-sm text-slate-500 dark:text-slate-400">
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Help Center</a></li>
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">API Documentation</a></li>
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">HIPAA Policy</a></li>
-              <li><a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Contact Sales</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Help Center</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">API Documentation</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">HIPAA Policy</a></li>
+              <li><a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Contact Sales</a></li>
             </ul>
           </div>
 
@@ -498,189 +386,12 @@ export default function WelcomePage() {
         <div className="max-w-[1200px] mx-auto mt-16 pt-8 border-t border-card-border/50 flex flex-col sm:flex-row justify-between items-center gap-4 font-label-sm text-label-sm text-slate-500">
           <p>© {new Date().getFullYear()} MedOS AI Platform. All rights reserved.</p>
           <div className="flex gap-8">
-            <a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Privacy Policy</a>
-            <a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Terms of Service</a>
-            <a className="hover:text-primary dark:hover:text-teal-350 transition-colors" href="#">Security Standard</a>
+            <a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Privacy Policy</a>
+            <a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Terms of Service</a>
+            <a className="hover:text-primary dark:hover:text-teal-355 transition-colors" href="#">Security Standard</a>
           </div>
         </div>
       </footer>
-
-      {/* Modern Overlay Authentication Modal */}
-      {isAuthModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300 animate-float-up">
-          <div className="w-full max-w-md bg-card-bg border border-card-border rounded-3xl p-6 md:p-8 shadow-2xl relative transition-theme flex flex-col gap-6">
-            
-            {/* Close Button */}
-            <button 
-              onClick={() => setIsAuthModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-foreground p-1 hover:bg-sidebar-bg rounded-lg transition-colors cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {/* Header branding */}
-            <div className="text-center space-y-1.5 pt-2">
-              <h3 className="text-2xl font-black tracking-tight text-foreground">Access MedOS AI</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Secure entry to clinical schedules & Scribe workspaces</p>
-            </div>
-
-            {/* Tab Toggles: Patient vs Doctor Portal */}
-            <div className="grid grid-cols-2 bg-sidebar-bg p-1 rounded-2xl border border-card-border">
-              <button
-                type="button"
-                onClick={() => { setActiveTab("patient"); setErrorMsg(null); setSuccessMsg(null); }}
-                className={`py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
-                  activeTab === "patient" 
-                    ? "bg-medical-blue-dark text-white" 
-                    : "text-slate-500 hover:text-medical-blue-dark dark:hover:text-teal-300"
-                }`}
-              >
-                Patient Portal
-              </button>
-              <button
-                type="button"
-                onClick={() => { setActiveTab("doctor"); setErrorMsg(null); setSuccessMsg(null); }}
-                className={`py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
-                  activeTab === "doctor" 
-                    ? "bg-medical-blue-dark text-white" 
-                    : "text-slate-500 hover:text-medical-blue-dark dark:hover:text-teal-300"
-                }`}
-              >
-                Doctor Portal
-              </button>
-            </div>
-
-            {/* Credentials / Form Input Body */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              
-              {authMode === "register" && (
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                    className="w-full bg-input-bg border border-input-border focus:border-primary-container rounded-xl px-4 py-2.5 text-xs text-foreground placeholder-slate-400 focus:outline-none transition-theme"
-                  />
-                </div>
-              )}
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Email Address</label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full bg-input-bg border border-input-border focus:border-primary-container rounded-xl px-4 py-2.5 text-xs text-foreground placeholder-slate-400 focus:outline-none transition-theme"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Security Password</label>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-input-bg border border-input-border focus:border-primary-container rounded-xl px-4 py-2.5 text-xs text-foreground placeholder-slate-400 focus:outline-none transition-theme"
-                />
-              </div>
-
-              {/* Status Alert logs */}
-              {errorMsg && (
-                <div className="bg-danger-red/10 border border-danger-red/20 rounded-xl p-3 flex items-start gap-2.5 text-xs text-danger-red">
-                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                  <span>{errorMsg}</span>
-                </div>
-              )}
-
-              {successMsg && (
-                <div className="bg-success-green/10 border border-success-green/20 rounded-xl p-3 flex items-start gap-2.5 text-xs text-success-green">
-                  <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                  <span>{successMsg}</span>
-                </div>
-              )}
-
-              {/* Form submit button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-primary-container hover:bg-medical-blue-dark text-white py-3 rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-primary-container/10 transition-all disabled:opacity-75"
-              >
-                {loading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <>
-                    {authMode === "login" ? "Sign In to Account" : "Create Gated Account"}
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
-            </form>
-
-            {/* SSO / Divider and Google/Facebook mocks */}
-            <div className="space-y-4">
-              <div className="flex items-center my-2">
-                <div className="flex-1 border-t border-card-border" />
-                <span className="px-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider">SSO Sandbox Login</span>
-                <div className="flex-1 border-t border-card-border" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3.5">
-                <button
-                  type="button"
-                  onClick={() => handleMockSSO("google")}
-                  className="bg-card-bg border border-input-border rounded-xl px-4 py-2.5 text-xs font-bold text-foreground hover:bg-sidebar-bg flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Globe className="w-3.5 h-3.5 text-red-500" />
-                  Google SSO
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleMockSSO("facebook")}
-                  className="bg-card-bg border border-input-border rounded-xl px-4 py-2.5 text-xs font-bold text-foreground hover:bg-sidebar-bg flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Shield className="w-3.5 h-3.5 text-blue-600" />
-                  Facebook
-                </button>
-              </div>
-            </div>
-
-            {/* Switch Login vs Register */}
-            <div className="text-center font-label-sm text-label-sm text-slate-500 dark:text-slate-400">
-              {authMode === "login" ? (
-                <>
-                  Need to establish your profile?{" "}
-                  <button
-                    type="button"
-                    onClick={() => { setAuthMode("register"); setErrorMsg(null); setSuccessMsg(null); }}
-                    className="text-primary dark:text-teal-400 font-bold hover:underline cursor-pointer"
-                  >
-                    Register Here
-                  </button>
-                </>
-              ) : (
-                <>
-                  Already registered?{" "}
-                  <button
-                    type="button"
-                    onClick={() => { setAuthMode("login"); setErrorMsg(null); setSuccessMsg(null); }}
-                    className="text-primary dark:text-teal-400 font-bold hover:underline cursor-pointer"
-                  >
-                    Log In Here
-                  </button>
-                </>
-              )}
-            </div>
-
-          </div>
-        </div>
-      )}
 
     </div>
   );
