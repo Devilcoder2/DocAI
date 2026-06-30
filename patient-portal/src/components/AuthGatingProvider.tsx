@@ -8,7 +8,7 @@ interface AuthGatingProviderProps {
   children: React.ReactNode;
 }
 
-const PUBLIC_ROUTES = ["/welcome"];
+const PUBLIC_ROUTES = ["/welcome", "/login"];
 
 export default function AuthGatingProvider({ children }: AuthGatingProviderProps) {
   const router = useRouter();
