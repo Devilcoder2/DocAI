@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import { 
@@ -45,6 +45,29 @@ export default function WelcomePage() {
     router.push("/login");
   };
 
+  // Choreographed scroll-driven showcase logic
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const totalHeight = rect.height;
+      const viewportHeight = window.innerHeight;
+      const scrolled = -rect.top;
+      
+      const scrollableHeight = totalHeight - viewportHeight;
+      if (scrollableHeight <= 0) return;
+      
+      const fraction = Math.max(0, Math.min(1, scrolled / scrollableHeight));
+      setScrollProgress(fraction);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const features = [
     {
       id: "01",
@@ -53,7 +76,7 @@ export default function WelcomePage() {
       visual: (
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 shadow-2xl relative overflow-hidden font-mono text-[10px] space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <span className="text-indigo-650 font-bold flex items-center gap-1.5">
+            <span className="text-indigo-655 text-indigo-600 font-bold flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
               AMBIENT NLP NODES
             </span>
@@ -62,7 +85,7 @@ export default function WelcomePage() {
           <div className="space-y-2.5 text-slate-500">
             <p className="truncate"><span className="text-slate-700 font-bold">[00:24]</span> "BP measured 120 over 80..."</p>
             <p className="text-indigo-650 font-semibold truncate">↳ Generating SOAP Objective...</p>
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-150 font-sans text-slate-705 text-[10px] shadow-inner leading-relaxed">
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-150 font-sans text-slate-700 text-[10px] shadow-inner leading-relaxed">
               <strong>Objective:</strong> BP 120/80 mmHg, SpO2 99%. Lungs clear to auscultation.
             </div>
           </div>
@@ -117,7 +140,7 @@ export default function WelcomePage() {
               <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600 border border-emerald-100">
                 <Users className="w-4 h-4" />
               </div>
-              <span className="text-xs font-bold text-slate-800">Specialist Matching Engine</span>
+              <span className="text-xs font-bold text-slate-805 text-slate-800">Specialist Matching Engine</span>
             </div>
             <span className="text-[9px] text-slate-400 font-mono">1.2 mi radius</span>
           </div>
@@ -126,7 +149,7 @@ export default function WelcomePage() {
             <div className="bg-slate-50 border border-slate-100 p-3 rounded-2xl flex items-center justify-between shadow-sm hover:border-emerald-250 transition-colors">
               <div className="min-w-0">
                 <p className="text-[11px] font-bold text-slate-800">Dr. Alan Mercer, MD</p>
-                <p className="text-[9px] text-slate-500">Cardiology • In-Network</p>
+                <p className="text-[9px] text-slate-505 text-slate-500">Cardiology • In-Network</p>
               </div>
               <div className="text-right shrink-0">
                 <span className="text-[10px] bg-emerald-50 text-emerald-600 font-bold px-2 py-0.5 rounded-full border border-emerald-100 font-bold">98% Match</span>
@@ -137,7 +160,7 @@ export default function WelcomePage() {
                 <p className="text-[11px] font-bold text-slate-800">Dr. Jessica Chen</p>
                 <p className="text-[9px] text-slate-505 text-slate-500">Pediatrics • Out-Of-Network</p>
               </div>
-              <span className="text-[10px] bg-slate-100 text-slate-505 font-bold px-2 py-0.5 rounded-full">85% Match</span>
+              <span className="text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded-full">85% Match</span>
             </div>
           </div>
         </div>
@@ -150,7 +173,7 @@ export default function WelcomePage() {
       visual: (
         <div className="w-full bg-white border border-slate-100 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 h-[280px]">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest font-mono">Active Care Assistant</span>
+            <span className="text-[9px] font-bold text-slate-405 text-slate-400 uppercase tracking-widest font-mono">Active Care Assistant</span>
             <span className="w-2 h-2 rounded-full bg-indigo-600 animate-ping" />
           </div>
           
@@ -174,6 +197,53 @@ export default function WelcomePage() {
       )
     }
   ];
+
+  const getFeatureStyle = (idx: number, p: number) => {
+    const centers = [0, 0.33, 0.66, 1.0];
+    const center = centers[idx];
+    
+    let opacity = 0;
+    let translateY = 150; // starts below
+    
+    if (p <= center) {
+      if (idx === 0) {
+        opacity = 1;
+        translateY = 0;
+      } else {
+        const start = center - 0.20;
+        if (p < start) {
+          opacity = 0;
+          translateY = 150;
+        } else {
+          const t = (p - start) / 0.20;
+          opacity = t;
+          translateY = Math.round(150 * (1 - t));
+        }
+      }
+    } else {
+      // p > center
+      const fadeEnd = center + 0.15;
+      if (idx === 3) {
+        opacity = 1;
+        translateY = 0;
+      } else if (p > fadeEnd) {
+        opacity = 0;
+        translateY = 0;
+      } else {
+        const t = (p - center) / 0.15;
+        opacity = 1 - t;
+        translateY = 0; // Remains stationary!
+      }
+    }
+    
+    return {
+      opacity,
+      transform: `translateY(${translateY}px)`,
+      pointerEvents: opacity > 0.1 ? ("auto" as const) : ("none" as const),
+      zIndex: 10 + idx,
+      transition: "opacity 150ms ease-out, transform 150ms ease-out"
+    };
+  };
 
   return (
     <div className="min-h-screen bg-slate-50/30 text-slate-805 overflow-x-hidden font-sans relative">
@@ -218,24 +288,24 @@ export default function WelcomePage() {
               <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: "3s" }} />
               Introducing v4.0 Platform
             </span>
-            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-slate-900 leading-[1.05] tracking-tight">
+            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-slate-900 leading-[1.05] tracking-tight animate-fade-in">
               The Future of <br/>
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 bg-clip-text text-transparent">Medical Intelligence</span>
             </h1>
-            <p className="text-slate-650 text-lg sm:text-xl leading-relaxed max-w-2xl mt-2">
+            <p className="text-slate-650 text-slate-600 text-lg sm:text-xl leading-relaxed max-w-2xl mt-2 animate-fade-in">
               Precise diagnostics, ambient SOAP note transcription, and empathetic care. MedOS AI bridges the gap between complex clinical data and meaningful patient outcomes.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-2">
               <button 
                 onClick={handleNavigateToLogin}
-                className="bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/20 text-white px-8 py-4 rounded-xl font-semibold text-sm hover:-translate-y-0.5 transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
+                className="bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/20 text-white px-8 py-4 rounded-xl font-semibold text-sm hover:-translate-y-0.5 transition-all active:scale-95 flex items-center gap-2 cursor-pointer animate-fade-in"
               >
                 Get Started
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button 
                 onClick={handleNavigateToLogin}
-                className="bg-white text-slate-700 hover:text-slate-905 hover:bg-slate-50 hover:shadow-md px-8 py-4 rounded-xl border border-slate-200 font-semibold text-sm hover:-translate-y-0.5 transition-all cursor-pointer"
+                className="bg-white text-slate-700 hover:text-slate-905 text-slate-900 hover:bg-slate-50 hover:shadow-md px-8 py-4 rounded-xl border border-slate-200 font-semibold text-sm hover:-translate-y-0.5 transition-all cursor-pointer animate-fade-in"
               >
                 View Demo
               </button>
@@ -296,10 +366,10 @@ export default function WelcomePage() {
                   
                   <div className="space-y-2">
                     <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold font-mono">Active Consultation</span>
-                    <div className="bg-indigo-600/5 border border-indigo-50 p-2.5 rounded-xl flex items-center gap-3">
+                    <div className="bg-indigo-600/5 border border-indigo-55 p-2.5 rounded-xl flex items-center gap-3">
                       <div className="w-2.5 h-2.5 rounded-full bg-indigo-655 bg-indigo-650 animate-ping shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold text-slate-800 truncate">Telehealth Visit</p>
+                        <p className="text-[10px] font-bold text-slate-808 text-slate-800 truncate">Telehealth Visit</p>
                         <p className="text-[9px] text-indigo-605 text-indigo-600 font-medium">Connecting (WebRTC)</p>
                       </div>
                     </div>
@@ -320,7 +390,7 @@ export default function WelcomePage() {
                   </div>
                   
                   <div className="bg-white border border-slate-100 p-2 rounded-xl flex items-center justify-between text-[10px]">
-                    <span className="text-slate-500">Auto-save completed 1 min ago</span>
+                    <span className="text-slate-505 text-slate-500">Auto-save completed 1 min ago</span>
                     <button className="bg-indigo-50 hover:bg-indigo-100 text-indigo-750 px-3 py-1 rounded-lg font-semibold transition-all">
                       Export Notes
                     </button>
@@ -407,7 +477,7 @@ export default function WelcomePage() {
               </div>
               <div className="text-left">
                 <p className="font-bold text-xs text-slate-800 leading-none font-bold">HIPAA Compliant Platform</p>
-                <p className="text-[9px] text-slate-500 mt-1 uppercase font-semibold tracking-wider">AES-256 Encrypted &amp; Secure</p>
+                <p className="text-[9px] text-slate-505 text-slate-500 mt-1 uppercase font-semibold tracking-wider">AES-256 Encrypted &amp; Secure</p>
               </div>
             </div>
 
@@ -420,56 +490,73 @@ export default function WelcomePage() {
             <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Platform Ecosystem</span>
             <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-905 leading-tight">Integrated Clinical Modules</h2>
             <p className="text-slate-500 max-w-xl mx-auto text-base">
-              Scroll down to see how each module slides up and takes the place of the previous feature in the console view.
+              Scroll down to watch the clinical unit interfaces flow and slide up directly in place.
             </p>
           </div>
         </section>
 
-        {/* Scroll-driven Features Showcase Track (CSS-only Sticky stack) */}
-        <section className="relative w-full bg-slate-50 border-t border-slate-100 z-10">
-          
-          {features.map((feature, idx) => (
-            <div 
-              key={feature.id}
-              className="relative lg:sticky top-0 lg:top-20 h-auto lg:h-[calc(100vh-80px)] w-full flex items-center bg-slate-50 border-b border-slate-200/60 py-16 lg:py-0 shadow-sm"
-              style={{ zIndex: 10 + idx }}
-            >
-              <div className="max-w-7xl mx-auto px-6 md:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                
-                {/* Left Side: Transparent outline number & text */}
-                <div className="relative flex flex-col justify-center min-h-[300px]">
-                  {/* Outline Number */}
-                  <div 
-                    className="absolute left-0 text-[180px] sm:text-[280px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
-                    style={{ 
-                      WebkitTextStroke: "1.5px rgba(99, 102, 241, 0.12)", 
-                      color: "transparent"
-                    } as React.CSSProperties}
-                  >
-                    {feature.id}
-                  </div>
-                  
-                  <div className="space-y-4 max-w-md relative z-10 pl-6 border-l-2 border-indigo-600">
-                    <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Module {feature.id}</span>
-                    <h3 className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
-                      {feature.title}
-                    </h3>
-                    <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Right Side: The visual mockup console */}
-                <div className="w-full max-w-[460px] flex items-center justify-center justify-self-center lg:justify-self-end">
-                  {feature.visual}
-                </div>
-
+        {/* Mobile Showcase (Normal Scrolling Flow) */}
+        <div className="block lg:hidden max-w-7xl mx-auto px-6 md:px-8 space-y-16 py-12 bg-slate-50">
+          {features.map((feature) => (
+            <div key={feature.id} className="space-y-6">
+              <div className="relative pl-6 border-l-2 border-indigo-600">
+                <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Module {feature.id}</span>
+                <h3 className="text-3xl font-black text-slate-900 leading-tight">{feature.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{feature.description}</p>
+              </div>
+              <div className="w-full max-w-[400px] mx-auto">
+                {feature.visual}
               </div>
             </div>
           ))}
-          
-        </section>
+        </div>
+
+        {/* Desktop Choreographed Scroll Showcase */}
+        <div className="hidden lg:block relative w-full h-[320vh] bg-slate-50 border-t border-slate-100 z-10" ref={containerRef}>
+          <div className="sticky top-20 h-[calc(100vh-80px)] flex items-center w-full px-6 md:px-8 max-w-7xl mx-auto overflow-hidden">
+            <div className="relative w-full h-[450px]">
+              {features.map((feature, idx) => {
+                const style = getFeatureStyle(idx, scrollProgress);
+                return (
+                  <div 
+                    key={feature.id}
+                    className="absolute inset-0 grid grid-cols-2 gap-16 items-center w-full h-full"
+                    style={style}
+                  >
+                    {/* Left Side: Transparent outline number & text */}
+                    <div className="relative flex flex-col justify-center min-h-[300px]">
+                      {/* Outline Number */}
+                      <div 
+                        className="absolute left-0 text-[280px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                        style={{ 
+                          WebkitTextStroke: "1.5px rgba(99, 102, 241, 0.12)", 
+                          color: "transparent"
+                        } as React.CSSProperties}
+                      >
+                        {feature.id}
+                      </div>
+                      
+                      <div className="space-y-4 max-w-md relative z-10 pl-6 border-l-2 border-indigo-600">
+                        <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Module {feature.id}</span>
+                        <h3 className="text-4xl font-black text-slate-905 leading-tight">
+                          {feature.title}
+                        </h3>
+                        <p className="text-slate-600 text-base leading-relaxed">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right Side: The visual mockup console */}
+                    <div className="w-full max-w-[460px] flex items-center justify-center justify-self-end">
+                      {feature.visual}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
         {/* Trust & Analytics Section */}
         <section id="metrics" className="py-24 px-6 md:px-8 bg-white reveal-on-scroll">
@@ -570,8 +657,8 @@ export default function WelcomePage() {
         <section className="py-20 px-6 md:px-8 bg-white reveal-on-scroll">
           <div className="max-w-7xl mx-auto bg-slate-950 text-white rounded-[40px] p-12 md:p-20 relative overflow-hidden shadow-2xl border border-slate-900 font-mono">
             {/* Background Subtle Gradient Glows */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-655 bg-indigo-600 opacity-20 blur-[120px]" />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-655 bg-violet-600 opacity-20 blur-[120px]" />
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-650/10 rounded-full blur-[140px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-650/10 rounded-full blur-[140px]" />
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
               {/* Text content left */}
@@ -579,7 +666,7 @@ export default function WelcomePage() {
                 <span className="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-xs font-semibold border border-indigo-500/20 uppercase tracking-widest font-mono">
                   Launch Platform
                 </span>
-                <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl leading-tight font-black">
+                <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl leading-tight">
                   Ready to deploy your modern clinic console?
                 </h2>
                 <p className="text-slate-400 text-base leading-relaxed">
@@ -594,7 +681,7 @@ export default function WelcomePage() {
                   </button>
                   <button 
                     onClick={handleNavigateToLogin}
-                    className="bg-transparent border border-slate-700 hover:border-slate-505 text-slate-350 text-slate-305 hover:bg-white/5 px-8 py-4 rounded-xl text-sm font-semibold transition-all cursor-pointer font-sans"
+                    className="bg-transparent border border-slate-700 hover:border-slate-500 text-slate-300 hover:bg-white/5 px-8 py-4 rounded-xl text-sm font-semibold transition-all cursor-pointer font-sans"
                   >
                     Contact Sales Eng.
                   </button>
@@ -603,13 +690,13 @@ export default function WelcomePage() {
 
               {/* Terminal screen right */}
               <div className="bg-slate-950 border border-slate-850 p-6 rounded-2xl text-[10.5px] text-slate-350 text-left space-y-2.5 relative overflow-hidden shadow-inner leading-relaxed">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-900 text-slate-505 text-slate-500 uppercase tracking-widest text-[9px] font-bold">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-900 text-slate-500 uppercase tracking-widest text-[9px] font-bold">
                   <span>deploy-console-status</span>
                   <RefreshCw className="w-3 h-3 text-indigo-400 animate-spin" style={{ animationDuration: "4s" }} />
                 </div>
                 <p className="text-indigo-400">$ medos-admin deploy --region=us-east-1 --secure=true</p>
-                <p className="text-slate-505 text-slate-500">Connecting to EHR primary clinical endpoints...</p>
-                <p className="text-emerald-500 font-bold">✔ [OK] MedOS HIPAA validation key matches successfully.</p>
+                <p className="text-slate-500">Connecting to EHR primary clinical endpoints...</p>
+                <p className="text-emerald-500">✔ [OK] MedOS HIPAA validation key matches successfully.</p>
                 <p className="text-slate-505 text-slate-500">Initializing ambient scribe NLP nodes...</p>
                 <p className="text-emerald-500 font-bold">✔ [OK] Audio transcript transcription models active.</p>
                 <p className="text-indigo-305 text-indigo-300 font-bold font-sans">MedOS Platform node initialized. Ready to consult (t=148ms).</p>
@@ -635,10 +722,10 @@ export default function WelcomePage() {
               The leading artificial intelligence platform for high-performance clinical teams.
             </p>
             <div className="flex gap-4">
-              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-605 hover:text-indigo-650 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
+              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-600 hover:text-indigo-600 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
                 <Globe className="w-4 h-4" />
               </a>
-              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-605 hover:text-indigo-650 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
+              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-600 hover:text-indigo-600 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
                 <Send className="w-4 h-4" />
               </a>
             </div>
@@ -647,7 +734,7 @@ export default function WelcomePage() {
           <div>
             <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono">Platform</h5>
             <ul className="space-y-4 text-sm text-slate-500">
-              <li><a className="hover:text-indigo-650 transition-colors" href="#">AI Scribe</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">AI Scribe</a></li>
               <li><a className="hover:text-indigo-655 transition-colors" href="#">Telehealth Pro</a></li>
               <li><a className="hover:text-indigo-655 transition-colors" href="#">Care Companion</a></li>
               <li><a className="hover:text-indigo-655 transition-colors" href="#">Directory Services</a></li>
@@ -655,9 +742,9 @@ export default function WelcomePage() {
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-slate-805 text-slate-800 mb-6 uppercase tracking-wider font-mono font-bold">Support</h5>
-            <ul className="space-y-4 text-sm text-slate-505 text-slate-500">
-              <li><a className="hover:text-indigo-650 transition-colors" href="#">Help Center</a></li>
+            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono font-bold">Support</h5>
+            <ul className="space-y-4 text-sm text-slate-500">
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Help Center</a></li>
               <li><a className="hover:text-indigo-655 transition-colors" href="#">API Documentation</a></li>
               <li><a className="hover:text-indigo-655 transition-colors" href="#">HIPAA Policy</a></li>
               <li><a className="hover:text-indigo-655 transition-colors" href="#">Contact Sales</a></li>
@@ -665,7 +752,7 @@ export default function WelcomePage() {
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-slate-808 text-slate-800 mb-6 uppercase tracking-wider font-mono font-bold">Newsletter</h5>
+            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono font-bold">Newsletter</h5>
             <p className="text-sm text-slate-505 text-slate-500 mb-4 leading-relaxed">
               Stay updated with clinical AI research.
             </p>
@@ -686,7 +773,7 @@ export default function WelcomePage() {
         <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} MedOS AI Platform. All rights reserved.</p>
           <div className="flex gap-8">
-            <a className="hover:text-indigo-650 transition-colors" href="#">Privacy Policy</a>
+            <a className="hover:text-indigo-600 transition-colors" href="#">Privacy Policy</a>
             <a className="hover:text-indigo-655 hover:text-indigo-600 transition-colors" href="#">Terms of Service</a>
             <a className="hover:text-indigo-655 hover:text-indigo-600 transition-colors" href="#">Security Standard</a>
           </div>
