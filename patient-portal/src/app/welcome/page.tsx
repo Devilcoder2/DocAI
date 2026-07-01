@@ -634,17 +634,26 @@ export default function WelcomePage() {
                   MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
                 </p>
               </div>
-              
-              {/* Circular SVG dials */}
+                       {/* Circular SVG dials */}
               <div className="grid grid-cols-3 gap-4">
                 {/* Dial 1 */}
                 <div 
                   onMouseEnter={() => setActiveGauge(0)}
                   onMouseLeave={() => setActiveGauge(null)}
-                  className={`bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                  className={`relative overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                     activeGauge === 0 ? "border-indigo-300 bg-indigo-50/10 scale-105 shadow-md shadow-indigo-100/5" : "border-slate-100 hover:border-slate-200"
                   }`}
                 >
+                  {/* Background Outline Number */}
+                  <div 
+                    className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                    style={{ 
+                      WebkitTextStroke: "1px rgba(99, 102, 241, 0.1)", 
+                      color: "transparent"
+                    } as React.CSSProperties}
+                  >
+                    01
+                  </div>
                   <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
@@ -659,10 +668,20 @@ export default function WelcomePage() {
                 <div 
                   onMouseEnter={() => setActiveGauge(1)}
                   onMouseLeave={() => setActiveGauge(null)}
-                  className={`bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                  className={`relative overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                     activeGauge === 1 ? "border-emerald-300 bg-emerald-50/10 scale-105 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
                   }`}
                 >
+                  {/* Background Outline Number */}
+                  <div 
+                    className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                    style={{ 
+                      WebkitTextStroke: "1px rgba(16, 185, 129, 0.1)", 
+                      color: "transparent"
+                    } as React.CSSProperties}
+                  >
+                    02
+                  </div>
                   <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
@@ -677,10 +696,20 @@ export default function WelcomePage() {
                 <div 
                   onMouseEnter={() => setActiveGauge(2)}
                   onMouseLeave={() => setActiveGauge(null)}
-                  className={`bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                  className={`relative overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                     activeGauge === 2 ? "border-violet-300 bg-violet-50/10 scale-105 shadow-md shadow-violet-100/5" : "border-slate-100 hover:border-slate-200"
                   }`}
                 >
+                  {/* Background Outline Number */}
+                  <div 
+                    className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                    style={{ 
+                      WebkitTextStroke: "1px rgba(139, 92, 246, 0.1)", 
+                      color: "transparent"
+                    } as React.CSSProperties}
+                  >
+                    03
+                  </div>
                   <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
@@ -701,17 +730,17 @@ export default function WelcomePage() {
                 ) : activeGauge === 0 ? (
                   <div className="space-y-1 animate-fade-in w-full text-left">
                     <p className="text-[10px] font-bold text-indigo-650 uppercase tracking-widest font-mono">Charting Speed Details</p>
-                    <p className="text-xs text-slate-605 text-slate-600 leading-normal">MedOS saves clinicians an average of 2.4 hours of documentation per day, accelerating primary SOAP drafts by 42%.</p>
+                    <p className="text-xs text-slate-600 leading-normal">MedOS saves clinicians an average of 2.4 hours of documentation per day, accelerating primary SOAP drafts by 42%.</p>
                   </div>
                 ) : activeGauge === 1 ? (
                   <div className="space-y-1 animate-fade-in w-full text-left">
                     <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest font-mono">Direct Patient Engagement</p>
-                    <p className="text-xs text-slate-605 text-slate-600 leading-normal">Allows 68% more face-to-face eye contact. Ambient microphones work in the background, eliminating typing during visits.</p>
+                    <p className="text-xs text-slate-600 leading-normal">Allows 68% more face-to-face eye contact. Ambient microphones work in the background, eliminating typing during visits.</p>
                   </div>
                 ) : (
                   <div className="space-y-1 animate-fade-in w-full text-left">
                     <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest font-mono">EHR Sync Coding Accuracy</p>
-                    <p className="text-xs text-slate-655 text-slate-600 leading-normal">Boosts billing validation and SOAP diagnostic match accuracy by 24%, lowering primary claim rejection rates.</p>
+                    <p className="text-xs text-slate-600 leading-normal">Boosts billing validation and SOAP diagnostic match accuracy by 24%, lowering primary claim rejection rates.</p>
                   </div>
                 )}
               </div>
@@ -719,48 +748,48 @@ export default function WelcomePage() {
             
             {/* Right Column: Live Telemetry monitor panel & Graph (lg:col-span-7) */}
             <div className="lg:col-span-7 relative">
-              <div className="bg-slate-900 text-slate-100 p-6 md:p-8 rounded-[40px] relative overflow-hidden border border-slate-800 shadow-2xl hover:shadow-indigo-950/20 hover:scale-[1.005] transition-all duration-300 font-mono space-y-6">
+              <div className="bg-white text-slate-800 p-6 md:p-8 rounded-[40px] relative overflow-hidden border border-slate-100 shadow-2xl hover:shadow-indigo-100/20 hover:scale-[1.005] transition-all duration-300 font-mono space-y-6">
                 
                 {/* Terminal Header */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                   <div className="flex items-center gap-2.5">
-                    <Server className="w-4.5 h-4.5 text-indigo-400" />
-                    <h4 className="text-xs font-bold text-slate-200">medos-node-east</h4>
+                    <Server className="w-4.5 h-4.5 text-indigo-600" />
+                    <h4 className="text-xs font-bold text-slate-850 text-slate-800">medos-node-east</h4>
                   </div>
-                  <span className="text-[9px] bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 font-bold flex items-center gap-1.5">
+                  <span className="text-[9px] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 font-bold flex items-center gap-1.5 animate-pulse">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                     NODE_STABLE
                   </span>
                 </div>
                 
                 {/* Live Console Output */}
-                <div className="h-[125px] bg-slate-950/60 rounded-2xl border border-slate-850 p-4 font-mono text-[10px] text-indigo-300 space-y-1.5 overflow-hidden shadow-inner leading-relaxed text-left select-none">
+                <div className="h-[125px] bg-slate-50 rounded-2xl border border-slate-100 p-4 font-mono text-[10px] text-indigo-700 space-y-1.5 overflow-hidden shadow-inner leading-relaxed text-left select-none">
                   {telemetryLogs.map((log, index) => (
                     <p key={index} className="truncate animate-float-up" style={{ animationDuration: "0.2s" }}>
-                      <span className="text-slate-500">{log.split(" ")[0]}</span> {log.substring(log.indexOf(" ") + 1)}
+                      <span className="text-slate-400">{log.split(" ")[0]}</span> {log.substring(log.indexOf(" ") + 1)}
                     </p>
                   ))}
                 </div>
 
                 {/* Animated Line Graph Dashboard */}
-                <div className="space-y-3.5 border-t border-slate-800 pt-5">
+                <div className="space-y-3.5 border-t border-slate-100 pt-5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-mono text-slate-400">Documentation Efficiency Trend</span>
-                    <span className="font-bold text-emerald-400 font-mono flex items-center gap-1">
+                    <span className="font-mono text-slate-500">Documentation Efficiency Trend</span>
+                    <span className="font-bold text-emerald-600 font-mono flex items-center gap-1">
                       <TrendingUp className="w-3.5 h-3.5" />
                       -145 min/week
                     </span>
                   </div>
                   
-                  <div className="h-[120px] bg-slate-950/40 rounded-2xl border border-slate-850 p-4 flex items-end relative overflow-hidden">
+                  <div className="h-[120px] bg-slate-50 rounded-2xl border border-slate-100 p-4 flex items-end relative overflow-hidden">
                     <svg className="w-full h-full" viewBox="0 0 100 35" fill="none">
                       {/* Background grid lines */}
-                      <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                      <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                      <line x1="0" y1="30" x2="100" y2="30" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+                      <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
+                      <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
+                      <line x1="0" y1="30" x2="100" y2="30" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
                       
                       {/* Gradient path fill */}
-                      <path d="M0,32 Q20,28 40,20 T80,10 T100,5 L100,35 L0,35 Z" fill="url(#grad)" opacity="0.15" />
+                      <path d="M0,32 Q20,28 40,20 T80,10 T100,5 L100,35 L0,35 Z" fill="url(#grad)" opacity="0.08" />
                       
                       {/* Active graph line */}
                       <path 
@@ -789,7 +818,7 @@ export default function WelcomePage() {
                     </svg>
                   </div>
                   
-                  <div className="flex justify-between text-[9px] font-mono text-slate-550 text-slate-500 px-1 select-none">
+                  <div className="flex justify-between text-[9px] font-mono text-slate-500 px-1 select-none">
                     <span>Mon</span>
                     <span>Tue</span>
                     <span>Wed</span>
@@ -801,7 +830,6 @@ export default function WelcomePage() {
 
               </div>
             </div>
-            
           </div>
         </section>
 
