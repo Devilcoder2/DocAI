@@ -246,7 +246,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/30 text-slate-805 overflow-x-hidden font-sans relative">
+    <div className="min-h-screen bg-slate-50/30 text-slate-800 overflow-x-clip font-sans relative">
       
       {/* TopAppBar Navigation */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
