@@ -248,34 +248,34 @@ export default function WelcomePage() {
   return (
     <div className="min-h-screen bg-slate-50/30 text-slate-800 overflow-x-clip font-sans relative">
       
-      {/* TopAppBar Navigation */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 md:px-8 h-20 flex justify-between items-center w-full">
-          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-2.5 group cursor-pointer">
-              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
-                <Activity className="w-5.5 h-5.5 animate-pulse" />
+      {/* TopAppBar Navigation (Floating Pill Capsule Bar) */}
+      <div className="sticky top-4 z-50 w-full px-4 md:px-8 max-w-7xl mx-auto pointer-events-none">
+        <header className="pointer-events-auto bg-indigo-50/80 backdrop-blur-md border border-indigo-100 rounded-full shadow-lg shadow-indigo-100/10 px-6 md:px-8 h-16 flex justify-between items-center w-full transition-all duration-300">
+          <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2 group cursor-pointer">
+              <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
+                <Activity className="w-4.5 h-4.5 animate-pulse" />
               </div>
-              <span className="font-display font-extrabold text-xl text-slate-900 tracking-tight">
-                MedOS <span className="text-indigo-600 font-medium">AI</span>
+              <span className="font-display font-extrabold text-base text-slate-900 tracking-tight animate-fade-in">
+                MedOS <span className="text-indigo-650 font-semibold text-indigo-600 font-medium">AI</span>
               </span>
             </div>
-            <nav className="hidden md:flex gap-8 items-center">
-              <a className="text-sm font-semibold text-indigo-600 border-b-2 border-indigo-600 py-2.5 transition-all" href="#">Home</a>
-              <a className="text-sm font-medium text-slate-500 hover:text-slate-900 hover:scale-[1.02] py-2.5 transition-all" href="#solutions">Solutions</a>
-              <a className="text-sm font-medium text-slate-500 hover:text-slate-900 hover:scale-[1.02] py-2.5 transition-all" href="#metrics">Metrics</a>
+            <nav className="hidden md:flex gap-6 items-center">
+              <a className="text-xs font-bold text-indigo-705 text-indigo-700 py-1 transition-all" href="#">Home</a>
+              <a className="text-xs font-medium text-slate-500 hover:text-slate-905 hover:text-slate-900 hover:scale-[1.02] py-1 transition-all" href="#solutions">Solutions</a>
+              <a className="text-xs font-medium text-slate-500 hover:text-slate-905 hover:text-slate-900 hover:scale-[1.02] py-1 transition-all" href="#metrics">Metrics</a>
             </nav>
           </div>
           <div className="flex items-center gap-4">
             <button 
               onClick={handleNavigateToLogin}
-              className="bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-600/10 hover:-translate-y-0.5 text-white px-5.5 py-2.5 rounded-xl font-semibold text-sm transition-all active:scale-95 cursor-pointer"
+              className="bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-600/15 hover:-translate-y-0.5 text-white px-5 py-2 rounded-full font-semibold text-xs transition-all active:scale-95 cursor-pointer"
             >
               Sign In
             </button>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       <main className="relative">
         
