@@ -20,6 +20,10 @@
   --color-primary-container: #0066ff;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   /* Slate-based default Elegant Light Theme */
   --background: #f8fafc;
