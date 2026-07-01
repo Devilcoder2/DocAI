@@ -49,6 +49,42 @@ export default function WelcomePage() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Active gauges and simulated live telemetry state
+  const [activeGauge, setActiveGauge] = useState<number | null>(null);
+  const [telemetryLogs, setTelemetryLogs] = useState<string[]>([
+    "sys-node-east [INIT]: starting telemetry sync...",
+    "sys-node-east [SECURE]: HIPAA validation handshake verified [AES-256-GCM]",
+    "sys-node-east [NET]: latency ping 14ms (avg)",
+    "ehr-sync-service [OK]: patient database matched successfully [1.2s]",
+  ]);
+
+  useEffect(() => {
+    const logPhrases = [
+      "scribe-ambient-nlp: transcription block verified at 99.4% accuracy",
+      "sys-node-west [SECURE]: credentials handshake complete",
+      "vitals-ingest-hub: diagnostics matched in-network triggers",
+      "webrtc-signaling: video connection established (1080p)",
+      "telehealth-latency: ping optimized. current local ping = 11ms",
+      "ehr-soap-service: SOAP draft exported successfully [240ms]",
+      "auth-handshake: AES-256 session key rotated",
+      "sys-node-east [SYNC]: 14 patient records synced to primary hub"
+    ];
+
+    const interval = setInterval(() => {
+      const randomPhrase = logPhrases[Math.floor(Math.random() * logPhrases.length)];
+      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const newEntry = `[${timestamp}] ${randomPhrase}`;
+      
+      setTelemetryLogs((prev) => {
+        const updated = [...prev, newEntry];
+        if (updated.length > 5) updated.shift();
+        return updated;
+      });
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -581,14 +617,20 @@ export default function WelcomePage() {
         </div>
 
         {/* Trust & Analytics Section */}
-        <section id="metrics" className="py-24 px-6 md:px-8 bg-white reveal-on-scroll">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <section id="metrics" className="py-28 px-6 md:px-8 bg-white border-b border-slate-100 reveal-on-scroll">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             
-            <div className="space-y-10">
-              <div className="space-y-3">
-                <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Performance Impact</span>
-                <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">Measurable Clinical Efficiency</h2>
-                <p className="text-slate-600 text-base leading-relaxed">
+            {/* Left Column: Headings & Dials (lg:col-span-5) */}
+            <div className="lg:col-span-5 space-y-10">
+              <div className="space-y-4">
+                <span className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
+                  Performance Impact
+                </span>
+                <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">
+                  Measurable Clinical Efficiency
+                </h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
                   MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
                 </p>
               </div>
@@ -596,82 +638,170 @@ export default function WelcomePage() {
               {/* Circular SVG dials */}
               <div className="grid grid-cols-3 gap-4">
                 {/* Dial 1 */}
-                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:scale-105 transition-transform">
-                  <div className="relative w-16 h-16">
+                <div 
+                  onMouseEnter={() => setActiveGauge(0)}
+                  onMouseLeave={() => setActiveGauge(null)}
+                  className={`bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                    activeGauge === 0 ? "border-indigo-300 bg-indigo-50/10 scale-105 shadow-md shadow-indigo-100/5" : "border-slate-100 hover:border-slate-200"
+                  }`}
+                >
+                  <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                      <path className="text-slate-150" stroke="currentColor" strokeWidth="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      <path className="text-indigo-600" strokeDasharray="82, 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
+                      <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#4f46e5" strokeWidth="2.5" strokeDasharray="82, 100" strokeLinecap="round" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+42%</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+42%</div>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Charting Speed</span>
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Charting Speed</span>
                 </div>
 
                 {/* Dial 2 */}
-                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:scale-105 transition-transform">
-                  <div className="relative w-16 h-16">
+                <div 
+                  onMouseEnter={() => setActiveGauge(1)}
+                  onMouseLeave={() => setActiveGauge(null)}
+                  className={`bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                    activeGauge === 1 ? "border-emerald-300 bg-emerald-50/10 scale-105 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
+                  }`}
+                >
+                  <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                      <path className="text-slate-150" stroke="currentColor" strokeWidth="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      <path className="text-emerald-500" strokeDasharray="91, 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
+                      <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#10b981" strokeWidth="2.5" strokeDasharray="68, 100" strokeLinecap="round" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+68%</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+68%</div>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Engagement</span>
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Engagement</span>
                 </div>
 
                 {/* Dial 3 */}
-                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:scale-105 transition-transform">
-                  <div className="relative w-16 h-16">
+                <div 
+                  onMouseEnter={() => setActiveGauge(2)}
+                  onMouseLeave={() => setActiveGauge(null)}
+                  className={`bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                    activeGauge === 2 ? "border-violet-300 bg-violet-50/10 scale-105 shadow-md shadow-violet-100/5" : "border-slate-100 hover:border-slate-200"
+                  }`}
+                >
+                  <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                      <path className="text-slate-150" stroke="currentColor" strokeWidth="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      <path className="text-violet-500" strokeDasharray="76, 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
+                      <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#8b5cf6" strokeWidth="2.5" strokeDasharray="76, 100" strokeLinecap="round" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+24%</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+24%</div>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Accuracy</span>
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Accuracy</span>
                 </div>
+              </div>
+
+              {/* Gauge Detail Explanation Box */}
+              <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl h-24 flex items-center transition-all duration-300">
+                {activeGauge === null ? (
+                  <p className="text-xs text-slate-500 text-center font-mono uppercase tracking-wide w-full select-none">
+                    💡 Hover over any gauge dial to inspect telemetry data
+                  </p>
+                ) : activeGauge === 0 ? (
+                  <div className="space-y-1 animate-fade-in w-full text-left">
+                    <p className="text-[10px] font-bold text-indigo-650 uppercase tracking-widest font-mono">Charting Speed Details</p>
+                    <p className="text-xs text-slate-605 text-slate-600 leading-normal">MedOS saves clinicians an average of 2.4 hours of documentation per day, accelerating primary SOAP drafts by 42%.</p>
+                  </div>
+                ) : activeGauge === 1 ? (
+                  <div className="space-y-1 animate-fade-in w-full text-left">
+                    <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest font-mono">Direct Patient Engagement</p>
+                    <p className="text-xs text-slate-605 text-slate-600 leading-normal">Allows 68% more face-to-face eye contact. Ambient microphones work in the background, eliminating typing during visits.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-1 animate-fade-in w-full text-left">
+                    <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest font-mono">EHR Sync Coding Accuracy</p>
+                    <p className="text-xs text-slate-655 text-slate-600 leading-normal">Boosts billing validation and SOAP diagnostic match accuracy by 24%, lowering primary claim rejection rates.</p>
+                  </div>
+                )}
               </div>
             </div>
             
-            {/* Live Telemetry monitor panel */}
-            <div className="relative animate-slide-in-right">
-              <div className="bg-slate-900 text-slate-100 p-8 rounded-[40px] relative overflow-hidden border border-slate-800 shadow-2xl hover:shadow-indigo-950/20 hover:scale-[1.01] transition-all duration-300 font-mono">
-                <div className="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
-                  <div className="flex items-center gap-2">
-                    <Server className="w-5 h-5 text-indigo-400" />
-                    <h4 className="text-sm font-bold text-slate-200">System Telemetry Log</h4>
+            {/* Right Column: Live Telemetry monitor panel & Graph (lg:col-span-7) */}
+            <div className="lg:col-span-7 relative">
+              <div className="bg-slate-900 text-slate-100 p-6 md:p-8 rounded-[40px] relative overflow-hidden border border-slate-800 shadow-2xl hover:shadow-indigo-950/20 hover:scale-[1.005] transition-all duration-300 font-mono space-y-6">
+                
+                {/* Terminal Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                  <div className="flex items-center gap-2.5">
+                    <Server className="w-4.5 h-4.5 text-indigo-400" />
+                    <h4 className="text-xs font-bold text-slate-200">medos-node-east</h4>
                   </div>
-                  <span className="text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full flex items-center gap-1.5 text-[10px] font-semibold">
+                  <span className="text-[9px] bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 font-bold flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    Live Server
+                    NODE_STABLE
                   </span>
                 </div>
                 
-                <div className="space-y-4 text-xs leading-relaxed text-slate-350">
-                  <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-xl border border-slate-850">
-                    <span className="text-slate-400">MedOS Active Session Nodes:</span>
-                    <span className="text-indigo-400 font-bold">12,480 active</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-xl border border-slate-850">
-                    <span className="text-slate-400">Total Consultations Processed:</span>
-                    <span className="text-slate-200 font-bold">1,240,580</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-xl border border-slate-850">
-                    <span className="text-slate-400">Node API Ping Latency:</span>
-                    <span className="text-emerald-400 font-bold">14ms average</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-3 bg-indigo-950/30 p-4 rounded-xl border border-indigo-900/40 text-slate-300">
-                    <Shield className="w-5 h-5 text-indigo-400 shrink-0" />
-                    <p className="text-[11px] leading-normal font-sans text-slate-400">
-                      Standardized security protocol: AES-256 Bit payload encryption active for all active client endpoints.
+                {/* Live Console Output */}
+                <div className="h-[125px] bg-slate-950/60 rounded-2xl border border-slate-850 p-4 font-mono text-[10px] text-indigo-300 space-y-1.5 overflow-hidden shadow-inner leading-relaxed text-left select-none">
+                  {telemetryLogs.map((log, index) => (
+                    <p key={index} className="truncate animate-float-up" style={{ animationDuration: "0.2s" }}>
+                      <span className="text-slate-500">{log.split(" ")[0]}</span> {log.substring(log.indexOf(" ") + 1)}
                     </p>
+                  ))}
+                </div>
+
+                {/* Animated Line Graph Dashboard */}
+                <div className="space-y-3.5 border-t border-slate-800 pt-5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-mono text-slate-400">Documentation Efficiency Trend</span>
+                    <span className="font-bold text-emerald-400 font-mono flex items-center gap-1">
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      -145 min/week
+                    </span>
+                  </div>
+                  
+                  <div className="h-[120px] bg-slate-950/40 rounded-2xl border border-slate-850 p-4 flex items-end relative overflow-hidden">
+                    <svg className="w-full h-full" viewBox="0 0 100 35" fill="none">
+                      {/* Background grid lines */}
+                      <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+                      <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+                      <line x1="0" y1="30" x2="100" y2="30" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+                      
+                      {/* Gradient path fill */}
+                      <path d="M0,32 Q20,28 40,20 T80,10 T100,5 L100,35 L0,35 Z" fill="url(#grad)" opacity="0.15" />
+                      
+                      {/* Active graph line */}
+                      <path 
+                        d="M0,32 Q20,28 40,20 T80,10 T100,5" 
+                        stroke="url(#line-grad)" 
+                        strokeWidth="1.5" 
+                        strokeLinecap="round"
+                        strokeDasharray="500"
+                        strokeDashoffset="0"
+                      >
+                        <animate attributeName="stroke-dashoffset" values="500;0" dur="2s" repeatCount="1" />
+                      </path>
+
+                      {/* Definitions */}
+                      <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#10b981" />
+                          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+                        </linearGradient>
+                        <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#6366f1" />
+                          <stop offset="50%" stopColor="#a855f7" />
+                          <stop offset="100%" stopColor="#10b981" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                  
+                  <div className="flex justify-between text-[9px] font-mono text-slate-550 text-slate-500 px-1 select-none">
+                    <span>Mon</span>
+                    <span>Tue</span>
+                    <span>Wed</span>
+                    <span>Thu</span>
+                    <span>Fri</span>
+                    <span>Sat</span>
                   </div>
                 </div>
+
               </div>
             </div>
+            
           </div>
         </section>
 
