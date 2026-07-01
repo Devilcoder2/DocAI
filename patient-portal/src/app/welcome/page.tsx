@@ -50,7 +50,7 @@ export default function WelcomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Active gauges and simulated live telemetry state
-  const [activeGauge, setActiveGauge] = useState<number | null>(null);
+  const [activeGauge, setActiveGauge] = useState<number | null>(0);
   const [telemetryLogs, setTelemetryLogs] = useState<string[]>([
     "sys-node-east [INIT]: starting telemetry sync...",
     "sys-node-east [SECURE]: HIPAA validation handshake verified [AES-256-GCM]",
@@ -788,7 +788,6 @@ export default function WelcomePage() {
                     {/* Dial 1 (Speed) - slides up last */}
                     <div 
                       onMouseEnter={() => setActiveGauge(0)}
-                      onMouseLeave={() => setActiveGauge(null)}
                       style={getGaugeCardStyle(0, metricsProgress, activeGauge === 0)}
                       className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                         activeGauge === 0 ? "border-indigo-300 bg-indigo-50/10 shadow-md shadow-indigo-100/5" : "border-slate-100 hover:border-slate-200"
@@ -813,10 +812,9 @@ export default function WelcomePage() {
                     {/* Dial 2 (Engagement) - slides in from left second */}
                     <div 
                       onMouseEnter={() => setActiveGauge(1)}
-                      onMouseLeave={() => setActiveGauge(null)}
                       style={getGaugeCardStyle(1, metricsProgress, activeGauge === 1)}
                       className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
-                        activeGauge === 1 ? "border-emerald-300 bg-emerald-50/10 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
+                        activeGauge === 1 ? "border-emerald-350 bg-emerald-50/10 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
                       }`}
                     >
                       <div 
@@ -838,7 +836,6 @@ export default function WelcomePage() {
                     {/* Dial 3 (Accuracy) - slides in from left first */}
                     <div 
                       onMouseEnter={() => setActiveGauge(2)}
-                      onMouseLeave={() => setActiveGauge(null)}
                       style={getGaugeCardStyle(2, metricsProgress, activeGauge === 2)}
                       className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                         activeGauge === 2 ? "border-violet-300 bg-violet-50/10 shadow-md shadow-violet-100/5" : "border-slate-100 hover:border-slate-200"
@@ -863,11 +860,7 @@ export default function WelcomePage() {
 
                   {/* Gauge Detail Explanation Box */}
                   <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl h-24 flex items-center transition-all duration-300">
-                    {activeGauge === null ? (
-                      <p className="text-xs text-slate-500 text-center font-mono uppercase tracking-wide w-full select-none">
-                        💡 Hover over any gauge dial to inspect telemetry data
-                      </p>
-                    ) : activeGauge === 0 ? (
+                    {activeGauge === 0 ? (
                       <div className="space-y-1 animate-fade-in w-full text-left">
                         <p className="text-[10px] font-bold text-indigo-650 uppercase tracking-widest font-mono">Charting Speed Details</p>
                         <p className="text-xs text-slate-600 leading-normal">MedOS saves clinicians an average of 2.4 hours of documentation per day, accelerating primary SOAP drafts by 42%.</p>
