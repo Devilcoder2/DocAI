@@ -484,30 +484,29 @@ export default function WelcomePage() {
           </div>
         </section>
 
-        {/* Introduction Header for sticky scroll showcase */}
-        <section id="solutions" className="pt-28 pb-12 bg-slate-50/50 border-t border-slate-100/60">
-          <div className="max-w-7xl mx-auto px-6 md:px-8 text-center flex flex-col items-center gap-4">
+        {/* Mobile Showcase Header & List (Normal Scrolling Flow) */}
+        <div className="block lg:hidden pt-20 bg-slate-50 px-6">
+          <div className="text-center flex flex-col items-center gap-3 mb-8">
             <span className="inline-flex items-center gap-1.5 bg-indigo-55 bg-indigo-50 border border-indigo-100 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
               Platform Ecosystem
             </span>
-            <h2 className="font-display font-black text-4xl sm:text-5xl text-slate-900 leading-[1.15] tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">
+            <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-[1.15] tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">
               Integrated Clinical Modules
             </h2>
             <div className="w-24 h-0.5 bg-slate-200 mt-2 relative rounded-full overflow-hidden">
               <div className="absolute inset-y-0 left-0 w-8 bg-indigo-600 rounded-full animate-pulse" style={{ animationDuration: "2s" }} />
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* Mobile Showcase (Normal Scrolling Flow) */}
-        <div className="block lg:hidden max-w-7xl mx-auto px-6 md:px-8 space-y-16 py-12 bg-slate-50">
+        <div className="block lg:hidden max-w-7xl mx-auto px-6 md:px-8 space-y-16 pb-16 bg-slate-50">
           {features.map((feature) => (
             <div key={feature.id} className="space-y-6">
               <div className="relative pl-6 border-l-2 border-indigo-600">
                 <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Module {feature.id}</span>
                 <h3 className="text-3xl font-black text-slate-900 leading-tight">{feature.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{feature.description}</p>
+                <p className="text-slate-605 text-slate-600 text-sm leading-relaxed">{feature.description}</p>
               </div>
               <div className="w-full max-w-[400px] mx-auto">
                 {feature.visual}
@@ -518,8 +517,23 @@ export default function WelcomePage() {
 
         {/* Desktop Choreographed Scroll Showcase */}
         <div className="hidden lg:block relative w-full h-[320vh] bg-slate-50 border-t border-slate-100 z-10" ref={containerRef}>
-          <div className="sticky top-20 h-[calc(100vh-80px)] flex items-center w-full px-6 md:px-8 max-w-7xl mx-auto overflow-hidden">
-            <div className="relative w-full h-[450px]">
+          <div className="sticky top-20 h-[calc(100vh-80px)] flex flex-col justify-center w-full px-6 md:px-8 max-w-7xl mx-auto overflow-hidden">
+            
+            {/* Sticky Header inside desktop showcase */}
+            <div className="text-center flex flex-col items-center gap-3 mb-12 shrink-0">
+              <span className="inline-flex items-center gap-1.5 bg-indigo-55 bg-indigo-50 border border-indigo-100 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
+                Platform Ecosystem
+              </span>
+              <h2 className="font-display font-black text-4xl sm:text-4xl text-slate-900 leading-[1.15] tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">
+                Integrated Clinical Modules
+              </h2>
+              <div className="w-24 h-0.5 bg-slate-200 mt-2 relative rounded-full overflow-hidden">
+                <div className="absolute inset-y-0 left-0 w-8 bg-indigo-600 rounded-full animate-pulse" style={{ animationDuration: "2s" }} />
+              </div>
+            </div>
+
+            <div className="relative w-full h-[450px] shrink-0">
               {features.map((feature, idx) => {
                 const style = getFeatureStyle(idx, scrollProgress);
                 return (
