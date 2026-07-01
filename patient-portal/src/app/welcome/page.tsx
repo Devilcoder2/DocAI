@@ -485,13 +485,18 @@ export default function WelcomePage() {
         </section>
 
         {/* Introduction Header for sticky scroll showcase */}
-        <section id="solutions" className="pt-24 bg-slate-50/50 border-t border-slate-100">
-          <div className="max-w-7xl mx-auto px-6 md:px-8 text-center space-y-3">
-            <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Platform Ecosystem</span>
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-905 leading-tight">Integrated Clinical Modules</h2>
-            <p className="text-slate-500 max-w-xl mx-auto text-base">
-              Scroll down to watch the clinical unit interfaces flow and slide up directly in place.
-            </p>
+        <section id="solutions" className="pt-28 pb-12 bg-slate-50/50 border-t border-slate-100/60">
+          <div className="max-w-7xl mx-auto px-6 md:px-8 text-center flex flex-col items-center gap-4">
+            <span className="inline-flex items-center gap-1.5 bg-indigo-55 bg-indigo-50 border border-indigo-100 px-3.5 py-1.5 rounded-full text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
+              Platform Ecosystem
+            </span>
+            <h2 className="font-display font-black text-4xl sm:text-5xl text-slate-900 leading-[1.15] tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 bg-clip-text text-transparent">
+              Integrated Clinical Modules
+            </h2>
+            <div className="w-24 h-0.5 bg-slate-200 mt-2 relative rounded-full overflow-hidden">
+              <div className="absolute inset-y-0 left-0 w-8 bg-indigo-600 rounded-full animate-pulse" style={{ animationDuration: "2s" }} />
+            </div>
           </div>
         </section>
 
