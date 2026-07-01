@@ -85,19 +85,91 @@ export default function WelcomePage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Metrics section scroll progress state
+  const [metricsProgress, setMetricsProgress] = useState(0);
+  const metricsRef = useRef<HTMLDivElement>(null);
+
+  const getGaugeCardStyle = (idx: number, p: number, isHovered: boolean) => {
+    let opacity = 0;
+    let transform = "";
+    
+    if (idx === 2) {
+      // Box 3: slides in from left between 0.15 and 0.40
+      if (p < 0.15) {
+        opacity = 0;
+        transform = "translateX(-120px)";
+      } else if (p > 0.40) {
+        opacity = 1;
+        transform = "translateX(0px)";
+      } else {
+        const t = (p - 0.15) / 0.25;
+        opacity = t;
+        transform = `translateX(${-120 * (1 - t)}px)`;
+      }
+    } else if (idx === 1) {
+      // Box 2: slides in from left between 0.40 and 0.65
+      if (p < 0.40) {
+        opacity = 0;
+        transform = "translateX(-120px)";
+      } else if (p > 0.65) {
+        opacity = 1;
+        transform = "translateX(0px)";
+      } else {
+        const t = (p - 0.40) / 0.25;
+        opacity = t;
+        transform = `translateX(${-120 * (1 - t)}px)`;
+      }
+    } else if (idx === 0) {
+      // Box 1: slides up from bottom between 0.65 and 0.90
+      if (p < 0.65) {
+        opacity = 0;
+        transform = "translateY(100px)";
+      } else if (p > 0.90) {
+        opacity = 1;
+        transform = "translateY(0px)";
+      } else {
+        const t = (p - 0.65) / 0.25;
+        opacity = t;
+        transform = `translateY(${100 * (1 - t)}px)`;
+      }
+    }
+
+    if (isHovered) {
+      transform += " scale(1.05)";
+    }
+    
+    return {
+      opacity,
+      transform,
+      transition: "opacity 150ms ease-out, transform 150ms/150ms ease-out"
+    };
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const totalHeight = rect.height;
       const viewportHeight = window.innerHeight;
-      const scrolled = -rect.top;
-      
-      const scrollableHeight = totalHeight - viewportHeight;
-      if (scrollableHeight <= 0) return;
-      
-      const fraction = Math.max(0, Math.min(1, scrolled / scrollableHeight));
-      setScrollProgress(fraction);
+
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const totalHeight = rect.height;
+        const scrolled = -rect.top;
+        const scrollableHeight = totalHeight - viewportHeight;
+        if (scrollableHeight > 0) {
+          const fraction = Math.max(0, Math.min(1, scrolled / scrollableHeight));
+          setScrollProgress(fraction);
+        }
+      }
+
+      if (metricsRef.current) {
+        const rect = metricsRef.current.getBoundingClientRect();
+        const totalHeight = rect.height;
+        const scrolled = -rect.top;
+        const scrollableHeight = totalHeight - viewportHeight;
+        if (scrollableHeight > 0) {
+          const fraction = Math.max(0, Math.min(1, scrolled / scrollableHeight));
+          setMetricsProgress(fraction);
+        }
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -617,11 +689,10 @@ export default function WelcomePage() {
         </div>
 
         {/* Trust & Analytics Section */}
-        <section id="metrics" className="py-28 px-6 md:px-8 bg-white border-b border-slate-100 reveal-on-scroll">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            
-            {/* Left Column: Headings & Dials (lg:col-span-5) */}
-            <div className="lg:col-span-5 space-y-10">
+        <div id="metrics">
+          {/* Mobile Metrics Layout (Normal Scrolling Flow) */}
+          <section className="block lg:hidden py-20 px-6 md:px-8 bg-white border-b border-slate-100">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 gap-16 items-center">
               <div className="space-y-4">
                 <span className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
@@ -630,214 +701,285 @@ export default function WelcomePage() {
                 <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">
                   Measurable Clinical Efficiency
                 </h2>
-                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                <p className="text-slate-600 text-sm leading-relaxed">
                   MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
                 </p>
               </div>
-                       {/* Circular SVG dials */}
+
+              {/* Statically positioned mobile dials */}
               <div className="grid grid-cols-3 gap-4">
                 {/* Dial 1 */}
-                <div 
-                  onMouseEnter={() => setActiveGauge(0)}
-                  onMouseLeave={() => setActiveGauge(null)}
-                  className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
-                    activeGauge === 0 ? "border-indigo-300 bg-indigo-50/10 scale-105 shadow-md shadow-indigo-100/5" : "border-slate-100 hover:border-slate-200"
-                  }`}
-                >
-                  {/* Background Outline Number */}
-                  <div 
-                    className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
-                    style={{ 
-                      WebkitTextStroke: "1.2px rgba(99, 102, 241, 0.22)", 
-                      color: "transparent"
-                    } as React.CSSProperties}
-                  >
-                    01
-                  </div>
-                  <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
+                <div className="relative isolate overflow-hidden bg-slate-50 border border-slate-100 rounded-3xl p-4 flex flex-col items-center text-center gap-4">
+                  <div className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" style={{ WebkitTextStroke: "1px rgba(99, 102, 241, 0.1)", color: "transparent" } as React.CSSProperties}>01</div>
+                  <div className="relative w-16 h-16">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#4f46e5" strokeWidth="2.5" strokeDasharray="82, 100" strokeLinecap="round" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+42%</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+42%</div>
                   </div>
                   <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Charting Speed</span>
                 </div>
 
                 {/* Dial 2 */}
-                <div 
-                  onMouseEnter={() => setActiveGauge(1)}
-                  onMouseLeave={() => setActiveGauge(null)}
-                  className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
-                    activeGauge === 1 ? "border-emerald-300 bg-emerald-50/10 scale-105 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
-                  }`}
-                >
-                  {/* Background Outline Number */}
-                  <div 
-                    className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
-                    style={{ 
-                      WebkitTextStroke: "1.2px rgba(16, 185, 129, 0.22)", 
-                      color: "transparent"
-                    } as React.CSSProperties}
-                  >
-                    02
-                  </div>
-                  <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
+                <div className="relative isolate overflow-hidden bg-slate-50 border border-slate-100 rounded-3xl p-4 flex flex-col items-center text-center gap-4">
+                  <div className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" style={{ WebkitTextStroke: "1px rgba(16, 185, 129, 0.1)", color: "transparent" } as React.CSSProperties}>02</div>
+                  <div className="relative w-16 h-16">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#10b981" strokeWidth="2.5" strokeDasharray="68, 100" strokeLinecap="round" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+68%</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+68%</div>
                   </div>
                   <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Engagement</span>
                 </div>
 
                 {/* Dial 3 */}
-                <div 
-                  onMouseEnter={() => setActiveGauge(2)}
-                  onMouseLeave={() => setActiveGauge(null)}
-                  className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
-                    activeGauge === 2 ? "border-violet-300 bg-violet-50/10 scale-105 shadow-md shadow-violet-100/5" : "border-slate-100 hover:border-slate-200"
-                  }`}
-                >
-                  {/* Background Outline Number */}
-                  <div 
-                    className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
-                    style={{ 
-                      WebkitTextStroke: "1.2px rgba(139, 92, 246, 0.22)", 
-                      color: "transparent"
-                    } as React.CSSProperties}
-                  >
-                    03
-                  </div>
-                  <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
+                <div className="relative isolate overflow-hidden bg-slate-50 border border-slate-100 rounded-3xl p-4 flex flex-col items-center text-center gap-4">
+                  <div className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" style={{ WebkitTextStroke: "1px rgba(139, 92, 246, 0.1)", color: "transparent" } as React.CSSProperties}>03</div>
+                  <div className="relative w-16 h-16">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
                       <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#8b5cf6" strokeWidth="2.5" strokeDasharray="76, 100" strokeLinecap="round" />
                     </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+24%</div>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+24%</div>
                   </div>
                   <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Accuracy</span>
                 </div>
               </div>
 
-              {/* Gauge Detail Explanation Box */}
-              <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl h-24 flex items-center transition-all duration-300">
-                {activeGauge === null ? (
-                  <p className="text-xs text-slate-500 text-center font-mono uppercase tracking-wide w-full select-none">
-                    💡 Hover over any gauge dial to inspect telemetry data
-                  </p>
-                ) : activeGauge === 0 ? (
-                  <div className="space-y-1 animate-fade-in w-full text-left">
-                    <p className="text-[10px] font-bold text-indigo-650 uppercase tracking-widest font-mono">Charting Speed Details</p>
-                    <p className="text-xs text-slate-600 leading-normal">MedOS saves clinicians an average of 2.4 hours of documentation per day, accelerating primary SOAP drafts by 42%.</p>
-                  </div>
-                ) : activeGauge === 1 ? (
-                  <div className="space-y-1 animate-fade-in w-full text-left">
-                    <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest font-mono">Direct Patient Engagement</p>
-                    <p className="text-xs text-slate-600 leading-normal">Allows 68% more face-to-face eye contact. Ambient microphones work in the background, eliminating typing during visits.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-1 animate-fade-in w-full text-left">
-                    <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest font-mono">EHR Sync Coding Accuracy</p>
-                    <p className="text-xs text-slate-600 leading-normal">Boosts billing validation and SOAP diagnostic match accuracy by 24%, lowering primary claim rejection rates.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            {/* Right Column: Live Telemetry monitor panel & Graph (lg:col-span-7) */}
-            <div className="lg:col-span-7 relative">
-              <div className="bg-white text-slate-800 p-6 md:p-8 rounded-[40px] relative overflow-hidden border border-slate-100 shadow-2xl hover:shadow-indigo-100/20 hover:scale-[1.005] transition-all duration-300 font-mono space-y-6">
-                
-                {/* Terminal Header */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-2.5">
-                    <Server className="w-4.5 h-4.5 text-indigo-600" />
-                    <h4 className="text-xs font-bold text-slate-850 text-slate-800">medos-node-east</h4>
-                  </div>
-                  <span className="text-[9px] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 font-bold flex items-center gap-1.5 animate-pulse">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    NODE_STABLE
-                  </span>
+              {/* Mobile telemetry console */}
+              <div className="bg-white text-slate-800 p-6 rounded-[32px] border border-slate-100 shadow-xl font-mono space-y-6">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5"><Server className="w-4 h-4 text-indigo-600" /> medos-node-east</span>
+                  <span className="text-[8px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-100 font-bold">NODE_STABLE</span>
                 </div>
-                
-                {/* Live Console Output */}
-                <div className="h-[125px] bg-slate-50 rounded-2xl border border-slate-100 p-4 font-mono text-[10px] text-indigo-700 space-y-1.5 overflow-hidden shadow-inner leading-relaxed text-left select-none">
+                <div className="h-[100px] bg-slate-50 rounded-2xl border border-slate-100 p-3 font-mono text-[9px] text-indigo-700 space-y-1 overflow-hidden shadow-inner text-left">
                   {telemetryLogs.map((log, index) => (
-                    <p key={index} className="truncate animate-float-up" style={{ animationDuration: "0.2s" }}>
-                      <span className="text-slate-400">{log.split(" ")[0]}</span> {log.substring(log.indexOf(" ") + 1)}
-                    </p>
+                    <p key={index} className="truncate"><span className="text-slate-400">{log.split(" ")[0]}</span> {log.substring(log.indexOf(" ") + 1)}</p>
                   ))}
                 </div>
+              </div>
+            </div>
+          </section>
 
-                {/* Animated Line Graph Dashboard */}
-                <div className="space-y-3.5 border-t border-slate-100 pt-5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-mono text-slate-500">Documentation Efficiency Trend</span>
-                    <span className="font-bold text-emerald-600 font-mono flex items-center gap-1">
-                      <TrendingUp className="w-3.5 h-3.5" />
-                      -145 min/week
+          {/* Desktop Metrics Layout (Sticky Choreographed Scroll Viewport) */}
+          <div ref={metricsRef} className="hidden lg:block relative w-full h-[260vh] bg-white border-b border-slate-100 z-10">
+            <div className="sticky top-20 h-[calc(100vh-80px)] flex items-center w-full px-6 md:px-8 max-w-7xl mx-auto overflow-hidden">
+              <div className="max-w-7xl mx-auto grid grid-cols-12 gap-16 items-center w-full">
+                
+                {/* Left Column: Headings & Dials (col-span-5) */}
+                <div className="col-span-5 space-y-10">
+                  <div className="space-y-4">
+                    <span className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-full text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono shadow-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
+                      Performance Impact
                     </span>
+                    <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">
+                      Measurable Clinical Efficiency
+                    </h2>
+                    <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                      MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
+                    </p>
                   </div>
                   
-                  <div className="h-[120px] bg-slate-50 rounded-2xl border border-slate-100 p-4 flex items-end relative overflow-hidden">
-                    <svg className="w-full h-full" viewBox="0 0 100 35" fill="none">
-                      {/* Background grid lines */}
-                      <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
-                      <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
-                      <line x1="0" y1="30" x2="100" y2="30" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
-                      
-                      {/* Gradient path fill */}
-                      <path d="M0,32 Q20,28 40,20 T80,10 T100,5 L100,35 L0,35 Z" fill="url(#grad)" opacity="0.08" />
-                      
-                      {/* Active graph line */}
-                      <path 
-                        d="M0,32 Q20,28 40,20 T80,10 T100,5" 
-                        stroke="url(#line-grad)" 
-                        strokeWidth="1.5" 
-                        strokeLinecap="round"
-                        strokeDasharray="500"
-                        strokeDashoffset="0"
+                  {/* Staggered animated dials */}
+                  <div className="grid grid-cols-3 gap-4">
+                    {/* Dial 1 (Speed) - slides up last */}
+                    <div 
+                      onMouseEnter={() => setActiveGauge(0)}
+                      onMouseLeave={() => setActiveGauge(null)}
+                      style={getGaugeCardStyle(0, metricsProgress, activeGauge === 0)}
+                      className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                        activeGauge === 0 ? "border-indigo-300 bg-indigo-50/10 shadow-md shadow-indigo-100/5" : "border-slate-100 hover:border-slate-200"
+                      }`}
+                    >
+                      <div 
+                        className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                        style={{ WebkitTextStroke: "1.2px rgba(99, 102, 241, 0.22)", color: "transparent" } as React.CSSProperties}
                       >
-                        <animate attributeName="stroke-dashoffset" values="500;0" dur="2s" repeatCount="1" />
-                      </path>
+                        01
+                      </div>
+                      <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
+                          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#4f46e5" strokeWidth="2.5" strokeDasharray="82, 100" strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+42%</div>
+                      </div>
+                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Charting Speed</span>
+                    </div>
 
-                      {/* Definitions */}
-                      <defs>
-                        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" stopColor="#10b981" />
-                          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-                        </linearGradient>
-                        <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#6366f1" />
-                          <stop offset="50%" stopColor="#a855f7" />
-                          <stop offset="100%" stopColor="#10b981" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
+                    {/* Dial 2 (Engagement) - slides in from left second */}
+                    <div 
+                      onMouseEnter={() => setActiveGauge(1)}
+                      onMouseLeave={() => setActiveGauge(null)}
+                      style={getGaugeCardStyle(1, metricsProgress, activeGauge === 1)}
+                      className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                        activeGauge === 1 ? "border-emerald-300 bg-emerald-50/10 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
+                      }`}
+                    >
+                      <div 
+                        className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                        style={{ WebkitTextStroke: "1.2px rgba(16, 185, 129, 0.22)", color: "transparent" } as React.CSSProperties}
+                      >
+                        02
+                      </div>
+                      <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
+                          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#10b981" strokeWidth="2.5" strokeDasharray="68, 100" strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+68%</div>
+                      </div>
+                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Engagement</span>
+                    </div>
+
+                    {/* Dial 3 (Accuracy) - slides in from left first */}
+                    <div 
+                      onMouseEnter={() => setActiveGauge(2)}
+                      onMouseLeave={() => setActiveGauge(null)}
+                      style={getGaugeCardStyle(2, metricsProgress, activeGauge === 2)}
+                      className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                        activeGauge === 2 ? "border-violet-300 bg-violet-50/10 shadow-md shadow-violet-100/5" : "border-slate-100 hover:border-slate-200"
+                      }`}
+                    >
+                      <div 
+                        className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
+                        style={{ WebkitTextStroke: "1.2px rgba(139, 92, 246, 0.22)", color: "transparent" } as React.CSSProperties}
+                      >
+                        03
+                      </div>
+                      <div className="relative w-18 h-18 sm:w-20 sm:h-20 transition-transform duration-300">
+                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#f1f5f9" strokeWidth="2.5" />
+                          <circle cx="18" cy="18" r="15.9155" fill="none" stroke="#8b5cf6" strokeWidth="2.5" strokeDasharray="76, 100" strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-slate-800">+24%</div>
+                      </div>
+                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-mono">Accuracy</span>
+                    </div>
                   </div>
-                  
-                  <div className="flex justify-between text-[9px] font-mono text-slate-500 px-1 select-none">
-                    <span>Mon</span>
-                    <span>Tue</span>
-                    <span>Wed</span>
-                    <span>Thu</span>
-                    <span>Fri</span>
-                    <span>Sat</span>
+
+                  {/* Gauge Detail Explanation Box */}
+                  <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl h-24 flex items-center transition-all duration-300">
+                    {activeGauge === null ? (
+                      <p className="text-xs text-slate-500 text-center font-mono uppercase tracking-wide w-full select-none">
+                        💡 Hover over any gauge dial to inspect telemetry data
+                      </p>
+                    ) : activeGauge === 0 ? (
+                      <div className="space-y-1 animate-fade-in w-full text-left">
+                        <p className="text-[10px] font-bold text-indigo-650 uppercase tracking-widest font-mono">Charting Speed Details</p>
+                        <p className="text-xs text-slate-600 leading-normal">MedOS saves clinicians an average of 2.4 hours of documentation per day, accelerating primary SOAP drafts by 42%.</p>
+                      </div>
+                    ) : activeGauge === 1 ? (
+                      <div className="space-y-1 animate-fade-in w-full text-left">
+                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest font-mono">Direct Patient Engagement</p>
+                        <p className="text-xs text-slate-600 leading-normal">Allows 68% more face-to-face eye contact. Ambient microphones work in the background, eliminating typing during visits.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-1 animate-fade-in w-full text-left">
+                        <p className="text-[10px] font-bold text-violet-600 uppercase tracking-widest font-mono">EHR Sync Coding Accuracy</p>
+                        <p className="text-xs text-slate-600 leading-normal">Boosts billing validation and SOAP diagnostic match accuracy by 24%, lowering primary claim rejection rates.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Right Column: Live Telemetry monitor panel & Graph (col-span-7) */}
+                <div className="col-span-7 relative">
+                  <div className="bg-white text-slate-800 p-6 md:p-8 rounded-[40px] relative overflow-hidden border border-slate-100 shadow-2xl hover:shadow-indigo-100/20 hover:scale-[1.005] transition-all duration-300 font-mono space-y-6">
+                    
+                    {/* Terminal Header */}
+                    <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                      <div className="flex items-center gap-2.5">
+                        <Server className="w-4.5 h-4.5 text-indigo-600" />
+                        <h4 className="text-xs font-bold text-slate-850 text-slate-800">medos-node-east</h4>
+                      </div>
+                      <span className="text-[9px] bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-100 font-bold flex items-center gap-1.5 animate-pulse">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                        NODE_STABLE
+                      </span>
+                    </div>
+                    
+                    {/* Live Console Output */}
+                    <div className="h-[125px] bg-slate-50 rounded-2xl border border-slate-100 p-4 font-mono text-[10px] text-indigo-700 space-y-1.5 overflow-hidden shadow-inner leading-relaxed text-left select-none">
+                      {telemetryLogs.map((log, index) => (
+                        <p key={index} className="truncate animate-float-up" style={{ animationDuration: "0.2s" }}>
+                          <span className="text-slate-400">{log.split(" ")[0]}</span> {log.substring(log.indexOf(" ") + 1)}
+                        </p>
+                      ))}
+                    </div>
+
+                    {/* Animated Line Graph Dashboard */}
+                    <div className="space-y-3.5 border-t border-slate-100 pt-5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-mono text-slate-500">Documentation Efficiency Trend</span>
+                        <span className="font-bold text-emerald-600 font-mono flex items-center gap-1">
+                          <TrendingUp className="w-3.5 h-3.5" />
+                          -145 min/week
+                        </span>
+                      </div>
+                      
+                      <div className="h-[120px] bg-slate-50 rounded-2xl border border-slate-100 p-4 flex items-end relative overflow-hidden">
+                        <svg className="w-full h-full" viewBox="0 0 100 35" fill="none">
+                          {/* Background grid lines */}
+                          <line x1="0" y1="10" x2="100" y2="10" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
+                          <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
+                          <line x1="0" y1="30" x2="100" y2="30" stroke="rgba(0,0,0,0.02)" strokeWidth="0.5" />
+                          
+                          {/* Gradient path fill */}
+                          <path d="M0,32 Q20,28 40,20 T80,10 T100,5 L100,35 L0,35 Z" fill="url(#grad)" opacity="0.08" />
+                          
+                          {/* Active graph line */}
+                          <path 
+                            d="M0,32 Q20,28 40,20 T80,10 T100,5" 
+                            stroke="url(#line-grad)" 
+                            strokeWidth="1.5" 
+                            strokeLinecap="round"
+                            strokeDasharray="500"
+                            strokeDashoffset="0"
+                          >
+                            <animate attributeName="stroke-dashoffset" values="500;0" dur="2s" repeatCount="1" />
+                          </path>
+
+                          {/* Definitions */}
+                          <defs>
+                            <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="#10b981" />
+                              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+                            </linearGradient>
+                            <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                              <stop offset="0%" stopColor="#6366f1" />
+                              <stop offset="50%" stopColor="#a855f7" />
+                              <stop offset="100%" stopColor="#10b981" />
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                      </div>
+                      
+                      <div className="flex justify-between text-[9px] font-mono text-slate-500 px-1 select-none">
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* CTA Section (Overhauled into a terminal command deploy node) */}
         <section className="py-20 px-6 md:px-8 bg-white reveal-on-scroll">
           <div className="max-w-7xl mx-auto bg-slate-950 text-white rounded-[40px] p-12 md:p-20 relative overflow-hidden shadow-2xl border border-slate-900 font-mono">
             {/* Background Subtle Gradient Glows */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-650/10 rounded-full blur-[140px]" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-650/10 rounded-full blur-[140px]" />
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
