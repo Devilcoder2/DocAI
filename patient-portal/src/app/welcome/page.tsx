@@ -969,22 +969,22 @@ export default function WelcomePage() {
           </div>
         </div>
 
-        {/* CTA Section (Overhauled into a terminal command deploy node) */}
+        {/* CTA Section (Overhauled into a light-themed terminal command deploy node) */}
         <section className="py-20 px-6 md:px-8 bg-white reveal-on-scroll">
-          <div className="max-w-7xl mx-auto bg-slate-950 text-white rounded-[40px] p-12 md:p-20 relative overflow-hidden shadow-2xl border border-slate-900 font-mono">
+          <div className="max-w-7xl mx-auto bg-slate-50 text-slate-800 border border-slate-100 rounded-[40px] p-12 md:p-20 relative overflow-hidden shadow-2xl font-mono">
             {/* Background Subtle Gradient Glows */}
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-650/10 rounded-full blur-[140px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[140px]" />
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
               {/* Text content left */}
               <div className="text-left space-y-6 font-sans">
-                <span className="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-xs font-semibold border border-indigo-500/20 uppercase tracking-widest font-mono">
+                <span className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold border border-indigo-100 uppercase tracking-widest font-mono">
                   Launch Platform
                 </span>
-                <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl leading-tight">
+                <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl text-slate-900 leading-tight">
                   Ready to deploy your modern clinic console?
                 </h2>
-                <p className="text-slate-400 text-base leading-relaxed">
+                <p className="text-slate-605 text-slate-600 text-base leading-relaxed">
                   Start your 30-day trial deployment immediately. Integrate with your active EHR portal in under 24 hours.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -996,7 +996,7 @@ export default function WelcomePage() {
                   </button>
                   <button 
                     onClick={handleNavigateToLogin}
-                    className="bg-transparent border border-slate-700 hover:border-slate-500 text-slate-300 hover:bg-white/5 px-8 py-4 rounded-xl text-sm font-semibold transition-all cursor-pointer font-sans"
+                    className="bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 px-8 py-4 rounded-xl text-sm font-semibold transition-all cursor-pointer font-sans"
                   >
                     Contact Sales Eng.
                   </button>
@@ -1004,17 +1004,17 @@ export default function WelcomePage() {
               </div>
 
               {/* Terminal screen right */}
-              <div className="bg-slate-950 border border-slate-850 p-6 rounded-2xl text-[10.5px] text-slate-350 text-left space-y-2.5 relative overflow-hidden shadow-inner leading-relaxed">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-900 text-slate-500 uppercase tracking-widest text-[9px] font-bold">
+              <div className="bg-white border border-slate-150 p-6 rounded-2xl text-[10.5px] text-slate-700 text-left space-y-2.5 relative overflow-hidden shadow-inner leading-relaxed">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100 text-slate-400 uppercase tracking-widest text-[9px] font-bold">
                   <span>deploy-console-status</span>
-                  <RefreshCw className="w-3 h-3 text-indigo-400 animate-spin" style={{ animationDuration: "4s" }} />
+                  <RefreshCw className="w-3 h-3 text-indigo-600 animate-spin" style={{ animationDuration: "4s" }} />
                 </div>
-                <p className="text-indigo-400">$ medos-admin deploy --region=us-east-1 --secure=true</p>
-                <p className="text-slate-500">Connecting to EHR primary clinical endpoints...</p>
-                <p className="text-emerald-500">✔ [OK] MedOS HIPAA validation key matches successfully.</p>
-                <p className="text-slate-505 text-slate-500">Initializing ambient scribe NLP nodes...</p>
-                <p className="text-emerald-500 font-bold">✔ [OK] Audio transcript transcription models active.</p>
-                <p className="text-indigo-305 text-indigo-300 font-bold font-sans">MedOS Platform node initialized. Ready to consult (t=148ms).</p>
+                <p className="text-indigo-600 font-bold">$ medos-admin deploy --region=us-east-1 --secure=true</p>
+                <p className="text-slate-400">Connecting to EHR primary clinical endpoints...</p>
+                <p className="text-emerald-600">✔ [OK] MedOS HIPAA validation key matches successfully.</p>
+                <p className="text-slate-400">Initializing ambient scribe NLP nodes...</p>
+                <p className="text-emerald-600 font-bold">✔ [OK] Audio transcript transcription models active.</p>
+                <p className="text-indigo-950 font-bold font-sans">MedOS Platform node initialized. Ready to consult (t=148ms).</p>
               </div>
             </div>
           </div>
@@ -1024,7 +1024,7 @@ export default function WelcomePage() {
 
       {/* Footer */}
       <footer className="bg-slate-50 border-t border-slate-100 py-16 px-6 md:px-8 transition-theme">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           
           <div className="space-y-6">
             <div className="flex items-center gap-2">
@@ -1033,7 +1033,7 @@ export default function WelcomePage() {
               </div>
               <span className="font-display font-extrabold text-lg text-slate-900 tracking-tight font-black">MedOS AI</span>
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-slate-550 text-slate-500 leading-relaxed">
               The leading artificial intelligence platform for high-performance clinical teams.
             </p>
             <div className="flex gap-4">
@@ -1047,51 +1047,29 @@ export default function WelcomePage() {
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono">Platform</h5>
+            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono">Platform Features</h5>
             <ul className="space-y-4 text-sm text-slate-500">
               <li><a className="hover:text-indigo-600 transition-colors" href="#">AI Scribe</a></li>
-              <li><a className="hover:text-indigo-655 transition-colors" href="#">Telehealth Pro</a></li>
-              <li><a className="hover:text-indigo-655 transition-colors" href="#">Care Companion</a></li>
-              <li><a className="hover:text-indigo-655 transition-colors" href="#">Directory Services</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Telehealth Pro</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Care Companion</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Directory Services</a></li>
             </ul>
           </div>
 
           <div>
-            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono font-bold">Support</h5>
+            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono">Corporate &amp; Legal</h5>
             <ul className="space-y-4 text-sm text-slate-500">
-              <li><a className="hover:text-indigo-600 transition-colors" href="#">Help Center</a></li>
-              <li><a className="hover:text-indigo-655 transition-colors" href="#">API Documentation</a></li>
-              <li><a className="hover:text-indigo-655 transition-colors" href="#">HIPAA Policy</a></li>
-              <li><a className="hover:text-indigo-655 transition-colors" href="#">Contact Sales</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Privacy Policy</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Terms of Service</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">Security Standards</a></li>
+              <li><a className="hover:text-indigo-600 transition-colors" href="#">HIPAA Compliance</a></li>
             </ul>
-          </div>
-
-          <div>
-            <h5 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider font-mono font-bold">Newsletter</h5>
-            <p className="text-sm text-slate-505 text-slate-500 mb-4 leading-relaxed">
-              Stay updated with clinical AI research.
-            </p>
-            <div className="flex gap-2">
-              <input 
-                className="bg-white border border-slate-200 rounded-xl px-4 py-2.5 w-full focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none text-sm transition-all" 
-                placeholder="Email address" 
-                type="email"
-              />
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow-md">
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
           </div>
 
         </div>
         
         <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} MedOS AI Platform. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a className="hover:text-indigo-600 transition-colors" href="#">Privacy Policy</a>
-            <a className="hover:text-indigo-655 hover:text-indigo-600 transition-colors" href="#">Terms of Service</a>
-            <a className="hover:text-indigo-655 hover:text-indigo-600 transition-colors" href="#">Security Standard</a>
-          </div>
         </div>
       </footer>
 
