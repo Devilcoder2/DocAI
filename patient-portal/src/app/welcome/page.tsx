@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { 
   Shield, Activity, Sparkles, Heart, Calendar, 
   Video, MessageSquare, ArrowRight, CheckCircle, 
-  Mic, Users, TrendingUp, Send, Globe
+  Mic, Users, TrendingUp, Send, Globe, Play, Server, RefreshCw
 } from "lucide-react";
 
 export default function WelcomePage() {
@@ -49,21 +49,21 @@ export default function WelcomePage() {
     <div className="min-h-screen bg-slate-50/30 text-slate-800 overflow-x-hidden font-sans relative">
       
       {/* TopAppBar Navigation */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 transition-all duration-305">
         <div className="max-w-7xl mx-auto px-6 md:px-8 h-20 flex justify-between items-center w-full">
           <div className="flex items-center gap-10">
             <div className="flex items-center gap-2.5 group cursor-pointer">
               <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
                 <Activity className="w-5.5 h-5.5 animate-pulse" />
               </div>
-              <span className="font-display font-extrabold text-xl text-slate-900 tracking-tight">
+              <span className="font-display font-extrabold text-xl text-slate-905 tracking-tight">
                 MedOS <span className="text-indigo-600 font-medium">AI</span>
               </span>
             </div>
             <nav className="hidden md:flex gap-8 items-center">
               <a className="text-sm font-semibold text-indigo-600 border-b-2 border-indigo-600 py-2.5 transition-all" href="#">Home</a>
               <a className="text-sm font-medium text-slate-500 hover:text-slate-900 hover:scale-[1.02] py-2.5 transition-all" href="#solutions">Solutions</a>
-              <a className="text-sm font-medium text-slate-500 hover:text-slate-905 hover:scale-[1.02] py-2.5 transition-all" href="#metrics">Metrics</a>
+              <a className="text-sm font-medium text-slate-500 hover:text-slate-900 hover:scale-[1.02] py-2.5 transition-all" href="#metrics">Metrics</a>
             </nav>
           </div>
           <div className="flex items-center gap-4">
@@ -84,15 +84,15 @@ export default function WelcomePage() {
           
           {/* Centered Typography Header */}
           <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-6 animate-fade-in relative z-20">
-            <span className="inline-flex items-center gap-1.5 bg-indigo-55 bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-xs font-semibold border border-indigo-100 animate-float">
+            <span className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-xs font-semibold border border-indigo-100 animate-float">
               <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: "3s" }} />
               Introducing v4.0 Platform
             </span>
-            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-slate-905 leading-[1.05] tracking-tight">
+            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-slate-900 leading-[1.05] tracking-tight">
               The Future of <br/>
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-605 via-violet-600 to-purple-600 bg-clip-text text-transparent">Medical Intelligence</span>
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 bg-clip-text text-transparent">Medical Intelligence</span>
             </h1>
-            <p className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-2xl mt-2">
+            <p className="text-slate-655 text-lg sm:text-xl leading-relaxed max-w-2xl mt-2">
               Precise diagnostics, ambient SOAP note transcription, and empathetic care. MedOS AI bridges the gap between complex clinical data and meaningful patient outcomes.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-2">
@@ -105,7 +105,7 @@ export default function WelcomePage() {
               </button>
               <button 
                 onClick={handleNavigateToLogin}
-                className="bg-white text-slate-705 text-slate-700 hover:text-slate-900 hover:bg-slate-50 hover:shadow-md px-8 py-4 rounded-xl border border-slate-200 font-semibold text-sm hover:-translate-y-0.5 transition-all cursor-pointer"
+                className="bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-50 hover:shadow-md px-8 py-4 rounded-xl border border-slate-200 font-semibold text-sm hover:-translate-y-0.5 transition-all cursor-pointer"
               >
                 View Demo
               </button>
@@ -113,7 +113,7 @@ export default function WelcomePage() {
           </div>
 
           {/* Futuristic 3D Overlapping Console Showcase */}
-          <div className="w-full max-w-5xl mx-auto mt-20 relative px-4 flex justify-center items-center select-none">
+          <div className="w-full max-w-5xl mx-auto mt-20 relative px-4 flex justify-center items-center select-none animate-scale-up">
             {/* Ambient Background Glows */}
             <div className="absolute -top-10 left-1/4 w-72 h-72 bg-indigo-400/20 rounded-full blur-[100px] opacity-70 animate-pulse-glow" />
             <div className="absolute -bottom-10 right-1/4 w-80 h-80 bg-violet-400/20 rounded-full blur-[100px] opacity-70 animate-pulse-glow" style={{ animationDelay: "2s" }} />
@@ -140,7 +140,7 @@ export default function WelcomePage() {
                 <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col justify-between">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-indigo-55 bg-indigo-50 border border-indigo-100 flex items-center justify-center font-bold text-indigo-650">
+                      <div className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center font-bold text-indigo-650">
                         JD
                       </div>
                       <div>
@@ -183,15 +183,15 @@ export default function WelcomePage() {
                     <span className="text-[10px] bg-slate-150 px-2 py-0.5 rounded-full text-slate-500 font-medium">SOAP Format</span>
                   </div>
                   
-                  <div className="flex-1 py-4 font-mono text-[10.5px] text-slate-600 space-y-3 overflow-y-auto leading-relaxed">
-                    <p><span className="text-indigo-650 font-bold">SUBJECTIVE:</span> Patient reports persistent dry cough and slight shortness of breath when exercising for past 4 days. No fever, sore throat, or chest pain.</p>
+                  <div className="flex-1 py-4 font-mono text-[10.5px] text-slate-655 space-y-3 overflow-y-auto leading-relaxed">
+                    <p><span className="text-indigo-650 font-bold">SUBJECTIVE:</span> Patient reports dry cough and slight shortness of breath when exercising for past 4 days. No fever, sore throat, or chest pain.</p>
                     <p><span className="text-indigo-650 font-bold">OBJECTIVE:</span> Lungs clear to auscultation bilaterally. Heart rate and rhythm regular. Blood pressure 122/80 mmHg. SpO2 at 98% room air.</p>
                     <p><span className="text-indigo-650 font-bold">ASSESSMENT:</span> Mild acute bronchitis. Rule out secondary infection. Recommend rest and hydration.</p>
                   </div>
                   
                   <div className="bg-white border border-slate-100 p-2 rounded-xl flex items-center justify-between text-[10px]">
                     <span className="text-slate-500">Auto-save completed 1 min ago</span>
-                    <button className="bg-indigo-50 hover:bg-indigo-100 text-indigo-750 text-indigo-700 px-3 py-1 rounded-lg font-semibold transition-all">
+                    <button className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg font-semibold transition-all">
                       Export Notes
                     </button>
                   </div>
@@ -222,7 +222,7 @@ export default function WelcomePage() {
                 <div className="w-1.5 h-3.5 bg-indigo-400 rounded animate-pulse" style={{ animationDuration: "0.75s" }} />
                 <div className="w-1.5 h-5 bg-indigo-650 rounded animate-pulse" style={{ animationDuration: "0.65s" }} />
               </div>
-              <p className="text-[10px] text-slate-500 italic leading-relaxed">
+              <p className="text-[10px] text-slate-550 italic leading-relaxed">
                 "Shortness of breath for past 4 days, especially when climbing stairs..."
               </p>
               <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between">
@@ -252,7 +252,7 @@ export default function WelcomePage() {
                   </div>
                 </div>
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  <span className="text-[9px] text-slate-500 font-semibold uppercase">SpO2 Level</span>
+                  <span className="text-[9px] text-slate-505 text-slate-500 font-semibold uppercase">SpO2 Level</span>
                   <div className="flex items-baseline gap-1 mt-0.5">
                     <span className="text-lg font-black text-slate-800">98</span>
                     <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">%</span>
@@ -284,106 +284,159 @@ export default function WelcomePage() {
           </div>
         </section>
 
-        {/* Feature Grid (Bento Style) */}
+        {/* Feature Grid (Bento Style Redesigned as interactive modules) */}
         <section id="solutions" className="py-24 px-6 md:px-8 bg-slate-50/50 border-y border-slate-100 reveal-on-scroll">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 space-y-3">
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest">Platform Features</span>
-              <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">Integrated Clinical Units</h2>
+            <div className="text-center mb-20 space-y-3">
+              <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Platform Ecosystem</span>
+              <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">Integrated Clinical Modules</h2>
               <p className="text-slate-500 max-w-xl mx-auto text-base">
-                One unified platform for the modern healthcare professional, built with the Single-Unit UX philosophy.
+                An ecosystem designed around live telemetry, automated SOAP structures, and real-time clinical workflows.
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               
-              {/* AI Ambient Scribe */}
-              <div className="md:col-span-2 group bg-white p-8 rounded-3xl hover:border-indigo-200 border border-slate-100 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1">
-                <div className="flex justify-between items-start">
-                  <div className="space-y-4">
-                    <div className="w-14 h-14 bg-indigo-50 text-indigo-650 rounded-2xl flex items-center justify-center border border-indigo-100 group-hover:scale-110 transition-transform">
+              {/* MODULE 1: AI Ambient Scribe (High fidelity SOAP transcription mockup) */}
+              <div className="md:col-span-2 group bg-white border border-slate-100 rounded-3xl p-8 hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-xl hover:-translate-y-1">
+                <div className="flex flex-col sm:flex-row gap-6 justify-between items-start">
+                  <div className="space-y-4 max-w-md">
+                    <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center border border-indigo-100 group-hover:scale-110 transition-transform">
                       <Mic className="w-7 h-7" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-800">AI Ambient Scribe</h3>
-                    <p className="text-slate-655 text-sm leading-relaxed max-w-md">
-                      Automatically captures consultation transcripts and generates structured SOAP notes, allowing you to focus entirely on the patient.
+                    <h3 className="text-2xl font-bold text-slate-900">AI Ambient Scribe</h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      Turns ambient doctor-patient conversation directly into production-ready EHR charts, clinical summaries, and formatted SOAP notes automatically.
                     </p>
                   </div>
-                  <img 
-                    className="w-36 h-36 object-contain opacity-90 group-hover:scale-105 transition-transform duration-300 hidden sm:block" 
-                    alt="Sound waves illustration"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqje0ZB7qky8-eUKV-_n0VDYaokBkp7QHRDc4U51RvyHy0fA6p-L6l2xyLM2rF3_YKdLplbrz0tYW8SsmGpQg7oLgtE9E0YvhHQ4xxWRdp3xlvMlakBHlSt-qJSwID-e_GIfuyZWe8vifECZ3FMXQVbWJAsEWWkhW5c7wvjMaNuVf9TkHGL1yIdif8fBIrlW278EU-_K7gGHcN6nm3g6Dp4twadlsagXb949S6AAgwLO0TWGIfheIJLtQ7xo4LHX_mzdb-uwHaePyE"
-                  />
+                  
+                  {/* Scribe Widget representation */}
+                  <div className="w-full sm:w-64 bg-slate-50 border border-slate-100 rounded-2xl p-4 font-mono text-[10px] space-y-3 self-center sm:self-auto shrink-0 shadow-sm relative overflow-hidden">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-150">
+                      <span className="text-indigo-650 font-bold flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-ping" />
+                        NLP ENGINE
+                      </span>
+                      <span className="text-[8px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded-full font-bold">SOAP v4.0</span>
+                    </div>
+                    <div className="space-y-2 text-slate-500">
+                      <p className="truncate"><span className="text-slate-700 font-bold">[00:24]</span> "BP measured 120 over 80..."</p>
+                      <p className="text-indigo-600 font-semibold truncate">↳ Generating SOAP Objective...</p>
+                      <div className="bg-white p-2 rounded-lg border border-slate-150 font-sans text-slate-700 text-[9px] shadow-sm leading-normal">
+                        <strong>Objective:</strong> BP 120/80 mmHg, SpO2 99%. Lungs clear.
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <span className="bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-xs font-semibold border border-slate-100">NLP-Powered</span>
-                  <span className="bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-xs font-semibold border border-slate-100">EHR Integrated</span>
+                
+                <div className="mt-8 pt-4 border-t border-slate-100 flex flex-wrap gap-3">
+                  <span className="bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-xs font-semibold border border-slate-100">Ambient Dictation</span>
+                  <span className="bg-slate-50 text-slate-600 px-3 py-1 rounded-full text-xs font-semibold border border-slate-100">SOAP Structuring</span>
                 </div>
               </div>
 
-              {/* Secure Telehealth */}
-              <div className="group bg-white p-8 rounded-3xl hover:border-amber-200 border border-slate-100 transition-all duration-300 space-y-6 shadow-sm hover:shadow-xl hover:-translate-y-1">
+              {/* MODULE 2: Secure Telehealth (High-fidelity Video Consult interface) */}
+              <div className="group bg-white border border-slate-100 rounded-3xl p-8 hover:border-amber-200 transition-all duration-300 space-y-6 shadow-sm hover:shadow-xl hover:-translate-y-1">
                 <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center border border-amber-100 group-hover:scale-110 transition-transform">
                   <Video className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800">Secure Telehealth</h3>
-                <p className="text-slate-655 text-sm leading-relaxed">
-                  HIPAA-compliant WebRTC rooms with crystal-clear audio-video and low-latency diagnostic streaming.
+                <h3 className="text-xl font-bold text-slate-900">Secure Telehealth</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  HIPAA-compliant high-performance video consultations featuring low-latency vitals feed and secure authentication.
                 </p>
-                <div className="pt-4 border-t border-slate-100">
-                  <a className="text-indigo-650 hover:text-indigo-850 text-indigo-650 font-semibold text-sm flex items-center gap-1 group/link transition-colors" href="#">
-                    Explore Telehealth 
-                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                  </a>
+                
+                {/* Telehealth Mock Panel */}
+                <div className="w-full bg-slate-50 border border-slate-150 rounded-2xl p-3 space-y-2 relative overflow-hidden shadow-inner">
+                  <div className="relative aspect-[16/9] bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center group-hover:shadow-md transition-shadow">
+                    {/* Simulated Camera Video */}
+                    <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-[8px] text-white px-2 py-0.5 rounded-full flex items-center gap-1 font-bold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Dr. Sarah Jenkins (Cardiology)
+                    </div>
+                    <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white border border-white/20">
+                      <Play className="w-5 h-5 fill-white/10" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center text-[9px] text-slate-500 font-semibold px-1">
+                    <span>1080p WebRTC Room</span>
+                    <span className="text-emerald-600 font-bold uppercase tracking-wider">Connected</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Smart Clinic Directory */}
-              <div className="group bg-white p-8 rounded-3xl hover:border-emerald-200 border border-slate-100 transition-all duration-300 space-y-6 shadow-sm hover:shadow-xl hover:-translate-y-1">
+              {/* MODULE 3: Smart Clinic Directory (High-fidelity specialist matching console) */}
+              <div className="group bg-white border border-slate-100 rounded-3xl p-8 hover:border-emerald-200 transition-all duration-300 space-y-6 shadow-sm hover:shadow-xl hover:-translate-y-1">
                 <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center border border-emerald-100 group-hover:scale-110 transition-transform">
                   <Users className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800">Clinic Directory</h3>
-                <p className="text-slate-655 text-sm leading-relaxed font-normal">
-                  Hyper-accurate filtering for specialists by proximity, insurance provider, and live availability.
+                <h3 className="text-xl font-bold text-slate-900">Clinic Directory</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Instantly filter nearby specialists based on in-network insurance status, proximity, and live clinical availability metrics.
                 </p>
-                <div className="w-full h-32 bg-slate-50 rounded-2xl overflow-hidden mt-4 border border-slate-100 relative group-hover:scale-[1.01] transition-transform">
-                  <div 
-                    className="w-full h-full bg-cover bg-center opacity-90 group-hover:scale-105 transition-transform duration-500" 
-                    style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4WDBEkx3nPHXpLyTMb0d9tR2pZL0ikzB5vSlA-A6a6GZUMmDRrJj62Mfcm6WWguNmtcLUW4SIiwv5hz8po6uFRrVW-wtcBs_yikXlZmTIS-wUfYK_RrBHmsrsknsmWqZDZEqb8VoOfpm0f1D5DCOeZLzC02QsPDyVVuaGVvNJt6R5VCaUG-IN2fcT8ZtUVX18ZfAbgJYdNvxhkHApvvPVAj9jyWkpC0y-Vg4rdZdkliGQZzUYptaA3TjWhLJafG2DzGWJITwhTv_A')" }}
-                  />
+                
+                {/* Directory Matching Mock Console */}
+                <div className="w-full bg-slate-50 border border-slate-150 rounded-2xl p-3 space-y-2 text-left font-sans">
+                  <div className="bg-white border border-slate-100 p-2.5 rounded-xl flex items-center justify-between shadow-sm hover:border-emerald-250 transition-colors">
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-slate-800">Dr. Alan Mercer, MD</p>
+                      <p className="text-[8px] text-slate-400">Cardiology • 1.2 mi away</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="text-[9px] bg-emerald-50 text-emerald-600 font-bold px-1.5 py-0.5 rounded-full border border-emerald-100">98% Match</span>
+                    </div>
+                  </div>
+                  <div className="bg-white border border-slate-100 p-2.5 rounded-xl flex items-center justify-between shadow-sm opacity-60">
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-800">Dr. Jessica Chen</p>
+                      <p className="text-[8px] text-slate-405 text-slate-400">Pediatrics • 2.5 mi away</p>
+                    </div>
+                    <span className="text-[9px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-full">85% Match</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Care Companion */}
-              <div className="md:col-span-2 group bg-white p-8 rounded-3xl hover:border-indigo-200 border border-slate-100 transition-all duration-300 flex flex-col md:flex-row gap-8 items-center shadow-sm hover:shadow-xl hover:-translate-y-1">
+              {/* MODULE 4: Care Companion (Interactive post-visit chat and schedule console) */}
+              <div className="md:col-span-2 group bg-white border border-slate-100 rounded-3xl p-8 hover:border-indigo-200 transition-all duration-300 flex flex-col md:flex-row gap-8 items-center shadow-sm hover:shadow-xl hover:-translate-y-1">
                 <div className="flex-1 space-y-6">
                   <div className="w-14 h-14 bg-indigo-50 text-indigo-650 rounded-2xl flex items-center justify-center border border-indigo-100 group-hover:scale-110 transition-transform">
                     <MessageSquare className="w-7 h-7" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800">Care Companion</h3>
-                  <p className="text-slate-655 text-sm leading-relaxed">
-                    An empathetic post-visit AI chat helping patients understand recovery plans and manage medication schedules seamlessly.
+                  <h3 className="text-2xl font-bold text-slate-900">Care Companion</h3>
+                  <p className="text-slate-655 text-slate-600 text-sm leading-relaxed">
+                    Empowers patients with 24/7 post-visit recovery conversations. AI checks symptoms, logs vitals, and automatically prompts medication schedules.
                   </p>
                   <button 
                     onClick={handleNavigateToLogin}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition-all cursor-pointer"
+                    className="bg-indigo-600 hover:bg-indigo-700 hover:shadow-md text-white px-6 py-3 rounded-xl font-semibold text-xs transition-all cursor-pointer"
                   >
                     Learn About Companion
                   </button>
                 </div>
                 
-                <div className="flex-1 w-full bg-slate-50 rounded-2xl p-6 relative overflow-hidden h-64 border border-slate-100 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm max-w-[85%] text-slate-700 text-xs border border-slate-100">
-                      How should I take my recovery medication?
+                {/* Companion Interactive Console */}
+                <div className="flex-1 w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col gap-3.5 h-64 overflow-hidden relative shadow-inner">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-150">
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Patient Assistant Mode</span>
+                    <span className="w-2 h-2 rounded-full bg-indigo-600 animate-ping" />
+                  </div>
+                  
+                  {/* Chat logs */}
+                  <div className="flex-1 space-y-2.5 overflow-y-auto pr-1">
+                    <div className="bg-white border border-slate-150 p-2.5 rounded-2xl rounded-bl-none shadow-sm max-w-[88%] text-[10px] text-slate-600">
+                      Hi, remember to take your 500mg Amoxicillin at 8:00 PM.
                     </div>
-                    <div className="bg-indigo-600 text-white p-3 rounded-2xl rounded-br-none shadow-sm ml-auto max-w-[85%] text-xs">
-                      Please take 1 tablet with food twice daily...
+                    <div className="bg-indigo-600 text-white p-2.5 rounded-2xl rounded-br-none shadow-sm ml-auto max-w-[88%] text-[10px]">
+                      Just took it, thanks!
                     </div>
                   </div>
-                  <div className="flex justify-center pt-4">
-                    <div className="w-12 h-1 bg-indigo-200 rounded-full animate-pulse" />
+
+                  {/* Checklist indicator */}
+                  <div className="bg-white border border-slate-150 p-2 rounded-xl flex items-center justify-between text-[9px] text-slate-500 shadow-sm">
+                    <span className="flex items-center gap-1">
+                      <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                      Medication dose logged
+                    </span>
+                    <span className="font-mono text-indigo-600 font-bold">100% compliant</span>
                   </div>
                 </div>
               </div>
@@ -392,79 +445,94 @@ export default function WelcomePage() {
           </div>
         </section>
 
-        {/* Trust & Analytics Section */}
+        {/* Trust & Analytics Section (Overhauled with circular gauges and live telemetry dashboards) */}
         <section id="metrics" className="py-24 px-6 md:px-8 bg-white reveal-on-scroll">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            <div className="space-y-8">
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Performance Impact</span>
-              <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-900 leading-tight">Measurable Clinical Efficiency</h2>
-              <p className="text-slate-600 text-base leading-relaxed">
-                MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
-              </p>
+            <div className="space-y-10">
+              <div className="space-y-3">
+                <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest font-mono">Performance Impact</span>
+                <h2 className="font-display font-black text-3xl sm:text-4xl text-slate-905 leading-tight">Measurable Clinical Efficiency</h2>
+                <p className="text-slate-600 text-base leading-relaxed">
+                  MedOS AI isn't just about features; it's about reclaiming time for patient care. Our clinical partners report significant improvements in daily workflow.
+                </p>
+              </div>
               
-              <div className="space-y-6">
-                
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-semibold text-slate-700">
-                    <span>Documentation Speed</span>
-                    <span className="text-indigo-600 font-bold">+42%</span>
+              {/* Circular SVG dials */}
+              <div className="grid grid-cols-3 gap-4">
+                {/* Dial 1 */}
+                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:scale-105 transition-transform">
+                  <div className="relative w-16 h-16">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                      <path className="text-slate-150" stroke="currentColor" strokeWidth="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <path className="text-indigo-600" strokeDasharray="82, 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+42%</div>
                   </div>
-                  <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-indigo-600 rounded-full transition-all duration-1000" style={{ width: "82%" }} />
-                  </div>
+                  <span className="text-[10px] text-slate-505 text-slate-500 font-bold uppercase tracking-wider">Charting Speed</span>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-semibold text-slate-700">
-                    <span>Patient Engagement</span>
-                    <span className="text-emerald-600 font-bold">+68%</span>
+                {/* Dial 2 */}
+                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:scale-105 transition-transform">
+                  <div className="relative w-16 h-16">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                      <path className="text-slate-150" stroke="currentColor" strokeWidth="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <path className="text-emerald-500" strokeDasharray="91, 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+68%</div>
                   </div>
-                  <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000" style={{ width: "91%" }} />
-                  </div>
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Engagement</span>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-semibold text-slate-700">
-                    <span>Diagnostic Accuracy</span>
-                    <span className="text-indigo-600 font-bold">+24%</span>
+                {/* Dial 3 */}
+                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4 flex flex-col items-center text-center gap-3 hover:scale-105 transition-transform">
+                  <div className="relative w-16 h-16">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                      <path className="text-slate-150" stroke="currentColor" strokeWidth="2.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <path className="text-violet-500" strokeDasharray="76, 100" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-800">+24%</div>
                   </div>
-                  <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-indigo-500 rounded-full transition-all duration-1000" style={{ width: "76%" }} />
-                  </div>
+                  <span className="text-[10px] text-slate-550 text-slate-500 font-bold uppercase tracking-wider">Accuracy</span>
                 </div>
-
               </div>
             </div>
             
+            {/* Live Telemetry monitor panel */}
             <div className="relative">
-              <div className="bg-slate-50 p-8 rounded-[40px] relative overflow-hidden border border-slate-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                <div className="flex items-center justify-between mb-8">
-                  <h4 className="text-lg font-bold text-slate-800">System Performance</h4>
-                  <span className="text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full flex items-center gap-1 text-xs font-semibold">
-                    <TrendingUp className="w-3.5 h-3.5 animate-bounce" />
-                    Live Data
+              <div className="bg-slate-900 text-slate-100 p-8 rounded-[40px] relative overflow-hidden border border-slate-800 shadow-2xl hover:shadow-indigo-950/20 hover:scale-[1.01] transition-all duration-300 font-mono">
+                <div className="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
+                  <div className="flex items-center gap-2">
+                    <Server className="w-5 h-5 text-indigo-400" />
+                    <h4 className="text-sm font-bold text-slate-200">System Telemetry Log</h4>
+                  </div>
+                  <span className="text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full flex items-center gap-1.5 text-[10px] font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                    Live Server
                   </span>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="bg-white p-6 rounded-2xl border border-slate-100 hover:scale-[1.02] transition-transform">
-                    <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Clinicians Active</p>
-                    <p className="text-3xl font-black text-indigo-600 mt-2">12,480</p>
+                <div className="space-y-4 text-xs leading-relaxed text-slate-350">
+                  <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-xl border border-slate-850">
+                    <span className="text-slate-400">MedOS Active Session Nodes:</span>
+                    <span className="text-indigo-400 font-bold">12,480 active</span>
                   </div>
-                  <div className="bg-white p-6 rounded-2xl border border-slate-100 hover:scale-[1.02] transition-transform">
-                    <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Patient Sessions</p>
-                    <p className="text-3xl font-black text-slate-800 mt-2">1.2M+</p>
+                  
+                  <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-xl border border-slate-850">
+                    <span className="text-slate-400">Total Consultations Processed:</span>
+                    <span className="text-slate-200 font-bold">1,240,580</span>
                   </div>
-                  <div className="sm:col-span-2 bg-indigo-50/30 p-6 rounded-2xl border border-indigo-50 flex items-center gap-4">
-                    <div className="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-indigo-600/10">
-                      <Shield className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-850 font-bold">Enterprise Encryption</p>
-                      <p className="text-xs text-slate-500 mt-0.5">AES-256 Bit Data Protection Standard</p>
-                    </div>
+                  
+                  <div className="flex items-center justify-between bg-slate-950/60 p-3.5 rounded-xl border border-slate-850">
+                    <span className="text-slate-400">Node API Ping Latency:</span>
+                    <span className="text-emerald-400 font-bold">14ms average</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-3 bg-indigo-950/30 p-4 rounded-xl border border-indigo-900/40 text-slate-300">
+                    <Shield className="w-5 h-5 text-indigo-400 shrink-0" />
+                    <p className="text-[11px] leading-normal font-sans text-slate-400">
+                      Standardized security protocol: AES-256 Bit payload encryption active for all active client endpoints.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -472,37 +540,54 @@ export default function WelcomePage() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section (Overhauled into a terminal command deploy node) */}
         <section className="py-20 px-6 md:px-8 bg-white reveal-on-scroll">
-          <div className="max-w-7xl mx-auto bg-indigo-900 rounded-[40px] p-12 md:p-20 relative overflow-hidden text-center text-white shadow-2xl">
-            {/* Background Subtle Glows */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600 opacity-20 blur-[120px]" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-violet-600 opacity-20 blur-[120px]" />
+          <div className="max-w-7xl mx-auto bg-slate-950 text-white rounded-[40px] p-12 md:p-20 relative overflow-hidden shadow-2xl border border-slate-900 font-mono">
+            {/* Background Subtle Gradient Glows */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-650/10 rounded-full blur-[140px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-650/10 rounded-full blur-[140px]" />
             
-            <div className="relative z-10 space-y-6">
-              <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl max-w-3xl mx-auto leading-tight">
-                Ready to join the modern clinic?
-              </h2>
-              <p className="text-indigo-100 text-base max-w-xl mx-auto opacity-90">
-                Start your 30-day free trial today. No complex integration required. Deployment in under 24 hours.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
-                <button 
-                  onClick={handleNavigateToLogin}
-                  className="w-full sm:w-auto bg-white hover:bg-slate-50 text-indigo-900 hover:shadow-xl hover:shadow-white/5 px-8 py-4 rounded-xl text-sm font-semibold transition-all active:scale-95 cursor-pointer"
-                >
-                  Get Started Now
-                </button>
-                <button 
-                  onClick={handleNavigateToLogin}
-                  className="w-full sm:w-auto bg-transparent border border-white/20 hover:border-white/50 text-white hover:bg-white/10 px-8 py-4 rounded-xl text-sm font-semibold transition-all cursor-pointer"
-                >
-                  Schedule a Demo
-                </button>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+              {/* Text content left */}
+              <div className="text-left space-y-6 font-sans">
+                <span className="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-xs font-semibold border border-indigo-500/20 uppercase tracking-widest font-mono">
+                  Launch Platform
+                </span>
+                <h2 className="font-display font-black text-3xl sm:text-4xl md:text-5xl leading-tight">
+                  Ready to deploy your modern clinic console?
+                </h2>
+                <p className="text-slate-400 text-base leading-relaxed">
+                  Start your 30-day trial deployment immediately. Integrate with your active EHR portal in under 24 hours.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <button 
+                    onClick={handleNavigateToLogin}
+                    className="bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/20 text-white px-8 py-4 rounded-xl text-sm font-semibold transition-all active:scale-95 cursor-pointer font-sans"
+                  >
+                    Initiate Deployment
+                  </button>
+                  <button 
+                    onClick={handleNavigateToLogin}
+                    className="bg-transparent border border-slate-700 hover:border-slate-500 text-slate-300 hover:bg-white/5 px-8 py-4 rounded-xl text-sm font-semibold transition-all cursor-pointer font-sans"
+                  >
+                    Contact Sales Eng.
+                  </button>
+                </div>
               </div>
-              <p className="text-xs text-indigo-200/70 pt-4">
-                Trusted by over 450+ medical institutions worldwide.
-              </p>
+
+              {/* Terminal screen right */}
+              <div className="bg-slate-950 border border-slate-850 p-6 rounded-2xl text-[10.5px] text-slate-300 text-left space-y-2.5 relative overflow-hidden shadow-inner leading-relaxed">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-900 text-slate-500 uppercase tracking-widest text-[9px] font-bold">
+                  <span>deploy-console-status</span>
+                  <RefreshCw className="w-3 h-3 text-indigo-400 animate-spin" style={{ animationDuration: "4s" }} />
+                </div>
+                <p className="text-indigo-400">$ medos-admin deploy --region=us-east-1 --secure=true</p>
+                <p className="text-slate-500">Connecting to EHR primary clinical endpoints...</p>
+                <p className="text-emerald-500">✔ [OK] MedOS HIPAA validation key matches successfully.</p>
+                <p className="text-slate-500">Initializing ambient scribe NLP nodes...</p>
+                <p className="text-emerald-500">✔ [OK] Audio transcript transcription models active.</p>
+                <p className="text-indigo-300 font-bold">MedOS Platform node initialized. Ready to consult (t=148ms).</p>
+              </div>
             </div>
           </div>
         </section>
@@ -524,10 +609,10 @@ export default function WelcomePage() {
               The leading artificial intelligence platform for high-performance clinical teams.
             </p>
             <div className="flex gap-4">
-              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-655 hover:text-indigo-600 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
+              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-600 hover:text-indigo-600 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
                 <Globe className="w-4 h-4" />
               </a>
-              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-655 hover:text-indigo-600 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
+              <a className="w-9 h-9 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-600 hover:text-indigo-600 shadow-sm hover:scale-110 hover:shadow-md transition-all" href="#">
                 <Send className="w-4 h-4" />
               </a>
             </div>
@@ -575,9 +660,9 @@ export default function WelcomePage() {
         <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} MedOS AI Platform. All rights reserved.</p>
           <div className="flex gap-8">
-            <a className="hover:text-indigo-650 transition-colors" href="#">Privacy Policy</a>
-            <a className="hover:text-indigo-655 hover:text-indigo-600 transition-colors" href="#">Terms of Service</a>
-            <a className="hover:text-indigo-655 hover:text-indigo-600 transition-colors" href="#">Security Standard</a>
+            <a className="hover:text-indigo-600 transition-colors" href="#">Privacy Policy</a>
+            <a className="hover:text-indigo-600 transition-colors" href="#">Terms of Service</a>
+            <a className="hover:text-indigo-600 transition-colors" href="#">Security Standard</a>
           </div>
         </div>
       </footer>
