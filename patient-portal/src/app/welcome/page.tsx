@@ -640,7 +640,7 @@ export default function WelcomePage() {
                 <div 
                   onMouseEnter={() => setActiveGauge(0)}
                   onMouseLeave={() => setActiveGauge(null)}
-                  className={`relative overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                  className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                     activeGauge === 0 ? "border-indigo-300 bg-indigo-50/10 scale-105 shadow-md shadow-indigo-100/5" : "border-slate-100 hover:border-slate-200"
                   }`}
                 >
@@ -648,7 +648,7 @@ export default function WelcomePage() {
                   <div 
                     className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
                     style={{ 
-                      WebkitTextStroke: "1px rgba(99, 102, 241, 0.1)", 
+                      WebkitTextStroke: "1.2px rgba(99, 102, 241, 0.22)", 
                       color: "transparent"
                     } as React.CSSProperties}
                   >
@@ -668,7 +668,7 @@ export default function WelcomePage() {
                 <div 
                   onMouseEnter={() => setActiveGauge(1)}
                   onMouseLeave={() => setActiveGauge(null)}
-                  className={`relative overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                  className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                     activeGauge === 1 ? "border-emerald-300 bg-emerald-50/10 scale-105 shadow-md shadow-emerald-100/5" : "border-slate-100 hover:border-slate-200"
                   }`}
                 >
@@ -676,7 +676,7 @@ export default function WelcomePage() {
                   <div 
                     className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
                     style={{ 
-                      WebkitTextStroke: "1px rgba(16, 185, 129, 0.1)", 
+                      WebkitTextStroke: "1.2px rgba(16, 185, 129, 0.22)", 
                       color: "transparent"
                     } as React.CSSProperties}
                   >
@@ -696,7 +696,7 @@ export default function WelcomePage() {
                 <div 
                   onMouseEnter={() => setActiveGauge(2)}
                   onMouseLeave={() => setActiveGauge(null)}
-                  className={`relative overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
+                  className={`relative isolate overflow-hidden bg-slate-50 border rounded-3xl p-4 flex flex-col items-center text-center gap-4 transition-all duration-300 cursor-pointer ${
                     activeGauge === 2 ? "border-violet-300 bg-violet-50/10 scale-105 shadow-md shadow-violet-100/5" : "border-slate-100 hover:border-slate-200"
                   }`}
                 >
@@ -704,7 +704,7 @@ export default function WelcomePage() {
                   <div 
                     className="absolute bottom-1 right-3 text-[60px] font-black select-none leading-none -z-10 font-mono tracking-tighter" 
                     style={{ 
-                      WebkitTextStroke: "1px rgba(139, 92, 246, 0.1)", 
+                      WebkitTextStroke: "1.2px rgba(139, 92, 246, 0.22)", 
                       color: "transparent"
                     } as React.CSSProperties}
                   >
