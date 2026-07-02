@@ -94,7 +94,7 @@ export default function HomePage() {
           <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
             <Activity className="w-4 h-4 animate-pulse" />
           </div>
-          <span className="font-display font-extrabold text-base text-slate-900 dark:text-teal-400 tracking-tight">
+          <span className="font-display font-extrabold text-base text-slate-900 dark:text-indigo-400 tracking-tight">
             MedOS <span className="text-indigo-600 font-semibold">AI</span>
           </span>
         </div>
@@ -142,11 +142,11 @@ export default function HomePage() {
             onClick={() => router.push("/profile")}
             className="flex items-center gap-3 mb-10 px-2 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary-container/10 dark:bg-teal-500/10 flex items-center justify-center text-primary-container dark:text-teal-400 group-hover:scale-105 transition-transform border border-primary-container/20">
+            <div className="w-10 h-10 rounded-xl bg-primary-container/10 dark:bg-indigo-500/10 flex items-center justify-center text-primary-container dark:text-indigo-400 group-hover:scale-105 transition-transform border border-primary-container/20">
               <User className="w-5 h-5" />
             </div>
             <div className="overflow-hidden">
-              <h3 className="font-label-md text-label-md text-foreground group-hover:text-primary-container dark:group-hover:text-teal-350 transition-colors truncate font-bold">{user.name}</h3>
+              <h3 className="font-label-md text-label-md text-foreground group-hover:text-primary-container dark:group-hover:text-indigo-350 transition-colors truncate font-bold">{user.name}</h3>
               <p className="text-[10px] text-slate-450 uppercase tracking-widest mt-0.5">ID: {user.id.slice(0, 8)}</p>
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function HomePage() {
               onClick={() => setActiveTab("dashboard")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
                 activeTab === "dashboard" 
-                  ? "text-primary-container dark:text-teal-400 bg-medical-blue-soft/50 dark:bg-teal-500/10 border-r-4 border-primary-container dark:border-teal-400 font-bold" 
+                  ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
             >
@@ -167,7 +167,7 @@ export default function HomePage() {
               onClick={() => setActiveTab("telehealth")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
                 activeTab === "telehealth" 
-                  ? "text-primary-container dark:text-teal-400 bg-medical-blue-soft/50 dark:bg-teal-500/10 border-r-4 border-primary-container dark:border-teal-400 font-bold" 
+                  ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
             >
@@ -178,7 +178,7 @@ export default function HomePage() {
               onClick={() => setActiveTab("vault")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
                 activeTab === "vault" 
-                  ? "text-primary-container dark:text-teal-400 bg-medical-blue-soft/50 dark:bg-teal-500/10 border-r-4 border-primary-container dark:border-teal-400 font-bold" 
+                  ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
             >
@@ -189,7 +189,7 @@ export default function HomePage() {
               onClick={() => setActiveTab("directory")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
                 activeTab === "directory" 
-                  ? "text-primary-container dark:text-teal-400 bg-medical-blue-soft/50 dark:bg-teal-500/10 border-r-4 border-primary-container dark:border-teal-400 font-bold" 
+                  ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
             >
@@ -200,7 +200,7 @@ export default function HomePage() {
               onClick={() => setActiveTab("companion")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
                 activeTab === "companion" 
-                  ? "text-primary-container dark:text-teal-400 bg-medical-blue-soft/50 dark:bg-teal-500/10 border-r-4 border-primary-container dark:border-teal-400 font-bold" 
+                  ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
             >
@@ -251,7 +251,7 @@ export default function HomePage() {
                     
                     <div className="relative z-10 space-y-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-primary-container/15 text-primary-container dark:text-teal-400 rounded-2xl flex items-center justify-center border border-primary-container/20 shadow-lg shadow-primary-container/5">
+                        <div className="w-12 h-12 bg-primary-container/15 text-primary-container dark:text-indigo-400 rounded-2xl flex items-center justify-center border border-primary-container/20 shadow-lg shadow-primary-container/5">
                           <Brain className="w-6 h-6 animate-pulse" />
                         </div>
                         <div>
@@ -267,13 +267,13 @@ export default function HomePage() {
                         <div className="flex flex-wrap gap-2">
                           <button 
                             onClick={() => setActiveTab("companion")}
-                            className="px-4 py-2 bg-card-bg hover:bg-sidebar-bg border border-card-border rounded-full text-xs font-bold text-primary-container dark:text-teal-400 transition-colors cursor-pointer"
+                            className="px-4 py-2 bg-card-bg hover:bg-sidebar-bg border border-card-border rounded-full text-xs font-bold text-primary-container dark:text-indigo-400 transition-colors cursor-pointer"
                           >
                             Summarize Visit
                           </button>
                           <button 
                             onClick={() => setActiveTab("companion")}
-                            className="px-4 py-2 bg-card-bg hover:bg-sidebar-bg border border-card-border rounded-full text-xs font-bold text-primary-container dark:text-teal-400 transition-colors cursor-pointer"
+                            className="px-4 py-2 bg-card-bg hover:bg-sidebar-bg border border-card-border rounded-full text-xs font-bold text-primary-container dark:text-indigo-400 transition-colors cursor-pointer"
                           >
                             Explain Medication
                           </button>
@@ -304,7 +304,7 @@ export default function HomePage() {
                       className="group cursor-pointer glass-card rounded-[32px] p-6 border-l-4 border-primary-container hover:bg-primary-container transition-all duration-300 flex flex-col justify-between h-1/2 min-h-[188px]"
                     >
                       <div className="flex justify-between items-start">
-                        <div className="w-12 h-12 bg-primary-container/10 dark:bg-white/10 rounded-2xl flex items-center justify-center text-primary-container dark:text-teal-400 group-hover:bg-white group-hover:text-primary-container transition-all">
+                        <div className="w-12 h-12 bg-primary-container/10 dark:bg-white/10 rounded-2xl flex items-center justify-center text-primary-container dark:text-indigo-400 group-hover:bg-white group-hover:text-primary-container transition-all">
                           <Search className="w-6 h-6" />
                         </div>
                         <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
@@ -340,7 +340,7 @@ export default function HomePage() {
                       <h2 className="font-headline text-xl font-bold text-foreground">Consultation History</h2>
                       <button 
                         onClick={() => setActiveTab("vault")}
-                        className="text-primary-container dark:text-teal-400 font-bold text-xs flex items-center gap-1 hover:underline cursor-pointer"
+                        className="text-primary-container dark:text-indigo-400 font-bold text-xs flex items-center gap-1 hover:underline cursor-pointer"
                       >
                         View all history 
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -364,7 +364,7 @@ export default function HomePage() {
                             <p className="text-[10px] text-slate-500 mt-0.5">Cardiology • Oct 12, 2023</p>
                             <div className="mt-2 flex items-center gap-2">
                               <span className="px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-[9px] font-bold uppercase tracking-wider">Completed</span>
-                              <span className="text-[9px] text-primary-container dark:text-teal-400 group-hover:underline">View Notes</span>
+                              <span className="text-[9px] text-primary-container dark:text-indigo-400 group-hover:underline">View Notes</span>
                             </div>
                           </div>
                         </div>
@@ -384,7 +384,7 @@ export default function HomePage() {
                             <p className="text-[10px] text-slate-500 mt-0.5">General Practitioner • Sep 24, 2023</p>
                             <div className="mt-2 flex items-center gap-2">
                               <span className="px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-[9px] font-bold uppercase tracking-wider">Completed</span>
-                              <span className="text-[9px] text-primary-container dark:text-teal-400 group-hover:underline">View Notes</span>
+                              <span className="text-[9px] text-primary-container dark:text-indigo-400 group-hover:underline">View Notes</span>
                             </div>
                           </div>
                         </div>
@@ -393,15 +393,15 @@ export default function HomePage() {
                         <div 
                           className="flex items-center gap-4 p-4 rounded-2xl bg-sidebar-bg/60 hover:bg-sidebar-bg border border-card-border/30 transition-colors cursor-pointer group"
                         >
-                          <div className="w-16 h-16 rounded-xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center text-primary-container dark:text-teal-400">
+                          <div className="w-16 h-16 rounded-xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center text-primary-container dark:text-indigo-400">
                             <FileText className="w-6 h-6" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-bold text-xs text-foreground truncate">City Health Labs</h4>
                             <p className="text-[10px] text-slate-500 mt-0.5">Blood Panel • Aug 30, 2023</p>
                             <div className="mt-2 flex items-center gap-2">
-                              <span className="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary-container dark:text-teal-350 text-[9px] font-bold uppercase tracking-wider">Lab Results</span>
-                              <span className="text-[9px] text-primary-container dark:text-teal-400 group-hover:underline">Download PDF</span>
+                              <span className="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary-container dark:text-indigo-350 text-[9px] font-bold uppercase tracking-wider">Lab Results</span>
+                              <span className="text-[9px] text-primary-container dark:text-indigo-400 group-hover:underline">Download PDF</span>
                             </div>
                           </div>
                         </div>
@@ -414,7 +414,7 @@ export default function HomePage() {
                             onClick={() => router.push(`/appointments/${appt.id}/companion`)}
                             className="flex items-center gap-4 p-4 rounded-2xl bg-sidebar-bg/60 hover:bg-sidebar-bg border border-card-border/30 transition-colors cursor-pointer group"
                           >
-                            <div className="w-16 h-16 rounded-xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center text-primary-container dark:text-teal-400 shrink-0">
+                            <div className="w-16 h-16 rounded-xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center text-primary-container dark:text-indigo-400 shrink-0">
                               <User className="w-6 h-6" />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -426,7 +426,7 @@ export default function HomePage() {
                               </p>
                               <div className="mt-2 flex items-center gap-2">
                                 <span className="px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-[9px] font-bold uppercase tracking-wider">Completed</span>
-                                <span className="text-[9px] text-primary-container dark:text-teal-400 group-hover:underline">View Notes</span>
+                                <span className="text-[9px] text-primary-container dark:text-indigo-400 group-hover:underline">View Notes</span>
                               </div>
                             </div>
                           </div>
@@ -446,7 +446,7 @@ export default function HomePage() {
               <div className="animate-float-up space-y-6">
                 <button 
                   onClick={() => setActiveTab("dashboard")}
-                  className="text-xs text-primary-container dark:text-teal-450 hover:underline flex items-center gap-1 font-bold cursor-pointer"
+                  className="text-xs text-primary-container dark:text-indigo-450 hover:underline flex items-center gap-1 font-bold cursor-pointer"
                 >
                   <ArrowRight className="w-3.5 h-3.5 rotate-180" />
                   Back to Dashboard
@@ -487,7 +487,7 @@ export default function HomePage() {
                       >
                         <div className="flex justify-between items-start">
                           <div>
-                            <span className="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary-container dark:text-teal-400 text-[9px] font-bold uppercase tracking-wider">Scheduled</span>
+                            <span className="px-2 py-0.5 rounded-full bg-primary-container/10 text-primary-container dark:text-indigo-400 text-[9px] font-bold uppercase tracking-wider">Scheduled</span>
                             <h4 className="font-bold text-sm text-foreground mt-2">{appt.doctor?.user.name || "Physician Practitioner"}</h4>
                             <p className="text-[10px] text-slate-550 mt-0.5">{appt.doctor?.specialty || "Telehealth Consultation"}</p>
                           </div>
@@ -539,7 +539,7 @@ export default function HomePage() {
                           className="flex items-center justify-between p-4 rounded-xl bg-sidebar-bg/60 border border-card-border/40 hover:bg-sidebar-bg transition-colors"
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <FileText className="w-5 h-5 text-primary-container dark:text-teal-400 shrink-0" />
+                            <FileText className="w-5 h-5 text-primary-container dark:text-indigo-400 shrink-0" />
                             <div className="min-w-0">
                               <p className="text-xs font-bold text-foreground truncate">{appt.doctor?.user.name || "Physician Specialist"}</p>
                               <p className="text-[10px] text-slate-500 mt-0.5">{new Date(appt.start_time).toLocaleDateString()} • {appt.reason || "General Consult"}</p>
@@ -547,7 +547,7 @@ export default function HomePage() {
                           </div>
                           <button 
                             onClick={() => router.push(`/appointments/${appt.id}/companion`)}
-                            className="text-primary-container dark:text-teal-400 text-xs font-bold hover:underline shrink-0 cursor-pointer"
+                            className="text-primary-container dark:text-indigo-400 text-xs font-bold hover:underline shrink-0 cursor-pointer"
                           >
                             View Clinical Summary
                           </button>
@@ -568,7 +568,7 @@ export default function HomePage() {
 
                 <div className="glass-card rounded-[32px] p-8 border border-card-border shadow-sm space-y-6 max-w-2xl">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-primary-container/10 border border-primary-container/20 text-primary-container dark:text-teal-400 rounded-2xl flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-primary-container/10 border border-primary-container/20 text-primary-container dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0">
                       <Brain className="w-6 h-6 animate-pulse" />
                     </div>
                     <div className="space-y-2">
@@ -592,7 +592,7 @@ export default function HomePage() {
                             className="flex items-center justify-between p-4 rounded-xl border border-card-border/40 hover:border-primary-container/30 bg-sidebar-bg/60 hover:bg-sidebar-bg transition-all cursor-pointer group"
                           >
                             <div>
-                              <p className="text-xs font-bold text-foreground truncate group-hover:text-primary-container dark:group-hover:text-teal-400 transition-colors">
+                              <p className="text-xs font-bold text-foreground truncate group-hover:text-primary-container dark:group-hover:text-indigo-400 transition-colors">
                                 Consultation with {appt.doctor?.user.name || "Physician"}
                               </p>
                               <p className="text-[10px] text-slate-500 mt-0.5">{new Date(appt.start_time).toLocaleDateString()} • {appt.doctor?.specialty || "Specialist"}</p>
@@ -617,7 +617,7 @@ export default function HomePage() {
         <button 
           onClick={() => setActiveTab("dashboard")}
           className={`flex flex-col items-center justify-center py-1 transition-all cursor-pointer ${
-            activeTab === "dashboard" ? "text-primary-container dark:text-teal-400" : "text-slate-400 hover:text-foreground"
+            activeTab === "dashboard" ? "text-primary-container dark:text-indigo-400" : "text-slate-400 hover:text-foreground"
           }`}
         >
           <LayoutDashboard className="w-5 h-5" />
@@ -627,7 +627,7 @@ export default function HomePage() {
         <button 
           onClick={() => setActiveTab("telehealth")}
           className={`flex flex-col items-center justify-center py-1 transition-all cursor-pointer ${
-            activeTab === "telehealth" ? "text-primary-container dark:text-teal-400" : "text-slate-400 hover:text-foreground"
+            activeTab === "telehealth" ? "text-primary-container dark:text-indigo-400" : "text-slate-400 hover:text-foreground"
           }`}
         >
           <Video className="w-5 h-5" />
@@ -637,7 +637,7 @@ export default function HomePage() {
         <button 
           onClick={() => setActiveTab("vault")}
           className={`flex flex-col items-center justify-center py-1 transition-all cursor-pointer ${
-            activeTab === "vault" ? "text-primary-container dark:text-teal-400" : "text-slate-400 hover:text-foreground"
+            activeTab === "vault" ? "text-primary-container dark:text-indigo-400" : "text-slate-400 hover:text-foreground"
           }`}
         >
           <FileText className="w-5 h-5" />
@@ -647,7 +647,7 @@ export default function HomePage() {
         <button 
           onClick={() => setActiveTab("directory")}
           className={`flex flex-col items-center justify-center py-1 transition-all cursor-pointer ${
-            activeTab === "directory" ? "text-primary-container dark:text-teal-400" : "text-slate-400 hover:text-foreground"
+            activeTab === "directory" ? "text-primary-container dark:text-indigo-400" : "text-slate-400 hover:text-foreground"
           }`}
         >
           <Users className="w-5 h-5" />
@@ -657,7 +657,7 @@ export default function HomePage() {
         <button 
           onClick={() => setActiveTab("companion")}
           className={`flex flex-col items-center justify-center py-1 transition-all cursor-pointer ${
-            activeTab === "companion" ? "text-primary-container dark:text-teal-400" : "text-slate-400 hover:text-foreground"
+            activeTab === "companion" ? "text-primary-container dark:text-indigo-400" : "text-slate-400 hover:text-foreground"
           }`}
         >
           <MessageSquare className="w-5 h-5" />
