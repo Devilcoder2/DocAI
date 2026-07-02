@@ -234,7 +234,7 @@ export default function ProfilePage() {
             <div>
               <div className="flex items-center gap-2">
                 <Heart className="w-5 h-5 text-indigo-600 fill-indigo-100" />
-                <h1 className="text-lg font-display font-black tracking-tight bg-gradient-to-r from-indigo-600 to-violet-750 bg-clip-text text-transparent">
+                <h1 className="text-lg font-display font-black tracking-tight text-medical-blue-dark">
                   Portal Settings
                 </h1>
               </div>
@@ -266,7 +266,7 @@ export default function ProfilePage() {
                 </div>
               </div>
               <div>
-                <h2 className="text-lg font-display font-extrabold text-slate-900 leading-snug">{name}</h2>
+                <h2 className="text-lg font-display font-extrabold text-medical-blue-dark leading-snug">{name}</h2>
                 <p className="text-xs text-slate-500">{email}</p>
               </div>
               <div className="inline-block px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-indigo-50 text-indigo-705 text-indigo-700 border border-indigo-100/50">
@@ -277,7 +277,7 @@ export default function ProfilePage() {
             {/* Health Overview / BMI Calculator Display (Only for Patients) */}
             {user?.role === "Patient" && (
               <div className="bg-white border border-slate-155 border-slate-150 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 space-y-5">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-100">
+                <h3 className="text-sm font-bold text-medical-blue-dark flex items-center gap-2 pb-2 border-b border-slate-100">
                   <Activity className="w-4 h-4 text-indigo-600" />
                   Health Status Overview
                 </h3>
@@ -353,7 +353,7 @@ export default function ProfilePage() {
                 
                 {/* Account Details Block */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-slate-100 font-mono">
+                  <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider pb-2 border-b border-slate-100 font-mono">
                     Account Parameters
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -383,7 +383,7 @@ export default function ProfilePage() {
                 {/* Medical Parameter Inputs Block (Only for Patients) */}
                 {user?.role === "Patient" && (
                   <div className="space-y-5 pt-4">
-                    <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-slate-100 font-mono">
+                    <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider pb-2 border-b border-slate-100 font-mono">
                       Medical Profile & Vital Constants
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -497,7 +497,7 @@ export default function ProfilePage() {
             {user?.role === "Patient" && (
               <div className="bg-white border border-slate-150 rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300 space-y-6">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-slate-100 font-mono">
+                  <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-slate-100 font-mono">
                     <Calendar className="w-4.5 h-4.5 text-indigo-650 text-indigo-600" />
                     Consultation History Log
                   </h3>

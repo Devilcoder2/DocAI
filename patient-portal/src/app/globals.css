@@ -12,7 +12,7 @@
   --color-input-bg: var(--input-bg);
   --color-input-border: var(--input-border);
 
-  --color-medical-blue-dark: #4338ca;
+  --color-medical-blue-dark: #0a2540;
   --color-medical-blue-soft: #f0f2ff;
   --color-success-green: #059669;
   --color-warning-amber: #d97706;
@@ -27,7 +27,7 @@ html {
 :root {
   /* Slate-based default Elegant Light Theme */
   --background: #f8fafc;
-  --foreground: #0f172a;
+  --foreground: #0a2540;
   --card-bg: #ffffff;
   --card-border: #e2e8f0;
   --sidebar-bg: #f1f5f9;
