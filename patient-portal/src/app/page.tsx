@@ -119,12 +119,6 @@ export default function HomePage() {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger-red rounded-full" />
             )}
           </button>
-          <button 
-            onClick={() => router.push("/profile")}
-            className="text-slate-500 hover:text-foreground hover:bg-sidebar-bg/80 p-2 rounded-full transition-colors cursor-pointer"
-          >
-            <Settings className="w-5 h-5" />
-          </button>
           <img 
             onClick={() => router.push("/profile")}
             alt="Patient Profile headshot" 
