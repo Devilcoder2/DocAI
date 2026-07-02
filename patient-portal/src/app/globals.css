@@ -12,12 +12,12 @@
   --color-input-bg: var(--input-bg);
   --color-input-border: var(--input-border);
 
-  --color-medical-blue-dark: #004bba;
-  --color-medical-blue-soft: #e6f0ff;
-  --color-success-green: #10b981;
-  --color-warning-amber: #f59e0b;
-  --color-danger-red: #ef4444;
-  --color-primary-container: #0066ff;
+  --color-medical-blue-dark: #4338ca;
+  --color-medical-blue-soft: #f0f2ff;
+  --color-success-green: #059669;
+  --color-warning-amber: #d97706;
+  --color-danger-red: #dc2626;
+  --color-primary-container: #4f46e5;
 }
 
 html {
@@ -104,7 +104,7 @@ h1, h2, h3, h4, h5, h6 {
 .floating-label-group input:focus ~ label,
 .floating-label-group input:not(:placeholder-shown) ~ label {
   transform: translateY(-8px) scale(0.85);
-  color: #0066ff;
+  color: #4f46e5;
   background-color: var(--card-bg);
   padding: 0 6px;
 }
