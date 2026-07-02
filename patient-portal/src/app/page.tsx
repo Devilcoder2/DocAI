@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { 
   LayoutDashboard, Video, FileText, Users, MessageSquare, 
   HelpCircle, LogOut, Search, Bell, Settings, Brain, 
-  Calendar, CheckCircle, ChevronRight, ArrowRight, User, Shield
+  Calendar, CheckCircle, ChevronRight, ArrowRight, User, Shield, Activity
 } from "lucide-react";
 
 import SearchDashboard from "@/components/SearchDashboard";
@@ -86,13 +86,16 @@ export default function HomePage() {
     <div className="bg-background text-foreground font-body-md min-h-screen flex flex-col transition-theme">
       
       {/* TopAppBar */}
-      <header className="bg-card-bg/70 dark:bg-card-bg/50 backdrop-blur-md border-b border-card-border/35 shadow-sm sticky top-0 flex justify-between items-center w-full px-margin-desktop h-16 z-30 transition-theme">
-        <div className="flex items-center gap-4">
-          <span 
-            onClick={() => setActiveTab("dashboard")}
-            className="font-headline-md text-headline-lg text-medical-blue-dark dark:text-teal-400 font-extrabold tracking-tight cursor-pointer"
-          >
-            MedOS AI
+      <header className="bg-card-bg/70 dark:bg-card-bg/50 backdrop-blur-md border-b border-card-border/35 shadow-sm sticky top-0 flex justify-between items-center w-full px-4 md:px-6 lg:px-8 h-16 z-30 transition-theme">
+        <div 
+          onClick={() => setActiveTab("dashboard")}
+          className="flex items-center gap-2 group cursor-pointer select-none"
+        >
+          <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
+            <Activity className="w-4 h-4 animate-pulse" />
+          </div>
+          <span className="font-display font-extrabold text-base text-slate-900 dark:text-teal-400 tracking-tight">
+            MedOS <span className="text-indigo-600 font-semibold">AI</span>
           </span>
         </div>
         
@@ -102,7 +105,7 @@ export default function HomePage() {
             <input 
               value={searchRecordInput}
               onChange={(e) => setSearchRecordInput(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-sidebar-bg/60 border border-card-border/60 rounded-full focus:ring-2 focus:ring-primary-container/20 text-xs focus:outline-none transition-theme text-foreground placeholder-slate-450" 
+              className="w-full pl-10 pr-4 py-2 bg-sidebar-bg/60 border border-card-border/60 rounded-full focus:ring-2 focus:ring-primary-container/20 text-xs focus:outline-none transition-theme text-foreground placeholder-slate-400" 
               placeholder="Search your health records..." 
               type="text"
             />
@@ -610,7 +613,7 @@ export default function HomePage() {
       </div>
 
       {/* BottomNavBar (Mobile Layout Navigation) */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full z-40 flex justify-around items-center px-margin-mobile py-2 bg-card-bg/90 backdrop-blur-xl border-t border-card-border/40 shadow-lg rounded-t-xl transition-theme">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full z-40 flex justify-around items-center px-4 py-2 bg-card-bg/90 backdrop-blur-xl border-t border-card-border/40 shadow-lg rounded-t-xl transition-theme">
         <button 
           onClick={() => setActiveTab("dashboard")}
           className={`flex flex-col items-center justify-center py-1 transition-all cursor-pointer ${
