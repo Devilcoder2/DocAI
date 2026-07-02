@@ -94,8 +94,8 @@ export default function HomePage() {
           <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform">
             <Activity className="w-4 h-4 animate-pulse" />
           </div>
-          <span className="font-display font-extrabold text-base text-slate-900 dark:text-indigo-400 tracking-tight">
-            MedOS <span className="text-indigo-600 font-semibold">AI</span>
+          <span className="font-display font-extrabold text-base text-slate-900 dark:text-slate-100 tracking-tight">
+            MedOS <span className="text-indigo-600 dark:text-indigo-400 font-semibold">AI</span>
           </span>
         </div>
         
