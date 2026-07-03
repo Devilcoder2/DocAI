@@ -150,12 +150,24 @@ export default function HomePage() {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger-red rounded-full" />
             )}
           </button>
-          <img 
+          <div 
             onClick={() => router.push("/profile")}
-            alt="Patient Profile headshot" 
-            className="w-9 h-9 rounded-full border-2 border-primary-container object-cover cursor-pointer hover:scale-105 transition-transform" 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQXUWFd3eIApifhmf5kVRU-vSgFbdTJefGO0bhXAsIVYhwDK5FNirfaSCGDUgUok59hJfww6UVVvTSofE628t1GqVtRkVqG3B2Vf0TXEYxpB3YyfsFJ2j0xohb3bI3NSq3_U8oo1itgkYyFpCzsKpKJEZeonlaPLc1k4pTcx5IrMW_CjveHjVG47j7MDnSb3upJaebFG57erXx4KBzEODkITczYHH2ltCUcSal-yBtCSo4pe0L8Cnoak8S0pi7_6w6hw1pm0K1O5UJ"
-          />
+            className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
+          >
+            <div className="text-right hidden sm:block">
+              <p className="text-xs font-bold text-foreground group-hover:text-primary-container transition-colors leading-tight">
+                {user.name}
+              </p>
+              <p className="text-[9px] text-slate-400 font-mono tracking-wider uppercase mt-0.5">
+                ID: {user.id.slice(0, 8)}
+              </p>
+            </div>
+            <img 
+              alt="Patient Profile headshot" 
+              className="w-9 h-9 rounded-full border-2 border-primary-container object-cover group-hover:scale-105 transition-transform" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQXUWFd3eIApifhmf5kVRU-vSgFbdTJefGO0bhXAsIVYhwDK5FNirfaSCGDUgUok59hJfww6UVVvTSofE628t1GqVtRkVqG3B2Vf0TXEYxpB3YyfsFJ2j0xohb3bI3NSq3_U8oo1itgkYyFpCzsKpKJEZeonlaPLc1k4pTcx5IrMW_CjveHjVG47j7MDnSb3upJaebFG57erXx4KBzEODkITczYHH2ltCUcSal-yBtCSo4pe0L8Cnoak8S0pi7_6w6hw1pm0K1O5UJ"
+            />
+          </div>
         </div>
       </header>
 
