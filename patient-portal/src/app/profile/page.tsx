@@ -126,7 +126,7 @@ export default function ProfilePage() {
   
   const getBMICategory = (val: number) => {
     if (val < 18.5) return { name: "Underweight", color: "text-sky-600", bg: "bg-sky-50" };
-    if (val < 25.0) return { name: "Normal Weight", color: "text-emerald-600", bg: "bg-emerald-50" };
+    if (val < 25.0) return { name: "Normal Weight", color: "text-emerald-650 text-emerald-600", bg: "bg-emerald-50" };
     if (val < 30.0) return { name: "Overweight", color: "text-amber-600", bg: "bg-amber-50" };
     return { name: "Obese", color: "text-rose-600", bg: "bg-rose-50" };
   };
@@ -134,25 +134,25 @@ export default function ProfilePage() {
   const bmiCategory = bmiVal ? getBMICategory(Number(bmiVal)) : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 relative selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-background text-foreground relative selection:bg-primary-container selection:text-white">
       
       {/* Background glow filters */}
-      <div className="absolute top-[-10%] right-[-10%] w-[35%] h-[35%] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-15%] left-[-10%] w-[40%] h-[40%] bg-violet-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] right-[-10%] w-[35%] h-[35%] bg-primary-container/5 rounded-full blur-[100px] pointer-events-none animate-pulse-glow" />
+      <div className="absolute bottom-[-15%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Profile Header */}
-      <header className="border-b border-slate-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-20">
+      <header className="border-b border-card-border/35 bg-card-bg/70 backdrop-blur-md sticky top-0 z-20 transition-theme">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => router.push(user?.role === "Doctor" ? "/doctor/dashboard" : "/")}
-              className="w-10 h-10 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-all shadow-sm cursor-pointer"
+              className="w-10 h-10 rounded-xl bg-card-bg hover:bg-sidebar-bg/60 border border-card-border/40 flex items-center justify-center text-foreground transition-all shadow-sm cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4.5 h-4.5" />
             </button>
             <div>
               <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-indigo-600 fill-indigo-100" />
+                <Heart className="w-5 h-5 text-indigo-600 fill-indigo-100 animate-pulse" />
                 <h1 className="text-lg font-display font-black tracking-tight text-medical-blue-dark">
                   Profile
                 </h1>
@@ -160,7 +160,7 @@ export default function ProfilePage() {
               <p className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase font-mono">User Directory Account</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-indigo-700 font-semibold bg-indigo-50 border border-indigo-100 rounded-full px-4 py-1.5 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 text-xs text-indigo-700 font-semibold bg-medical-blue-soft/80 border border-card-border/30 rounded-full px-4 py-1.5 backdrop-blur-md">
             <Shield className="w-3.5 h-3.5 text-indigo-600" />
             HIPAA Privacy Protected
           </div>
@@ -178,9 +178,9 @@ export default function ProfilePage() {
           <aside className="lg:col-span-4 space-y-6">
             
             {/* Account Metadata Card */}
-            <div className="bg-white border border-slate-150 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 text-center space-y-4">
+            <div className="glass-card rounded-[32px] p-6 border border-card-border/30 shadow-sm hover:shadow-md transition-all duration-300 text-center space-y-4">
               <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-650 p-0.5 mx-auto shadow-md">
-                <div className="w-full h-full bg-white rounded-[22px] flex items-center justify-center text-indigo-600 text-3xl font-black shadow-inner select-none">
+                <div className="w-full h-full bg-card-bg rounded-[22px] flex items-center justify-center text-indigo-600 text-3xl font-black shadow-inner select-none">
                   {name ? name.charAt(0).toUpperCase() : <User className="w-8 h-8" />}
                 </div>
               </div>
@@ -188,15 +188,15 @@ export default function ProfilePage() {
                 <h2 className="text-lg font-display font-extrabold text-medical-blue-dark leading-snug">{name}</h2>
                 <p className="text-xs text-slate-500">{email}</p>
               </div>
-              <div className="inline-block px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-indigo-50 text-indigo-700 border border-indigo-100/50">
+              <div className="inline-block px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-medical-blue-soft/80 text-indigo-700 border border-card-border/30">
                 {user?.role} Account
               </div>
             </div>
 
             {/* Health Overview / BMI Calculator Display (Only for Patients) */}
             {user?.role === "Patient" && (
-              <div className="bg-white border border-slate-150 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 space-y-5">
-                <h3 className="text-sm font-bold text-medical-blue-dark flex items-center gap-2 pb-2 border-b border-slate-100">
+              <div className="glass-card rounded-[32px] p-6 border border-card-border/30 shadow-sm hover:shadow-md transition-all duration-300 space-y-5">
+                <h3 className="text-sm font-bold text-medical-blue-dark flex items-center gap-2 pb-2 border-b border-card-border/30">
                   <Activity className="w-4 h-4 text-indigo-600" />
                   Health Status Overview
                 </h3>
@@ -205,10 +205,10 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-baseline">
                       <span className="text-xs text-slate-500 font-semibold">Calculated BMI</span>
-                      <span className="text-2xl font-display font-black text-slate-900">{bmiVal}</span>
+                      <span className="text-2xl font-display font-black text-foreground">{bmiVal}</span>
                     </div>
 
-                    <div className={`p-3.5 rounded-2xl ${bmiCategory?.bg} border border-slate-100 flex items-center justify-between`}>
+                    <div className={`p-3.5 rounded-2xl ${bmiCategory?.bg} border border-card-border/30 flex items-center justify-between`}>
                       <span className="text-xs text-slate-500 font-medium">Status Category</span>
                       <span className={`text-xs font-extrabold ${bmiCategory?.color}`}>{bmiCategory?.name}</span>
                     </div>
@@ -225,20 +225,20 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="py-4 text-center text-xs text-slate-500 space-y-2">
+                  <div className="py-4 text-center text-xs text-slate-550 italic space-y-2">
                     <p>Input height & weight parameters to display dynamic metabolic metrics.</p>
                   </div>
                 )}
 
                 {/* Health Metrics Recap */}
                 <div className="grid grid-cols-2 gap-3 text-center pt-2">
-                  <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 shadow-inner">
+                  <div className="bg-sidebar-bg/50 p-3.5 rounded-2xl border border-card-border/25 shadow-inner">
                     <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Weight</span>
                     <span className="text-base font-display font-extrabold text-indigo-600 mt-1 block">
                       {weight ? `${weight} kg` : "--"}
                     </span>
                   </div>
-                  <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 shadow-inner">
+                  <div className="bg-sidebar-bg/50 p-3.5 rounded-2xl border border-card-border/25 shadow-inner">
                     <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Height</span>
                     <span className="text-base font-display font-extrabold text-indigo-600 mt-1 block">
                       {height ? `${height} cm` : "--"}
@@ -254,25 +254,25 @@ export default function ProfilePage() {
             
             {/* Save Status Prompts */}
             {saveSuccess && (
-              <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs px-5 py-4 rounded-3xl flex items-center gap-3 animate-fade-in shadow-sm">
+              <div className="bg-success-green/10 border border-success-green/20 text-success-green text-xs px-5 py-4 rounded-3xl flex items-center gap-3 animate-fade-in shadow-sm">
                 <Check className="w-5 h-5 shrink-0" />
                 <span>Profile changes successfully committed to database.</span>
               </div>
             )}
             {errorMsg && (
-              <div className="bg-rose-50 border border-rose-100 text-rose-700 text-xs px-5 py-4 rounded-3xl flex items-center gap-3 animate-fade-in shadow-sm">
+              <div className="bg-danger-red/10 border border-danger-red/20 text-danger-red text-xs px-5 py-4 rounded-3xl flex items-center gap-3 animate-fade-in shadow-sm">
                 <AlertCircle className="w-5 h-5 shrink-0" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
             {/* Profile Forms Block */}
-            <div className="bg-white border border-slate-150 rounded-[32px] p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="glass-card rounded-[32px] p-6 md:p-8 border border-card-border/35 shadow-sm hover:shadow-md transition-all duration-300">
               <form onSubmit={handleSave} className="space-y-6">
                 
                 {/* Account Details Block */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider pb-2 border-b border-slate-100 font-mono">
+                  <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider pb-2 border-b border-card-border/30 font-mono">
                     Account Parameters
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -283,7 +283,7 @@ export default function ProfilePage() {
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none"
+                        className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -293,7 +293,7 @@ export default function ProfilePage() {
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none"
+                        className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
                       />
                     </div>
                   </div>
@@ -302,7 +302,7 @@ export default function ProfilePage() {
                 {/* Medical Parameter Inputs Block (Only for Patients) */}
                 {user?.role === "Patient" && (
                   <div className="space-y-5 pt-4">
-                    <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider pb-2 border-b border-slate-100 font-mono">
+                    <h3 className="text-sm font-bold text-medical-blue-dark uppercase tracking-wider pb-2 border-b border-card-border/30 font-mono">
                       Medical Profile & Vital Constants
                     </h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -316,7 +316,7 @@ export default function ProfilePage() {
                           max="150"
                           value={age}
                           onChange={(e) => setAge(e.target.value === "" ? "" : Number(e.target.value))}
-                          className="w-full bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none"
+                          className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
                         />
                       </div>
 
@@ -329,7 +329,7 @@ export default function ProfilePage() {
                           min="0"
                           value={weight}
                           onChange={(e) => setWeight(e.target.value === "" ? "" : Number(e.target.value))}
-                          className="w-full bg-slate-55 bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none"
+                          className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
                         />
                       </div>
 
@@ -342,7 +342,7 @@ export default function ProfilePage() {
                           min="0"
                           value={height}
                           onChange={(e) => setHeight(e.target.value === "" ? "" : Number(e.target.value))}
-                          className="w-full bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none"
+                          className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
                         />
                       </div>
 
@@ -352,7 +352,7 @@ export default function ProfilePage() {
                           <select
                             value={gender}
                             onChange={(e) => setGender(e.target.value)}
-                            className="w-full bg-slate-55 bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-700 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none appearance-none cursor-pointer"
+                            className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none appearance-none cursor-pointer"
                           >
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
@@ -375,7 +375,7 @@ export default function ProfilePage() {
                         placeholder="List any medication or environmental allergies (e.g., Penicillin, Peanuts, Pollen). Leave blank if none."
                         value={allergies}
                         onChange={(e) => setAllergies(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none resize-none"
+                        className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none resize-none"
                       />
                     </div>
 
@@ -386,7 +386,7 @@ export default function ProfilePage() {
                         placeholder="List any pre-existing health details doctors need to know (e.g. Asthma, Hypertension, Diabetes)."
                         value={chronicIllnesses}
                         onChange={(e) => setChronicIllnesses(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl py-3.5 px-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-sm transition-all outline-none resize-none"
+                        className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 px-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none resize-none"
                       />
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export default function ProfilePage() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="py-3.5 px-6 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-600/10 flex items-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 duration-200"
+                    className="py-3.5 px-6 bg-primary-container hover:bg-primary-container/90 disabled:opacity-50 text-white font-bold text-sm rounded-2xl shadow-lg shadow-primary-container/15 flex items-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 duration-200"
                   >
                     {saving ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
