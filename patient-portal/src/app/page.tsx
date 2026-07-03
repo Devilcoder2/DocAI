@@ -115,7 +115,7 @@ export default function HomePage() {
   const upcomingAppointments = appointments.filter(a => a.status === "Scheduled");
 
   return (
-    <div className="bg-background text-foreground font-body-md min-h-screen flex flex-col transition-theme">
+    <div className="bg-background text-foreground font-body-md h-screen overflow-hidden flex flex-col transition-theme">
       
       {/* TopAppBar */}
       <header className="bg-card-bg/70 dark:bg-card-bg/50 backdrop-blur-md border-b border-card-border/35 shadow-sm sticky top-0 flex justify-between items-center w-full px-4 md:px-6 lg:px-8 h-16 z-30 transition-theme">
@@ -172,7 +172,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <div className="flex flex-1 h-[calc(100vh-64px)] overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
         
         {/* SideNavBar Desktop */}
         <aside className={`hidden md:flex flex-col h-full py-8 bg-card-bg/60 dark:bg-card-bg/20 flex-shrink-0 border-r border-card-border/30 transition-all duration-350 ease-in-out ${
