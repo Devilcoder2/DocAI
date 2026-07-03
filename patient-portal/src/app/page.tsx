@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Video, FileText, Users, MessageSquare, 
   HelpCircle, LogOut, Search, Bell, Settings, Brain, 
   Calendar, CheckCircle, ChevronRight, ArrowRight, User, Shield, Activity,
-  ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, Check
+  ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, Check, ChevronLeft
 } from "lucide-react";
 
 import SearchDashboard from "@/components/SearchDashboard";
@@ -64,6 +64,7 @@ export default function HomePage() {
   const [searchRecordInput, setSearchRecordInput] = useState("");
   const [expandedApptId, setExpandedApptId] = useState<string | null>(null);
   const [noteTabs, setNoteTabs] = useState<Record<string, "summary" | "soap">>({});
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Redirect to welcome if not authenticated
   useEffect(() => {
@@ -174,90 +175,134 @@ export default function HomePage() {
       <div className="flex flex-1 h-[calc(100vh-64px)] overflow-hidden">
         
         {/* SideNavBar Desktop */}
-        <aside className="hidden md:flex flex-col h-full py-8 px-4 bg-card-bg/60 dark:bg-card-bg/20 w-64 flex-shrink-0 border-r border-card-border/30 transition-theme">
-          <nav className="flex-1 space-y-1">
+        <aside className={`hidden md:flex flex-col h-full py-8 bg-card-bg/60 dark:bg-card-bg/20 flex-shrink-0 border-r border-card-border/30 transition-all duration-350 ease-in-out ${
+          sidebarCollapsed ? "w-20 px-3" : "w-64 px-4"
+        }`}>
+          <nav className="flex-1 space-y-2">
             <button 
               onClick={() => setActiveTab("dashboard")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+              className={`w-full flex items-center rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } ${
                 activeTab === "dashboard" 
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
+              title={sidebarCollapsed ? "Dashboard" : undefined}
             >
-              <LayoutDashboard className="w-5 h-5" />
-              <span>Dashboard</span>
+              <LayoutDashboard className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Dashboard</span>}
             </button>
+            
             <button 
               onClick={() => setActiveTab("telehealth")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+              className={`w-full flex items-center rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } ${
                 activeTab === "telehealth" 
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
+              title={sidebarCollapsed ? "Telehealth" : undefined}
             >
-              <Video className="w-5 h-5" />
-              <span>Telehealth</span>
+              <Video className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Telehealth</span>}
             </button>
+
             <button 
               onClick={() => setActiveTab("history")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+              className={`w-full flex items-center rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } ${
                 activeTab === "history" 
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
+              title={sidebarCollapsed ? "Consultations" : undefined}
             >
-              <Calendar className="w-5 h-5" />
-              <span>Consultations</span>
+              <Calendar className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Consultations</span>}
             </button>
+
             <button 
               onClick={() => setActiveTab("vault")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+              className={`w-full flex items-center rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } ${
                 activeTab === "vault" 
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
+              title={sidebarCollapsed ? "Health Vault" : undefined}
             >
-              <FileText className="w-5 h-5" />
-              <span>Health Vault</span>
+              <FileText className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Health Vault</span>}
             </button>
+
             <button 
               onClick={() => setActiveTab("directory")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+              className={`w-full flex items-center rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } ${
                 activeTab === "directory" 
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
+              title={sidebarCollapsed ? "Directory" : undefined}
             >
-              <Users className="w-5 h-5" />
-              <span>Directory</span>
+              <Users className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Directory</span>}
             </button>
+
             <button 
               onClick={() => setActiveTab("companion")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+              className={`w-full flex items-center rounded-xl font-label-md text-label-md transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } ${
                 activeTab === "companion" 
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
+              title={sidebarCollapsed ? "Companion" : undefined}
             >
-              <MessageSquare className="w-5 h-5" />
-              <span>Companion</span>
+              <MessageSquare className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Companion</span>}
             </button>
           </nav>
 
-          <div className="mt-auto pt-6 border-t border-card-border/50 space-y-1">
+          <div className="mt-auto pt-4 border-t border-card-border/50 space-y-1.5">
             <a 
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-550 dark:text-slate-400 hover:text-foreground hover:bg-sidebar-bg/60 transition-all font-label-md text-label-md" 
+              className={`w-full flex items-center rounded-xl text-slate-550 dark:text-slate-400 hover:text-foreground hover:bg-sidebar-bg/60 transition-all font-label-md text-label-md ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              }`} 
               href="#"
+              title={sidebarCollapsed ? "Help Center" : undefined}
             >
-              <HelpCircle className="w-5 h-5" />
-              <span>Help Center</span>
+              <HelpCircle className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="truncate">Help Center</span>}
             </a>
+
             <button 
               onClick={clearAuth}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-danger-red hover:bg-danger-red/10 transition-all font-label-md text-label-md cursor-pointer"
+              className={`w-full flex items-center rounded-xl text-danger-red hover:bg-danger-red/10 transition-all font-label-md text-label-md cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              }`}
+              title={sidebarCollapsed ? "Sign Out" : undefined}
             >
-              <LogOut className="w-5 h-5" />
-              <span>Sign Out</span>
+              <LogOut className="w-5 h-5 shrink-0" />
+              {!sidebarCollapsed && <span className="truncate">Sign Out</span>}
+            </button>
+
+            {/* Collapse Trigger Button */}
+            <button 
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className={`w-full flex items-center text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60 rounded-xl transition-all duration-200 cursor-pointer ${
+                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+              } border-t border-card-border/30 pt-4 mt-2`}
+              title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            >
+              {sidebarCollapsed ? <ChevronRight className="w-5 h-5 shrink-0" /> : <ChevronLeft className="w-5 h-5 shrink-0" />}
+              {!sidebarCollapsed && <span className="truncate">Collapse</span>}
             </button>
           </div>
         </aside>
