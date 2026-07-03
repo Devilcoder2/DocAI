@@ -178,6 +178,18 @@ export default function HomePage() {
         <aside className={`hidden md:flex flex-col h-full py-8 bg-card-bg/60 dark:bg-card-bg/20 flex-shrink-0 border-r border-card-border/30 transition-all duration-350 ease-in-out ${
           sidebarCollapsed ? "w-20 px-3" : "w-64 px-4"
         }`}>
+          {/* Collapse Trigger Button (Top) */}
+          <button 
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className={`w-full flex items-center text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60 rounded-xl transition-all duration-200 cursor-pointer ${
+              sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
+            } border-b border-card-border/30 pb-4 mb-4`}
+            title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+          >
+            {sidebarCollapsed ? <ChevronRight className="w-5 h-5 shrink-0" /> : <ChevronLeft className="w-5 h-5 shrink-0" />}
+            {!sidebarCollapsed && <span className="truncate">Collapse</span>}
+          </button>
+
           <nav className="flex-1 space-y-2">
             <button 
               onClick={() => setActiveTab("dashboard")}
@@ -272,7 +284,7 @@ export default function HomePage() {
 
           <div className="mt-auto pt-4 border-t border-card-border/50 space-y-1.5">
             <a 
-              className={`w-full flex items-center rounded-xl text-slate-550 dark:text-slate-400 hover:text-foreground hover:bg-sidebar-bg/60 transition-all font-label-md text-label-md ${
+              className={`w-full flex items-center rounded-xl text-slate-555 dark:text-slate-400 hover:text-foreground hover:bg-sidebar-bg/60 transition-all font-label-md text-label-md ${
                 sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
               }`} 
               href="#"
@@ -291,18 +303,6 @@ export default function HomePage() {
             >
               <LogOut className="w-5 h-5 shrink-0" />
               {!sidebarCollapsed && <span className="truncate">Sign Out</span>}
-            </button>
-
-            {/* Collapse Trigger Button */}
-            <button 
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className={`w-full flex items-center text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60 rounded-xl transition-all duration-200 cursor-pointer ${
-                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
-              } border-t border-card-border/30 pt-4 mt-2`}
-              title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-            >
-              {sidebarCollapsed ? <ChevronRight className="w-5 h-5 shrink-0" /> : <ChevronLeft className="w-5 h-5 shrink-0" />}
-              {!sidebarCollapsed && <span className="truncate">Collapse</span>}
             </button>
           </div>
         </aside>
