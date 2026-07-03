@@ -175,19 +175,6 @@ export default function HomePage() {
         
         {/* SideNavBar Desktop */}
         <aside className="hidden md:flex flex-col h-full py-8 px-4 bg-card-bg/60 dark:bg-card-bg/20 w-64 flex-shrink-0 border-r border-card-border/30 transition-theme">
-          <div 
-            onClick={() => router.push("/profile")}
-            className="flex items-center gap-3 mb-10 px-2 cursor-pointer group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-primary-container/10 dark:bg-indigo-500/10 flex items-center justify-center text-primary-container dark:text-indigo-400 group-hover:scale-105 transition-transform border border-primary-container/20">
-              <User className="w-5 h-5" />
-            </div>
-            <div className="overflow-hidden">
-              <h3 className="font-label-md text-label-md text-foreground group-hover:text-primary-container dark:group-hover:text-indigo-350 transition-colors truncate font-bold">{user.name}</h3>
-              <p className="text-[10px] text-slate-450 uppercase tracking-widest mt-0.5">ID: {user.id.slice(0, 8)}</p>
-            </div>
-          </div>
-
           <nav className="flex-1 space-y-1">
             <button 
               onClick={() => setActiveTab("dashboard")}
