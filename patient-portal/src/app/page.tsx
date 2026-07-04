@@ -381,34 +381,34 @@ export default function HomePage() {
                     {/* Find a Doctor */}
                     <div 
                       onClick={() => setActiveTab("directory")}
-                      className="group cursor-pointer glass-card rounded-[32px] p-6 border-l-4 border-primary-container hover:bg-primary-container transition-all duration-300 flex flex-col justify-between h-1/2 min-h-[188px]"
+                      className="group cursor-pointer glass-card rounded-[32px] p-6 border-l-4 border-primary-container hover:bg-indigo-50/40 dark:hover:bg-indigo-500/5 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-1/2 min-h-[188px]"
                     >
                       <div className="flex justify-between items-start">
-                        <div className="w-12 h-12 bg-primary-container/10 dark:bg-white/10 rounded-2xl flex items-center justify-center text-primary-container dark:text-indigo-400 group-hover:bg-white group-hover:text-primary-container transition-all">
+                        <div className="w-12 h-12 bg-primary-container/10 dark:bg-white/10 rounded-2xl flex items-center justify-center text-primary-container dark:text-indigo-400 group-hover:scale-105 transition-all">
                           <Search className="w-6 h-6" />
                         </div>
-                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:translate-x-1 transition-transform" />
                       </div>
                       <div>
-                        <h3 className="font-headline text-lg font-bold text-medical-blue-dark group-hover:text-white mb-1">Find a Doctor</h3>
-                        <p className="text-xs text-slate-500 group-hover:text-white/80 leading-normal">Search our network of specialists and primary care providers.</p>
+                        <h3 className="font-headline text-lg font-bold text-medical-blue-dark mb-1">Find a Doctor</h3>
+                        <p className="text-xs text-slate-500 leading-normal">Search our network of specialists and primary care providers.</p>
                       </div>
                     </div>
 
                     {/* Book Appointment */}
                     <div 
                       onClick={() => setActiveTab("directory")}
-                      className="group cursor-pointer glass-card rounded-[32px] p-6 border-l-4 border-success-green hover:bg-success-green transition-all duration-300 flex flex-col justify-between h-1/2 min-h-[188px]"
+                      className="group cursor-pointer glass-card rounded-[32px] p-6 border-l-4 border-success-green hover:bg-emerald-50/40 dark:hover:bg-emerald-500/5 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-1/2 min-h-[188px]"
                     >
                       <div className="flex justify-between items-start">
-                        <div className="w-12 h-12 bg-success-green/10 dark:bg-white/10 rounded-2xl flex items-center justify-center text-success-green group-hover:bg-white group-hover:text-success-green transition-all">
+                        <div className="w-12 h-12 bg-success-green/10 dark:bg-white/10 rounded-2xl flex items-center justify-center text-success-green group-hover:scale-105 transition-all">
                           <Calendar className="w-6 h-6" />
                         </div>
-                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:translate-x-1 transition-transform" />
                       </div>
                       <div>
-                        <h3 className="font-headline text-lg font-bold text-medical-blue-dark group-hover:text-white mb-1">Book Appointment</h3>
-                        <p className="text-xs text-slate-500 group-hover:text-white/80 leading-normal">Schedule virtual or in-person visits in just a few clicks.</p>
+                        <h3 className="font-headline text-lg font-bold text-medical-blue-dark mb-1">Book Appointment</h3>
+                        <p className="text-xs text-slate-500 leading-normal">Schedule virtual or in-person visits in just a few clicks.</p>
                       </div>
                     </div>
 
