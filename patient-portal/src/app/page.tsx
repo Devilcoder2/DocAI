@@ -551,18 +551,9 @@ export default function HomePage() {
                     onBack={() => setSelectedDoctorId(null)} 
                   />
                 ) : (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab("dashboard")}
-                      className="text-xs text-primary-container dark:text-indigo-450 hover:underline flex items-center gap-1 font-bold cursor-pointer"
-                    >
-                      <ArrowRight className="w-3.5 h-3.5 rotate-180" />
-                      Back to Dashboard
-                    </button>
-                    <div className="glass-card rounded-[32px] border border-card-border overflow-hidden">
-                      <SearchDashboard onSelectDoctor={handleSelectDoctor} />
-                    </div>
-                  </>
+                  <div className="glass-card rounded-[32px] border border-card-border overflow-hidden">
+                    <SearchDashboard onSelectDoctor={handleSelectDoctor} />
+                  </div>
                 )}
               </div>
             )}
