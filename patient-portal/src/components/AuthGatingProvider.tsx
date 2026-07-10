@@ -10,7 +10,9 @@ interface AuthGatingProviderProps {
 
 const PUBLIC_ROUTES = ["/welcome", "/login"];
 
-export default function AuthGatingProvider({ children }: AuthGatingProviderProps) {
+export default function AuthGatingProvider({
+  children,
+}: AuthGatingProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, user } = useAuthStore();
@@ -40,10 +42,15 @@ export default function AuthGatingProvider({ children }: AuthGatingProviderProps
         }
       } else {
         // Enforce role-based route access controls
-        const isDoctorRoute = pathname === "/doctor" || pathname.startsWith("/doctor/");
+        const isDoctorRoute =
+          pathname === "/doctor" || pathname.startsWith("/doctor/");
         if (isDoctorRoute && user.role !== "Doctor") {
           router.replace("/");
-        } else if (!isDoctorRoute && pathname !== "/welcome" && user.role === "Doctor") {
+        } else if (
+          !isDoctorRoute &&
+          pathname !== "/welcome" &&
+          user.role === "Doctor"
+        ) {
           // Doctors should not browse the patient-portal dashboard
           router.replace("/doctor/dashboard");
         }
@@ -55,7 +62,7 @@ export default function AuthGatingProvider({ children }: AuthGatingProviderProps
   if (!mounted) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -71,7 +78,8 @@ export default function AuthGatingProvider({ children }: AuthGatingProviderProps
   }
 
   if (isAuthenticated && user) {
-    const isDoctorRoute = pathname === "/doctor" || pathname.startsWith("/doctor/");
+    const isDoctorRoute =
+      pathname === "/doctor" || pathname.startsWith("/doctor/");
     if (isDoctorRoute && user.role !== "Doctor") {
       return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center">
