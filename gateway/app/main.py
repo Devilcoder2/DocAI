@@ -505,10 +505,10 @@ async def proxy_agent_chat(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON body.")
         
-    auth_header = request.headers.get("Authorization")
-    headers = {}
-    if auth_header:
-        headers["Authorization"] = auth_header
+    headers = {
+        "X-User-Id": str(request.state.user_id),
+        "X-User-Role": str(request.state.role),
+    }
 
     return await proxy_request(
         "POST", "/api/v1/agent/chat", request,
@@ -616,5 +616,3 @@ async def proxy_twilio_webhook(request: Request):
         )
         from fastapi import Response
         return Response(content=twiml_fallback, media_type="application/xml", status_code=200)
-
-
