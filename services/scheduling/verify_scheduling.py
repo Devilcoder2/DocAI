@@ -14,7 +14,7 @@ print("=" * 60)
 print("Running seed script to reset and seed database...")
 subprocess.run([sys.executable, "app/seed.py"], check=True)
 
-SERVER_URL = "http://127.0.0.1:8001"
+SERVER_URL = "http://127.0.0.1:8101"
 
 print("Step 1: Spawning uvicorn scheduling microservice subprocess on port 8001...")
 env = os.environ.copy()
