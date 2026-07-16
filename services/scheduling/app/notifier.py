@@ -54,7 +54,7 @@ def send_appointment_emails(appointment_id: str):
         if appointment.consult_type == "telehealth":
             patient_html += f"""
                 <p style="margin: 20px 0 10px 0;"><strong>Virtual Consultation Room Link:</strong></p>
-                <p><a href="http://localhost:3000/appointments/{appointment.id}/room" style="background-color: #14b8a6; color: #0f172a; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Join Telehealth Consultation</a></p>
+                <p><a href="http://localhost:3100/appointments/{appointment.id}/room" style="background-color: #14b8a6; color: #0f172a; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Join Telehealth Consultation</a></p>
             """
         patient_html += """
                 <hr style="border: none; border-top: 1px solid #334155; margin: 25px 0;"/>
@@ -109,7 +109,7 @@ def send_appointment_emails(appointment_id: str):
                 </table>
                 
                 <p style="margin: 25px 0 10px 0;"><strong>Clinical Workspace & Scribe Control:</strong></p>
-                <p><a href="http://localhost:3000/doctor/appointments/{appointment.id}/scribe" style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Open EHR Scribe Panel</a></p>
+                <p><a href="http://localhost:3100/doctor/appointments/{appointment.id}/scribe" style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Open EHR Scribe Panel</a></p>
                 
                 <hr style="border: none; border-top: 1px solid #334155; margin: 25px 0;"/>
                 <p style="font-size: 11px; color: #64748b;">Medical AI Protected Session. This message holds confidential clinical details protected under HIPAA safeguards.</p>
