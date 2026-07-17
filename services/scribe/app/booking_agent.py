@@ -8,7 +8,7 @@ from fastapi import Form, Response
 logger = logging.getLogger(__name__)
 
 # Service scheduling URL setup
-SERVICE_SCHEDULING_URL = os.getenv("SERVICE_SCHEDULING_URL", "http://localhost:8001")
+SERVICE_SCHEDULING_URL = os.getenv("SERVICE_SCHEDULING_URL", "http://127.0.0.1:8101")
 
 # Red-flag symptoms for Twilio Booking Triage
 EMERGENCY_TRIAGE_FLAGS = [
