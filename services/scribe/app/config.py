@@ -19,10 +19,10 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
 
     # Microservices URLs
-    SERVICE_SCHEDULING_URL: str = "http://localhost:8001"
+    SERVICE_SCHEDULING_URL: str = "http://127.0.0.1:8101"
 
     # RabbitMQ Broker URL
-    RABBITMQ_URL: str = "amqp://medical_ai_mq_user:medical_ai_mq_password@localhost:5672/"
+    RABBITMQ_URL: str = "amqp://medical_ai_mq_user:medical_ai_mq_password@localhost:5772/"
 
     # AWS S3 Storage & Bedrock parameters (fallback to mock values for dev)
     AWS_ACCESS_KEY_ID: str = "mock_key_id"
@@ -37,6 +37,15 @@ class Settings(BaseSettings):
     # LLM Provider Fallbacks
     OPENAI_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
+
+    # Voice assistant providers.  Browser speech is only a clearly labelled
+    # accessibility fallback; it never creates simulated bookings.
+    VOICE_STT_PROVIDER: str = "deepgram"
+    VOICE_LLM_PROVIDER: str = "openai"
+    VOICE_TTS_PROVIDER: str = "openai"
+    DEEPGRAM_API_KEY: str = ""
+    ELEVENLABS_API_KEY: str = ""
+    VOICE_AGENT_ENABLED: bool = False
 
     # Local storage path for raw audio chunk dump
     RECORDING_DIR: str = "/tmp/medical_ai_recordings"
