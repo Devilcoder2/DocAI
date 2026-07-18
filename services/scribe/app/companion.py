@@ -15,7 +15,7 @@ from langgraph.graph import StateGraph, END
 logger = logging.getLogger(__name__)
 
 # Config setup for local Qdrant instance
-qdrant_client = QdrantClient(url="http://localhost:6333")
+qdrant_client = QdrantClient(url="http://localhost:7333")
 
 # Initialize Qdrant Collection
 COLLECTION_NAME = "care_plans"
@@ -156,7 +156,7 @@ def trigger_scheduling_escalation(appointment_id: str):
     Logs persistent SystemEvent automatically in scheduling DB.
     """
     try:
-        url = f"http://localhost:8001/appointments/{appointment_id}/clinical-note"
+        url = f"http://127.0.0.1:8101/appointments/{appointment_id}/clinical-note"
         payload = {"requires_escalation": True}
         res = httpx.put(url, json=payload, timeout=5.0)
         if res.status_code == 200:
