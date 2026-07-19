@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { Search, MapPin, Shield, Star, Calendar, ArrowRight, UserCheck } from "lucide-react";
-import { useAuthStore } from "@/store/useAuthStore";
+import { Search, MapPin, Star, Calendar, ArrowRight } from "lucide-react";
 
 // Type definitions matching schemas
 interface Doctor {
@@ -33,7 +31,6 @@ interface SearchDashboardProps {
  *   onSelectDoctor (function): Callback triggered when a doctor details or slot is clicked.
  */
 export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps) {
-  const { isAuthenticated, user, clearAuth } = useAuthStore();
   
   // Search state variables
   const [specialtyInput, setSpecialtyInput] = useState("");
@@ -82,7 +79,7 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
             <Search className="absolute left-4 top-3 text-slate-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Specialty (e.g. Cardiologist, Dentist...)"
+              placeholder="Doctor type (for example, heart or skin)"
               value={specialtyInput}
               onChange={(e) => setSpecialtyInput(e.target.value)}
               className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-2.5 pl-11 pr-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
@@ -92,7 +89,7 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
             <MapPin className="absolute left-4 top-3 text-slate-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="ZIP Code (e.g. 90210, 10001...)"
+              placeholder="PIN code (optional)"
               value={zipInput}
               onChange={(e) => setZipInput(e.target.value)}
               className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-2.5 pl-11 pr-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
@@ -105,14 +102,14 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
                 onClick={handleClearFilters}
                 className="px-5 py-2.5 rounded-2xl bg-card-bg hover:bg-sidebar-bg/60 border border-card-border text-foreground text-xs font-bold transition-all cursor-pointer whitespace-nowrap"
               >
-                Clear Filters
+                Clear
               </button>
             )}
             <button
               type="submit"
               className="px-6 py-2.5 rounded-2xl bg-primary-container hover:bg-primary-container/90 text-white font-bold text-xs shadow-md shadow-primary-container/15 flex items-center justify-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 duration-200 whitespace-nowrap"
             >
-              Search Providers
+              Find Doctors
             </button>
           </div>
         </form>
@@ -122,11 +119,11 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
       <div>
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-display font-extrabold text-foreground">
-            Available Providers ({doctors.length})
+            Doctors ({doctors.length})
           </h3>
           {(specialtyQuery || zipQuery) && (
             <span className="text-xs bg-medical-blue-soft/80 text-indigo-700 border border-card-border/30 px-3 py-1 rounded-full text-xs font-semibold">
-              Filtered Search
+              Your search
             </span>
           )}
         </div>
@@ -134,28 +131,28 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-10 h-10 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-slate-500 text-sm">Searching the provider marketplace...</p>
+            <p className="text-slate-500 text-sm">Looking for doctors...</p>
           </div>
         ) : isError ? (
           <div className="bg-danger-red/10 border border-danger-red/20 text-danger-red rounded-2xl p-6 text-center my-10">
-            <p className="font-semibold">Error retrieving doctors directory</p>
-            <p className="text-sm text-slate-500 mt-1">Please ensure the gateway and microservices are running locally.</p>
+            <p className="font-semibold">We could not load doctors</p>
+            <p className="text-sm text-slate-500 mt-1">Please try again in a moment.</p>
             <button 
               onClick={() => refetch()}
               className="mt-4 px-4 py-2 bg-danger-red text-white hover:bg-danger-red/90 rounded-xl text-xs font-bold transition-all cursor-pointer"
             >
-              Retry Connection
+              Try again
             </button>
           </div>
         ) : doctors.length === 0 ? (
           <div className="bg-sidebar-bg/20 border border-card-border/40 text-center py-16 px-4 rounded-3xl">
-            <p className="text-slate-500 font-medium">No doctors found matching your criteria.</p>
-            <p className="text-xs text-slate-400 mt-2">Try clearing your filters or searching another ZIP code.</p>
+            <p className="text-slate-500 font-medium">No doctors matched your search.</p>
+            <p className="text-xs text-slate-400 mt-2">Try another doctor type or clear the PIN code.</p>
             <button
               onClick={handleClearFilters}
               className="mt-4 text-xs font-semibold text-primary-container dark:text-indigo-400 hover:underline"
             >
-              Reset Search Parameters
+              Clear search
             </button>
           </div>
         ) : (
@@ -221,12 +218,12 @@ function DoctorCard({ doctor, onSelect }: DoctorCardProps) {
               <span className="text-sm font-bold text-foreground">{doctor.rating.toFixed(1)}</span>
             </div>
             <span className="text-slate-500 text-xs">•</span>
-            <span className="text-slate-500 text-xs">Verified Provider</span>
+            <span className="text-slate-500 text-xs">Doctor profile</span>
           </div>
 
           <div className="flex items-center gap-2 mt-4 text-xs text-slate-500">
             <MapPin className="w-4 h-4 text-slate-400" />
-            <span>{doctor.clinic_address} (ZIP {doctor.zip_code})</span>
+            <span>{doctor.clinic_address} (PIN {doctor.zip_code})</span>
           </div>
         </div>
       </div>
@@ -236,7 +233,7 @@ function DoctorCard({ doctor, onSelect }: DoctorCardProps) {
         <div>
           <span className="text-xs font-display font-extrabold text-foreground tracking-wider flex items-center gap-1.5 mb-3">
             <Calendar className="w-4 h-4 text-primary-container dark:text-indigo-400" />
-            Upcoming Slots (Today)
+            Available today
           </span>
           
           {isLoadingSlots ? (
@@ -245,7 +242,7 @@ function DoctorCard({ doctor, onSelect }: DoctorCardProps) {
             </div>
           ) : nextThreeSlots.length === 0 ? (
             <div className="bg-sidebar-bg/40 border border-card-border/40 rounded-2xl py-3 px-4 text-center">
-              <p className="text-xs text-slate-500 font-semibold">No slots remaining today.</p>
+              <p className="text-xs text-slate-500 font-semibold">No times left today.</p>
             </div>
           ) : (
             <div className="grid grid-cols-3 gap-2">
@@ -269,7 +266,7 @@ function DoctorCard({ doctor, onSelect }: DoctorCardProps) {
           onClick={() => onSelect(doctor.id)}
           className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-card-bg hover:bg-sidebar-bg/60 border border-card-border text-sm font-bold text-foreground transition-all cursor-pointer"
         >
-          View Full Profile
+          View doctor
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
