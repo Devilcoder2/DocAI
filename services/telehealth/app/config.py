@@ -19,10 +19,10 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
 
     # Microservices
-    SERVICE_SCHEDULING_URL: str = "http://localhost:8001"
+    SERVICE_SCHEDULING_URL: str = "http://127.0.0.1:8101"
 
     # LiveKit Telehealth SFU
-    LIVEKIT_URL: str = "ws://localhost:7880"
+    LIVEKIT_URL: str = "ws://localhost:7980"
     LIVEKIT_API_KEY: str = "devkey"
     LIVEKIT_API_SECRET: str = "secret"
 
