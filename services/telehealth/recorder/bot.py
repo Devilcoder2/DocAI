@@ -6,7 +6,7 @@ import subprocess
 from playwright.sync_api import sync_playwright
 
 # Parse environment configuration
-LIVEKIT_URL = os.environ.get("LIVEKIT_URL", "ws://localhost:7880")
+LIVEKIT_URL = os.environ.get("LIVEKIT_URL", "ws://localhost:7980")
 LIVEKIT_TOKEN = os.environ.get("LIVEKIT_TOKEN", "")
 ROOM_NAME = os.environ.get("ROOM_NAME", "unknown_room")
 RECORDING_DIR = os.environ.get("RECORDING_DIR", "/tmp/recording")
