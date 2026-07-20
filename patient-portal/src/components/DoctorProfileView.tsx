@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Star, MapPin, Shield, Calendar, ArrowLeft, GraduationCap, Award, MessageSquare, AlertCircle } from "lucide-react";
+import { Star, MapPin, Calendar, ArrowLeft, AlertCircle, MessageSquare } from "lucide-react";
 import BookingWizard from "@/components/BookingWizard";
 
 interface Doctor {
@@ -109,7 +109,7 @@ export default function DoctorProfileView({ doctorId, onBack }: DoctorProfileVie
         className="inline-flex items-center gap-2 text-slate-500 hover:text-primary-container font-semibold text-xs transition-colors cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Provider Directory
+        Back to doctors
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -130,54 +130,27 @@ export default function DoctorProfileView({ doctorId, onBack }: DoctorProfileVie
                   <span>{doctor.rating.toFixed(1)}</span>
                 </div>
                 <span className="text-slate-400 text-xs">•</span>
-                <span className="text-xs text-slate-500">Verified Marketplace Doctor</span>
+                <span className="text-xs text-slate-500">Doctor profile</span>
               </div>
 
               <div className="flex flex-col md:flex-row gap-4 mt-6 text-xs text-slate-500 border-t border-card-border/50 pt-4">
                 <span className="flex items-center gap-2 justify-center md:justify-start">
                   <MapPin className="w-4 h-4 text-primary-container shrink-0" />
-                  <span className="truncate">{doctor.clinic_address} (ZIP {doctor.zip_code})</span>
+                  <span className="truncate">{doctor.clinic_address} (PIN {doctor.zip_code})</span>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Biography & Credentials */}
+          {/* Doctor information */}
           <div className="glass-card rounded-[32px] p-6 md:p-8 space-y-6 border border-card-border shadow-sm">
             <div>
-              <h3 className="text-base font-bold text-foreground border-b border-card-border pb-3">About Provider</h3>
+              <h3 className="text-base font-bold text-foreground border-b border-card-border pb-3">About this doctor</h3>
               <p className="text-slate-600 text-xs leading-relaxed mt-4">
-                {doctor.user.name} is a board-certified specialist practicing in {doctor.specialty} at our local clinic. With over a decade of clinical experience, they are dedicated to providing state-of-the-art diagnostic care and individualized recovery plans. Their practice focuses on patient-centric diagnostics, using advanced clinical tools to deliver top-tier health outcomes.
+                {doctor.user.name} sees patients for {doctor.specialty.toLowerCase()} care at the clinic shown above. Choose a time below to request a visit.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-card-border/30">
-              <div className="flex gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center text-primary-container shrink-0">
-                  <GraduationCap className="w-5 h-5" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-xs text-foreground">Education & Training</h5>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                    MD — Harvard Medical School<br />
-                    Residency in Medicine — Mayo Clinic
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary-container/10 border border-primary-container/20 flex items-center justify-center text-primary-container shrink-0">
-                  <Award className="w-5 h-5" />
-                </div>
-                <div>
-                  <h5 className="font-bold text-xs text-foreground">Board Certifications</h5>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-                    American Board of {doctor.specialty}<br />
-                    Fellow of the College of Clinical Specialists
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Patient Reviews Section */}
