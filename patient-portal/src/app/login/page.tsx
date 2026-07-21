@@ -51,7 +51,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       if (authMode === "register") {
-        const response = await fetch("http://localhost:8000/api/v1/public/auth/register", {
+        const response = await fetch("http://localhost:8100/api/v1/public/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -76,7 +76,7 @@ export default function LoginPage() {
           router.push(data.user.role === "Doctor" ? "/doctor/dashboard" : "/");
         }, 800);
       } else {
-        const response = await fetch("http://localhost:8000/api/v1/public/auth/login", {
+        const response = await fetch("http://localhost:8100/api/v1/public/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
@@ -116,7 +116,7 @@ export default function LoginPage() {
     setErrorMsg(null);
     try {
       const email = activeTab === "doctor" ? "alice.heart@medical.com" : "john.doe@email.com";
-      const response = await fetch("http://localhost:8000/api/v1/public/auth/login", {
+      const response = await fetch("http://localhost:8100/api/v1/public/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
