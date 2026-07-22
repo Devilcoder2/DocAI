@@ -7,7 +7,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { 
   LayoutDashboard, Video, FileText, Users, MessageSquare, 
-  LogOut, Settings, Brain, 
+  LogOut, Search, Settings, Brain, 
   Calendar, CheckCircle, ChevronRight, ArrowRight, User, Shield, Activity,
   ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, Check, ChevronLeft
 } from "lucide-react";
@@ -536,22 +536,22 @@ export default function HomePage() {
             {activeTab === "telehealth" && (
               <div className="animate-float-up space-y-8">
                 <header className="flex flex-col gap-1.5">
-                  <h2 className="font-headline text-2xl font-black text-foreground">Upcoming Telehealth Rooms</h2>
-                  <p className="text-slate-500 text-xs">Access secure WebRTC virtual consult interfaces booked for your profile.</p>
+                  <h2 className="font-headline text-2xl font-black text-foreground">Your video visits</h2>
+                  <p className="text-slate-500 text-xs">Join a video visit when it is time for your appointment.</p>
                 </header>
 
                 {upcomingAppointments.length === 0 ? (
                   <div className="glass-card rounded-[32px] p-8 text-center border border-card-border max-w-lg">
                     <Video className="w-10 h-10 text-slate-400 mx-auto mb-4" />
-                    <h3 className="text-sm font-bold text-foreground">No Telehealth Appointments Scheduled</h3>
+                    <h3 className="text-sm font-bold text-foreground">No video visits booked</h3>
                     <p className="text-xs text-slate-550 mt-1 leading-normal">
-                      Schedule a virtual appointment with a specialist provider in the Directory module.
+                      Find a doctor and choose Video Visit while booking.
                     </p>
                     <button 
                       onClick={() => setActiveTab("directory")}
                       className="mt-6 bg-primary-container hover:bg-medical-blue-dark text-white px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer"
                     >
-                      Book Consultation Now
+                      Find a doctor
                     </button>
                   </div>
                 ) : (
@@ -574,13 +574,13 @@ export default function HomePage() {
                             onClick={() => router.push(`/appointments/${appt.id}/room`)}
                             className="bg-primary-container hover:bg-medical-blue-dark text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md shadow-primary-container/10"
                           >
-                            Join Video Consultation
+                            Join video visit
                           </button>
                           <button 
                             onClick={() => router.push(`/appointments/${appt.id}/companion`)}
                             className="text-primary-container hover:underline text-xs font-bold cursor-pointer"
                           >
-                            Pre-Consult Prep
+                            Get ready
                           </button>
                         </div>
                       </div>
@@ -593,19 +593,19 @@ export default function HomePage() {
             {activeTab === "vault" && (
               <div className="animate-float-up space-y-8">
                 <header className="flex flex-col gap-1.5">
-                  <h2 className="font-headline text-2xl font-black text-foreground">Clinical Health Vault</h2>
-                  <p className="text-slate-550 text-xs">Verify past clinical notes, diagnosis records, and signed SOAP documents.</p>
+                  <h2 className="font-headline text-2xl font-black text-foreground">My health records</h2>
+                  <p className="text-slate-550 text-xs">See visit notes that your doctor has completed.</p>
                 </header>
 
                 <div className="glass-card rounded-[32px] p-8 border border-card-border shadow-sm space-y-6">
                   <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                     <Shield className="w-4 h-4 text-success-green" />
-                    HIPAA Secure Medical Logs
+                    Your visit notes
                   </h3>
                   
                   {pastAppointments.length === 0 ? (
                     <p className="text-xs text-slate-500 leading-normal">
-                      No clinical notes found. Completed appointment document records will automatically sync to your health vault.
+                      No visit notes are ready yet. Completed notes will appear here after your doctor reviews them.
                     </p>
                   ) : (
                     <div className="space-y-4">
@@ -625,7 +625,7 @@ export default function HomePage() {
                             onClick={() => router.push(`/appointments/${appt.id}/companion`)}
                             className="text-primary-container dark:text-indigo-400 text-xs font-bold hover:underline shrink-0 cursor-pointer"
                           >
-                            View Clinical Summary
+                            View summary
                           </button>
                         </div>
                       ))}
@@ -638,8 +638,8 @@ export default function HomePage() {
             {activeTab === "companion" && (
               <div className="animate-float-up space-y-8">
                 <header className="flex flex-col gap-1.5">
-                  <h2 className="font-headline text-2xl font-black text-foreground">AI Care Companion Chat</h2>
-                  <p className="text-slate-550 text-xs">Conversational safety checkers, recovery timeline queries, and care directives.</p>
+                  <h2 className="font-headline text-2xl font-black text-foreground">Health Help</h2>
+                  <p className="text-slate-550 text-xs">Ask simple questions about the care instructions from a visit.</p>
                 </header>
 
                 <div className="glass-card rounded-[32px] p-8 border border-card-border shadow-sm space-y-6 max-w-2xl">
@@ -648,17 +648,17 @@ export default function HomePage() {
                       <Brain className="w-6 h-6 animate-pulse" />
                     </div>
                     <div className="space-y-2">
-                      <h3 className="text-sm font-bold text-foreground">Active Clinical Context Available</h3>
+                      <h3 className="text-sm font-bold text-foreground">Choose a visit</h3>
                       <p className="text-xs text-slate-500 leading-relaxed">
-                        To chat with the LangGraph Care Companion about your medical instruction guidelines, select an appointment from your consultation list to launch the active chat portal.
+                        Select a visit to ask about its care instructions. This does not replace medical advice from your doctor.
                       </p>
                     </div>
                   </div>
 
                   <div className="border-t border-card-border/50 pt-6">
-                    <h4 className="text-xs font-bold text-foreground mb-4">Select Consultation to Open Chat:</h4>
+                    <h4 className="text-xs font-bold text-foreground mb-4">Select a visit:</h4>
                     {appointments.length === 0 ? (
-                      <p className="text-xs text-slate-550 italic">No consultations available to start care companion chat.</p>
+                      <p className="text-xs text-slate-550 italic">There are no visits available yet.</p>
                     ) : (
                       <div className="space-y-3.5">
                         {appointments.map(appt => (
