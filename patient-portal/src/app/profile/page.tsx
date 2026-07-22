@@ -46,7 +46,7 @@ export default function ProfilePage() {
         setLoading(true);
         setErrorMsg(null);
 
-        const meRes = await fetch("http://localhost:8000/api/v1/users/me", {
+        const meRes = await fetch("http://localhost:8100/api/v1/users/me", {
           headers: { "Authorization": `Bearer ${token}` }
         });
         if (meRes.ok) {
@@ -90,7 +90,7 @@ export default function ProfilePage() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/me", {
+      const response = await fetch("http://localhost:8100/api/v1/users/me", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
