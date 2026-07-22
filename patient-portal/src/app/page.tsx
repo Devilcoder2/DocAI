@@ -7,7 +7,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 import { 
   LayoutDashboard, Video, FileText, Users, MessageSquare, 
-  HelpCircle, LogOut, Search, Bell, Settings, Brain, 
+  LogOut, Settings, Brain, 
   Calendar, CheckCircle, ChevronRight, ArrowRight, User, Shield, Activity,
   ChevronUp, ChevronDown, AlertTriangle, ArrowLeft, Check, ChevronLeft
 } from "lucide-react";
@@ -62,7 +62,6 @@ export default function HomePage() {
   const router = useRouter();
   const { isAuthenticated, user, token, clearAuth } = useAuthStore();
   const [activeTab, setActiveTab] = useState<"dashboard" | "directory" | "telehealth" | "vault" | "companion" | "history">("dashboard");
-  const [searchRecordInput, setSearchRecordInput] = useState("");
   const [expandedApptId, setExpandedApptId] = useState<string | null>(null);
   const [noteTabs, setNoteTabs] = useState<Record<string, "summary" | "soap">>({});
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -99,7 +98,7 @@ export default function HomePage() {
     queryKey: ["patient-appointments", user?.id],
     queryFn: async () => {
       if (!user?.id || !token) return [];
-      const response = await fetch(`http://localhost:8000/api/v1/appointments?patient_id=${user.id}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments?patient_id=${user.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) return [];
@@ -152,26 +151,12 @@ export default function HomePage() {
           </span>
         </div>
         
-        <div className="hidden md:flex flex-1 max-w-md mx-8">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-            <input 
-              value={searchRecordInput}
-              onChange={(e) => setSearchRecordInput(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-sidebar-bg/60 border border-card-border/60 rounded-full focus:ring-2 focus:ring-primary-container/20 text-xs focus:outline-none transition-theme text-foreground placeholder-slate-400" 
-              placeholder="Search your health records..." 
-              type="text"
-            />
-          </div>
+        <div className="hidden md:flex flex-1 items-center justify-center gap-2">
+          <button onClick={() => setActiveTab("directory")} className="rounded-full px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-sidebar-bg hover:text-foreground">Find a Doctor</button>
+          <button onClick={triggerVoiceAssistant} className="rounded-full bg-teal-600 px-4 py-2 text-xs font-semibold text-white hover:bg-teal-700">Health Help</button>
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="text-slate-500 hover:text-foreground hover:bg-sidebar-bg/80 p-2 rounded-full transition-colors relative cursor-pointer">
-            <Bell className="w-5 h-5" />
-            {upcomingAppointments.length > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger-red rounded-full" />
-            )}
-          </button>
           <div 
             onClick={() => router.push("/profile")}
             className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
@@ -236,10 +221,10 @@ export default function HomePage() {
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
-              title={sidebarCollapsed ? "Telehealth" : undefined}
+              title={sidebarCollapsed ? "Video Visits" : undefined}
             >
               <Video className="w-5 h-5 shrink-0" />
-              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Telehealth</span>}
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Video Visits</span>}
             </button>
 
             <button 
@@ -251,10 +236,10 @@ export default function HomePage() {
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
-              title={sidebarCollapsed ? "Consultations" : undefined}
+              title={sidebarCollapsed ? "My Appointments" : undefined}
             >
               <Calendar className="w-5 h-5 shrink-0" />
-              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Consultations</span>}
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">My Appointments</span>}
             </button>
 
             <button 
@@ -266,10 +251,10 @@ export default function HomePage() {
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
-              title={sidebarCollapsed ? "Health Vault" : undefined}
+              title={sidebarCollapsed ? "My Health Records" : undefined}
             >
               <FileText className="w-5 h-5 shrink-0" />
-              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Health Vault</span>}
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">My Health Records</span>}
             </button>
 
             <button 
@@ -281,10 +266,10 @@ export default function HomePage() {
                   ? "text-primary-container dark:text-indigo-400 bg-medical-blue-soft/50 dark:bg-indigo-500/10 border-r-4 border-primary-container dark:border-indigo-400 font-bold" 
                   : "text-slate-500 hover:text-foreground hover:bg-sidebar-bg/60"
               }`}
-              title={sidebarCollapsed ? "Directory" : undefined}
+              title={sidebarCollapsed ? "Find a Doctor" : undefined}
             >
               <Users className="w-5 h-5 shrink-0" />
-              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Directory</span>}
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Find a Doctor</span>}
             </button>
 
             <button 
@@ -299,21 +284,11 @@ export default function HomePage() {
               title={sidebarCollapsed ? "Companion" : undefined}
             >
               <MessageSquare className="w-5 h-5 shrink-0" />
-              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Companion</span>}
+              {!sidebarCollapsed && <span className="transition-all duration-300 truncate">Health Help</span>}
             </button>
           </nav>
 
           <div className="mt-auto pt-4 border-t border-card-border/50 space-y-1.5">
-            <a 
-              className={`w-full flex items-center rounded-xl text-slate-555 dark:text-slate-400 hover:text-foreground hover:bg-sidebar-bg/60 transition-all font-label-md text-label-md ${
-                sidebarCollapsed ? "justify-center p-3" : "gap-3 px-4 py-3"
-              }`} 
-              href="#"
-              title={sidebarCollapsed ? "Help Center" : undefined}
-            >
-              <HelpCircle className="w-5 h-5 shrink-0" />
-              {!sidebarCollapsed && <span className="truncate">Help Center</span>}
-            </a>
 
             <button 
               onClick={clearAuth}
@@ -356,8 +331,8 @@ export default function HomePage() {
                           <Brain className="w-6 h-6 animate-pulse" />
                         </div>
                         <div>
-                          <h2 className="font-headline text-xl font-bold text-foreground">AI Care Companion</h2>
-                          <p className="text-xs text-slate-500">Intelligent clinical guidance, 24/7</p>
+                          <h2 className="font-headline text-xl font-bold text-foreground">Health Help</h2>
+                          <p className="text-xs text-slate-500">Simple help with your care plan and appointments</p>
                         </div>
                       </div>
                       
