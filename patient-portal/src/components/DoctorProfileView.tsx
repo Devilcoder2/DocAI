@@ -34,7 +34,7 @@ export default function DoctorProfileView({ doctorId, onBack }: DoctorProfileVie
   const { data: doctor, isLoading: isLoadingDoc, isError: isErrorDoc } = useQuery<Doctor>({
     queryKey: ["doctor", doctorId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/public/doctors/${doctorId}`);
+      const response = await fetch(`http://localhost:8100/api/v1/public/doctors/${doctorId}`);
       if (!response.ok) {
         throw new Error("Failed to load doctor profile.");
       }
@@ -349,7 +349,7 @@ function DateSlotsColumn({ doctorId, dateStr, onSelectSlot }: DateSlotsColumnPro
   const { data: slots = [], isLoading } = useQuery<string[]>({
     queryKey: ["availability", doctorId, dateStr],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/public/doctors/${doctorId}/availability?date=${dateStr}`);
+      const response = await fetch(`http://localhost:8100/api/v1/public/doctors/${doctorId}/availability?date=${dateStr}`);
       if (!response.ok) return [];
       return response.json();
     }
