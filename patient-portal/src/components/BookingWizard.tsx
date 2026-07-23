@@ -80,7 +80,7 @@ export default function BookingWizard({
           reason_for_visit: `${visitReason}: ${symptoms}`
         };
 
-        const response = await fetch("http://localhost:8000/api/v1/appointments", {
+        const response = await fetch("http://localhost:8100/api/v1/appointments", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export default function BookingWizard({
                         : "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-slate-700"
                     }`}
                   >
-                    Virtual Video (Telehealth)
+                    Video Visit
                   </button>
                 </div>
               </div>
@@ -216,13 +216,13 @@ export default function BookingWizard({
                 <div>
                   <h4 className="font-bold text-slate-100 text-sm">AI Scribe Consultation Feature</h4>
                   <p className="text-xs text-slate-400 mt-1 leading-normal">
-                    This consultation integrates our virtual clinical scribe companion. The bot transcribes conversations into SOAP structured clinical files for doctor signing.
+                    If you agree, your visit may be recorded and turned into a draft note for your doctor to review.
                   </p>
                 </div>
               </div>
 
               <div className="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 text-xs text-slate-400 leading-relaxed">
-                <strong>Alert Notification Reminders:</strong> Email and SMS text alerts will automatically be dispatched to your registered address (<span className="text-slate-200 font-semibold">{user?.email || "N/A"}</span>) 24 hours prior to scheduled slots.
+                  <strong>Appointment reminders:</strong> We will show your appointment in the app. Email or SMS reminders depend on your notification setup.
               </div>
 
               <div className="space-y-4">
@@ -236,7 +236,7 @@ export default function BookingWizard({
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold text-slate-200">Consent to AI Note-Taking</span>
                     <span className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                      I authorize the AI Scribe to listen, record, transcribe, and structure clinical notes during my telehealth or in-office visit. I understand notes are reviewed and edited by my provider.
+                      I allow the app to record and make a draft note during my visit. My doctor will review the note before using it.
                     </span>
                   </div>
                 </label>
@@ -251,7 +251,7 @@ export default function BookingWizard({
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold text-slate-200">Accept Terms & Privacy Policy</span>
                     <span className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                      I agree to the HealthCenter Terms of Service, HIPAA data security disclosures, and privacy policies.
+                      I agree to the Terms and Privacy Policy.
                     </span>
                   </div>
                 </label>
@@ -268,7 +268,7 @@ export default function BookingWizard({
               
               <div>
                 <h4 className="text-xl font-bold text-slate-100">Appointment Confirmed!</h4>
-                <p className="text-xs text-slate-400 mt-1">Your reservation was logged successfully in the database.</p>
+                <p className="text-xs text-slate-400 mt-1">Your visit has been booked.</p>
               </div>
 
               <div className="max-w-md mx-auto bg-slate-950/50 border border-slate-850 rounded-2xl p-5 text-left space-y-4">
@@ -286,7 +286,7 @@ export default function BookingWizard({
                     <h5 className="font-bold text-xs text-slate-300">Provider & Format</h5>
                     <p className="text-xs text-slate-400 mt-0.5">{doctorName} ({specialty})</p>
                     <p className="text-[10px] font-bold text-teal-400 uppercase tracking-widest mt-1">
-                      {confirmedAppt.consult_type === "telehealth" ? "Virtual Telehealth Link Generated" : "In-Person Clinic Visit"}
+                      {confirmedAppt.consult_type === "telehealth" ? "Video visit" : "Clinic visit"}
                     </p>
                   </div>
                 </div>
@@ -296,7 +296,7 @@ export default function BookingWizard({
                   <div>
                     <h5 className="font-bold text-xs text-slate-300">Location Directions</h5>
                     <p className="text-[11px] leading-relaxed mt-0.5">
-                      Clinic Address: 100 Main St, Suite 400. Free patient parking is validated at checkout in the parking deck.
+                      Your clinic address will be shown on the doctor’s profile and in your appointment details.
                     </p>
                   </div>
                 </div>
@@ -304,7 +304,7 @@ export default function BookingWizard({
 
               {confirmedAppt.consult_type === "telehealth" && (
                 <div className="bg-teal-500/5 border border-teal-500/20 max-w-md mx-auto p-4 rounded-xl text-xs text-left leading-normal text-teal-400">
-                  <strong>Telehealth Instructions:</strong> A secure video session console link will appear on your Patient Dashboard. An SMS link was dispatched to your alert preferences.
+                  <strong>Video visit:</strong> Open My Appointments at the booked time and select Join video visit.
                 </div>
               )}
             </div>
