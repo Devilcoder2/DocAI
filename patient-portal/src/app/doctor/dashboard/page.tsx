@@ -85,7 +85,7 @@ export default function DoctorDashboard() {
         <div className="bg-rose-500/10 border border-rose-500/20 rounded-3xl p-8 max-w-md text-center">
           <ShieldAlert className="w-12 h-12 text-rose-400 mx-auto mb-4" />
           <h3 className="text-xl font-bold mb-2">Access Denied</h3>
-          <p className="text-sm text-slate-400 mb-6">Provider credentials required. Please log in as a clinical provider to access this dashboard.</p>
+          <p className="text-sm text-slate-400 mb-6">Please log in with a doctor account to open this page.</p>
           <Link href="/" className="bg-teal-500 hover:bg-teal-400 text-slate-950 px-6 py-2.5 rounded-xl font-bold text-sm transition-all">
             Return to Homepage
           </Link>
@@ -93,6 +93,10 @@ export default function DoctorDashboard() {
       </div>
     );
   }
+
+  const totalAppointments = appointments?.length ?? 0;
+  const completedAppointments = appointments?.filter((appt) => appt.status === "completed").length ?? 0;
+  const draftNotes = appointments?.filter((appt) => appt.clinical_note?.status === "draft").length ?? 0;
 
   // Filter and search appointments
   const filteredAppointments = appointments?.filter(appt => {
@@ -158,16 +162,13 @@ export default function DoctorDashboard() {
             <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Today</span>
             <div className="flex justify-between items-end">
               <div>
-                <span className="text-3xl font-black text-foreground">8</span>
-                <span className="text-xs text-emerald-500 font-semibold ml-2 inline-flex items-center gap-0.5">
-                  +12% vs yesterday
-                </span>
+                <span className="text-3xl font-black text-foreground">{totalAppointments}</span>
               </div>
               <span className="text-[10px] text-teal-500 font-bold bg-teal-500/10 px-2 py-0.5 rounded-md border border-teal-500/20">Consults</span>
             </div>
             <div className="border-t border-card-border mt-4 pt-4 flex justify-between text-xs text-slate-500 dark:text-slate-400">
-              <span>Completed: 6</span>
-              <span>In Queue: 2</span>
+              <span>Completed: {completedAppointments}</span>
+              <span>Upcoming: {Math.max(totalAppointments - completedAppointments, 0)}</span>
             </div>
           </div>
 
@@ -176,16 +177,12 @@ export default function DoctorDashboard() {
             <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Visit Notes</span>
             <div className="flex justify-between items-end">
               <div>
-                <span className="text-3xl font-black text-foreground">2.4m</span>
-                <span className="text-xs text-teal-500 font-semibold ml-2 inline-flex items-center gap-0.5">
-                  92% AI-assisted
-                </span>
+                <span className="text-3xl font-black text-foreground">{draftNotes}</span>
               </div>
-              <span className="text-[10px] text-indigo-500 font-bold bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20">Avg. Scribe Note Draft</span>
+              <span className="text-[10px] text-indigo-500 font-bold bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20">Need review</span>
             </div>
             <div className="border-t border-card-border mt-4 pt-4 flex justify-between text-xs text-slate-500 dark:text-slate-400">
-              <span>Time saved: 4.8 hrs</span>
-              <span>Accuracy: 98.4%</span>
+              <span>Open a visit to review a note</span>
             </div>
           </div>
 
