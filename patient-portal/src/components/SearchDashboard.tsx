@@ -51,7 +51,7 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
       if (specialtyQuery) params.append("specialty", specialtyQuery);
       if (zipQuery) params.append("zip_code", zipQuery);
       
-      const response = await fetch(`http://localhost:8000/api/v1/public/doctors?${params.toString()}`);
+      const response = await fetch(`http://localhost:8100/api/v1/public/doctors?${params.toString()}`);
       if (!response.ok) {
         throw new Error("Failed to search doctors.");
       }
@@ -192,7 +192,7 @@ function DoctorCard({ doctor, onSelect }: DoctorCardProps) {
   const { data: slots = [], isLoading: isLoadingSlots } = useQuery<string[]>({
     queryKey: ["availability", doctor.id, todayStr],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/public/doctors/${doctor.id}/availability?date=${todayStr}`);
+      const response = await fetch(`http://localhost:8100/api/v1/public/doctors/${doctor.id}/availability?date=${todayStr}`);
       if (!response.ok) return [];
       return response.json();
     }
