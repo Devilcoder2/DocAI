@@ -40,7 +40,7 @@ export default function CareCompanionPage({ params }: { params: Promise<{ id: st
   const { data: appointment, isLoading: isLoadingApp } = useQuery({
     queryKey: ["appointment", appointmentId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments/${appointmentId}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments/${appointmentId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -56,7 +56,7 @@ export default function CareCompanionPage({ params }: { params: Promise<{ id: st
   const { data: doctor } = useQuery({
     queryKey: ["doctor", doctorId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/public/doctors/${doctorId}`);
+      const response = await fetch(`http://localhost:8100/api/v1/public/doctors/${doctorId}`);
       if (!response.ok) {
         throw new Error("Failed to load doctor details.");
       }
@@ -69,7 +69,7 @@ export default function CareCompanionPage({ params }: { params: Promise<{ id: st
   useEffect(() => {
     if (!token || !appointmentId) return;
 
-    const gatewayWsUrl = `ws://localhost:8000/api/v1/appointments/${appointmentId}/companion/chat`;
+    const gatewayWsUrl = `ws://localhost:8100/api/v1/appointments/${appointmentId}/companion/chat`;
     console.log(`Connecting to Care Companion WebSocket: ${gatewayWsUrl}`);
     
     const ws = new WebSocket(gatewayWsUrl);
