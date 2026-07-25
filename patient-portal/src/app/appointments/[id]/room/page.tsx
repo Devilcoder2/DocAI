@@ -54,7 +54,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
   const { data: appointment, isLoading: isLoadingApp } = useQuery({
     queryKey: ["appointment", appointmentId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments/${appointmentId}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments/${appointmentId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -70,7 +70,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
   const { data: doctor } = useQuery({
     queryKey: ["doctor", doctorId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/public/doctors/${doctorId}`);
+      const response = await fetch(`http://localhost:8100/api/v1/public/doctors/${doctorId}`);
       if (!response.ok) {
         throw new Error("Failed to load doctor profile.");
       }
@@ -88,7 +88,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
     async function initializeRoom() {
       try {
         // Request LiveKit join token from Telehealth microservice
-        const tokenResp = await fetch("http://localhost:8000/api/v1/telehealth/rooms/token", {
+        const tokenResp = await fetch("http://localhost:8100/api/v1/telehealth/rooms/token", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -129,7 +129,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
         // Track scribe recording container activity
         const checkScribeStatus = async () => {
           try {
-            const statusResp = await fetch(`http://localhost:8000/api/v1/telehealth/rooms/${roomCredentials.room_name}/scribe/status`, {
+            const statusResp = await fetch(`http://localhost:8100/api/v1/telehealth/rooms/${roomCredentials.room_name}/scribe/status`, {
               headers: { Authorization: `Bearer ${token}` }
             });
             if (statusResp.ok) {
@@ -145,7 +145,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
         const scribeInterval = setInterval(checkScribeStatus, 3000);
 
         // Connect to LiveKit SFU instance
-        await lkRoom.connect(`ws://localhost:7880`, roomCredentials.token);
+        await lkRoom.connect(`ws://localhost:7980`, roomCredentials.token);
         
         // Publish local camera and microphone tracks
         await lkRoom.localParticipant.enableCameraAndMicrophone();
@@ -258,7 +258,7 @@ export default function PatientTelehealthRoom({ params }: { params: Promise<{ id
     const checkMockScribe = async () => {
       try {
         const roomName = `appointment_${appointmentId}`;
-        const statusResp = await fetch(`http://localhost:8000/api/v1/telehealth/rooms/${roomName}/scribe/status`, {
+        const statusResp = await fetch(`http://localhost:8100/api/v1/telehealth/rooms/${roomName}/scribe/status`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (statusResp.ok) {
