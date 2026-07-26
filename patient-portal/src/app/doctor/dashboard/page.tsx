@@ -48,7 +48,7 @@ export default function DoctorDashboard() {
 
   const handleViewPatientProfile = async (patientId: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/users/${patientId}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/users/${patientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.ok) {
@@ -67,7 +67,7 @@ export default function DoctorDashboard() {
   const { data: appointments, isLoading, error } = useQuery<Appointment[]>({
     queryKey: ["doctor-appointments", user?.id],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments?doctor_id=${user?.id}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments?doctor_id=${user?.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -121,8 +121,8 @@ export default function DoctorDashboard() {
               <ClipboardList className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] text-teal-400 font-bold uppercase tracking-widest">Clinical Care Portal</span>
-              <h1 className="text-lg font-bold">Doctor Consult Queue</h1>
+              <span className="text-[10px] text-teal-400 font-bold uppercase tracking-widest">Doctor Portal</span>
+              <h1 className="text-lg font-bold">My Appointments</h1>
             </div>
           </div>
 
@@ -146,7 +146,7 @@ export default function DoctorDashboard() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
           <h2 className="text-2xl font-extrabold text-foreground mb-2">Welcome Back, {user.name.split(" ")[0]}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
-            Review patient consult list, view active telehealth rooms, or open the AI Scribe Split-Screen workspace to sign and approve clinical documentation.
+            Review your appointments, join video visits, and review notes after a visit.
           </p>
         </div>
 
@@ -155,7 +155,7 @@ export default function DoctorDashboard() {
           
           {/* Card 1: Key Metrics */}
           <div className="bg-card-bg border border-card-border rounded-3xl p-6 transition-theme shadow-sm flex flex-col justify-between">
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Today's Overview</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Today</span>
             <div className="flex justify-between items-end">
               <div>
                 <span className="text-3xl font-black text-foreground">8</span>
@@ -173,7 +173,7 @@ export default function DoctorDashboard() {
 
           {/* Card 2: Average Duration */}
           <div className="bg-card-bg border border-card-border rounded-3xl p-6 transition-theme shadow-sm flex flex-col justify-between">
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">EHR Documentation Speed</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block mb-1">Visit Notes</span>
             <div className="flex justify-between items-end">
               <div>
                 <span className="text-3xl font-black text-foreground">2.4m</span>
@@ -403,21 +403,7 @@ export default function DoctorDashboard() {
                                 View Note
                               </Link>
                             ) : (
-                              <button
-                                onClick={async () => {
-                                  // Call telehealth endpoint to start scribe or create manual draft
-                                  const roomName = `appointment_${appt.id}`;
-                                  try {
-                                    alert("Starting Scribe. Join the Telehealth Room to run recording, or run verify_phase4.py diagnostic trigger.");
-                                  } catch (e) {
-                                    console.error(e);
-                                  }
-                                }}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-[11px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-400 transition-all border border-slate-700 border-dashed"
-                              >
-                                <PlusCircle className="w-3.5 h-3.5" />
-                                Initialize Scribe
-                              </button>
+              <span className="px-3 py-1.5 text-[11px] text-slate-500">A note appears after the visit.</span>
                             )}
                           </div>
                         </td>
