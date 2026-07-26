@@ -78,7 +78,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const { data: appointment, isLoading: isLoadingApp } = useQuery<Appointment>({
     queryKey: ["appointment-scribe", appointmentId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments/${appointmentId}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments/${appointmentId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -94,7 +94,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const { data: patientProfile } = useQuery({
     queryKey: ["patient-profile-scribe", patientId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/users/${patientId}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/users/${patientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -109,7 +109,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const { data: patientHistory = [] } = useQuery<any[]>({
     queryKey: ["patient-history-timeline", patientId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments?patient_id=${patientId}`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments?patient_id=${patientId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -124,7 +124,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const { data: doctorsCatalog = [] } = useQuery<Doctor[]>({
     queryKey: ["doctors-catalog"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:8000/api/v1/public/doctors");
+      const response = await fetch("http://localhost:8100/api/v1/public/doctors");
       if (!response.ok) {
         throw new Error("Failed to load doctors list.");
       }
@@ -136,7 +136,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const { data: clinicalNote, isLoading: isLoadingNote } = useQuery<ClinicalNote>({
     queryKey: ["clinical-note", appointmentId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments/${appointmentId}/clinical-note`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments/${appointmentId}/clinical-note`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!response.ok) {
@@ -161,7 +161,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   // 5. PUT manual draft updates
   const updateNoteMutation = useMutation({
     mutationFn: async (updatedFields: Partial<ClinicalNote>) => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments/${appointmentId}/clinical-note`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments/${appointmentId}/clinical-note`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -186,7 +186,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   // 6. POST approve signature confirmation
   const approveNoteMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`http://localhost:8000/api/v1/appointments/${appointmentId}/clinical-note/approve`, {
+      const response = await fetch(`http://localhost:8100/api/v1/appointments/${appointmentId}/clinical-note/approve`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` }
       });
