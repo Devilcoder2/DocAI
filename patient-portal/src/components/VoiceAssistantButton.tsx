@@ -1,354 +1,92 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import { Mic, MicOff, Bot, X, Wifi, AlertTriangle } from "lucide-react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { AlertTriangle, Bot, Loader2, Mic, MicOff, Send, Volume2, X } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
-type ConnectionState = "offline" | "connecting" | "ready" | "listening" | "speaking";
+type Status = "idle" | "listening" | "thinking" | "speaking" | "error";
+type AgentAction = { id: string; label: string; kind: "message" | "select_slot" | "confirm_booking"; doctor_id?: string; appointment_time?: string; consult_type?: string };
+type Reply = { conversation_id: string; response: string; transcript?: string; is_emergency: boolean; requires_confirmation: boolean; state: string; actions: AgentAction[] };
+type Message = { sender: "user" | "agent"; text: string };
 
-interface SpeechMessage {
-  sender: "user" | "agent";
-  text: string;
-}
+declare global { interface Window { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any; } }
 
 export default function VoiceAssistantButton() {
   const { isAuthenticated, user, token } = useAuthStore();
-  const [isOpen, setIsOpen] = useState(false);
-  const [connState, setConnState] = useState<ConnectionState>("offline");
-  const [messages, setMessages] = useState<SpeechMessage[]>([]);
-  const [userSpeech, setUserSpeech] = useState("");
-  const [agentSpeech, setAgentSpeech] = useState("");
-  
-  // Browser Speech refs
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [draft, setDraft] = useState("");
+  const [heard, setHeard] = useState("");
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [actions, setActions] = useState<AgentAction[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
-  const synthRef = useRef<SpeechSynthesis | null>(null);
-  const audioIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [visualScale, setVisualScale] = useState<number[]>([1, 1, 1, 1, 1]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      synthRef.current = window.speechSynthesis;
-    }
-    return () => {
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-    };
-  }, []);
+  useEffect(() => () => recognitionRef.current?.stop(), []);
+  if (!isAuthenticated || !user || user.role !== "Patient") return null;
+  const addMessage = (message: Message) => setMessages((current) => [...current, message]);
 
-  // Only render for authenticated Patients
-  if (!isAuthenticated || !user || user.role !== "Patient") {
-    return null;
-  }
-
-  // Generate mock voice response flow for Sub-Phase 9.1 client preview
-  const generateMockAgentReply = (input: string): string => {
-    const text = input.toLowerCase();
-    
-    // Emergency Triage Guardrail check
-    if (
-      text.includes("chest pain") || 
-      text.includes("shortness of breath") || 
-      text.includes("heart attack") ||
-      text.includes("breathing") ||
-      text.includes("severe bleeding")
-    ) {
-      setTimeout(() => {
-        setIsOpen(false); // Simply hang up / close the session as per instructions
-        if (synthRef.current) synthRef.current.cancel();
-      }, 7000);
-      return "Warning: We detect potential emergency symptoms. Please call 9 1 1 immediately or go to the nearest emergency room. We cannot book appointments for emergency conditions. Hanging up session.";
-    }
-
-    if (text.includes("hello") || text.includes("hi")) {
-      return "Hello! I am your AI clinic booking assistant. Would you like to schedule an annual physical or search our doctors list?";
-    }
-    if (text.includes("doctor") || text.includes("search") || text.includes("physician")) {
-      return "I found Dr. Alice Heart, who is a Cardiologist, and Dr. Bob Shield, who is a General Practitioner. Who would you like to schedule with?";
-    }
-    if (text.includes("alice") || text.includes("cardiology")) {
-      return "Dr. Alice has available appointments next Monday at 9:00 AM or 10:30 AM. Would you like to book the 9:00 AM slot?";
-    }
-    if (text.includes("book") || text.includes("confirm") || text.includes("yes")) {
-      return "Thank you! I have confirmed your appointment with Dr. Alice Heart for next Monday at 9:00 AM. A confirmation email notification has been dispatched to your inbox.";
-    }
-    if (text.includes("recipe") || text.includes("cake") || text.includes("cookie") || text.includes("code")) {
-      return "I am configured to assist only with clinic bookings, doctor directories, and appointment scheduling. I cannot answer out of scope questions.";
-    }
-
-    return "I can search local healthcare providers, check calendar slot availability, or book a consultation. Let me know how I can help.";
-  };
-
-  // Launch Web Speech API Simulator
-  const startBrowserSpeechSimulator = () => {
-    setConnState("connecting");
-    setMessages([
-      { sender: "agent", text: "Connecting to AI Care Assistant voice room..." }
-    ]);
-
-    setTimeout(() => {
-      setConnState("ready");
-      setMessages([
-        { sender: "agent", text: "Ready. Say 'Hello' to begin or ask to search doctors list." }
-      ]);
-      speakAgentText("Hello! I am your AI clinic booking assistant. Let me know how I can help you today.");
-    }, 1500);
-  };
-
-  // Speaks agent response text using browser TTS
-  const speakAgentText = (text: string) => {
-    if (!synthRef.current) return;
-    
-    // Stop any active speech
-    synthRef.current.cancel();
-    
+  const speak = (text: string) => {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    
-    utterance.onstart = () => {
-      setConnState("speaking");
-      setAgentSpeech(text);
-      setMessages(prev => [...prev, { sender: "agent", text }]);
-      
-      // Animate visual wave bars
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-      audioIntervalRef.current = setInterval(() => {
-        setVisualScale([
-          Math.random() * 2 + 0.5,
-          Math.random() * 2 + 0.5,
-          Math.random() * 2 + 0.5,
-          Math.random() * 2 + 0.5,
-          Math.random() * 2 + 0.5
-        ]);
-      }, 100);
-    };
-
-    utterance.onend = () => {
-      setConnState("ready");
-      if (audioIntervalRef.current) {
-        clearInterval(audioIntervalRef.current);
-        audioIntervalRef.current = null;
-      }
-      setVisualScale([1, 1, 1, 1, 1]);
-      
-      // Auto-listen again after speaking
-      listenToUser();
-    };
-
-    synthRef.current.speak(utterance);
+    utterance.lang = /[\u0900-\u097F]/.test(text) ? "hi-IN" : "en-IN";
+    utterance.onstart = () => setStatus("speaking");
+    utterance.onend = () => setStatus("idle");
+    window.speechSynthesis.speak(utterance);
   };
 
-  // Starts microphone capture using browser SpeechRecognition
-  const listenToUser = () => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setMessages(prev => [...prev, { sender: "agent", text: "Your browser does not support voice speech recognition." }]);
-      return;
+  const send = async (payload: Record<string, string | undefined>) => {
+    if (!token) return;
+    setStatus("thinking"); setError(null);
+    try {
+      const response = await fetch("http://localhost:8100/api/v1/agent/chat", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, body: JSON.stringify({ ...payload, conversation_id: conversationId }) });
+      const data: Reply | { detail?: string } = await response.json();
+      if (!response.ok) throw new Error("detail" in data ? data.detail || "Voice service is unavailable." : "Voice service is unavailable.");
+      const reply = data as Reply;
+      setConversationId(reply.conversation_id); setActions(reply.actions || []); addMessage({ sender: "agent", text: reply.response });
+      if (reply.is_emergency) setStatus("error"); else { speak(reply.response); if (!("speechSynthesis" in window)) setStatus("idle"); }
+    } catch (caught) {
+      setStatus("error"); setActions([]); setError(caught instanceof Error ? caught.message : "Voice service is unavailable. Please use Find a Doctor instead.");
     }
+  };
 
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-      } catch (e) {}
-    }
+  const submitText = async (event?: FormEvent) => {
+    event?.preventDefault(); const text = draft.trim(); if (!text || status === "thinking") return;
+    addMessage({ sender: "user", text }); setHeard(text); setDraft(""); await send({ message: text });
+  };
 
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = "en-US";
-
-    recognition.onstart = () => {
-      setConnState("listening");
-      setUserSpeech("");
-      
-      // Animate visual bars slightly for mic capture active
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-      audioIntervalRef.current = setInterval(() => {
-        setVisualScale([
-          Math.random() * 1.5 + 0.5,
-          Math.random() * 1.5 + 0.5,
-          Math.random() * 1.5 + 0.5,
-          Math.random() * 1.5 + 0.5,
-          Math.random() * 1.5 + 0.5
-        ]);
-      }, 120);
-    };
-
-    recognition.onresult = async (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setUserSpeech(transcript);
-      setMessages(prev => [...prev, { sender: "user", text: transcript }]);
-
-      try {
-        const response = await fetch("http://localhost:8000/api/v1/agent/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ message: transcript })
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          const reply = data.response;
-          
-          if (data.is_emergency) {
-            speakAgentText(reply);
-            setTimeout(() => {
-              setIsOpen(false);
-              if (synthRef.current) synthRef.current.cancel();
-            }, 8000);
-          } else {
-            speakAgentText(reply);
-          }
-        } else {
-          const reply = generateMockAgentReply(transcript);
-          speakAgentText(reply);
-        }
-      } catch (err) {
-        const reply = generateMockAgentReply(transcript);
-        speakAgentText(reply);
-      }
-    };
-
-    recognition.onerror = () => {
-      setConnState("ready");
-      if (audioIntervalRef.current) {
-        clearInterval(audioIntervalRef.current);
-        audioIntervalRef.current = null;
-      }
-      setVisualScale([1, 1, 1, 1, 1]);
-    };
-
-    recognition.onend = () => {
-      // If we didn't transition to speaking, return to ready
-      setConnState(prev => prev === "listening" ? "ready" : prev);
-      if (audioIntervalRef.current && connState === "listening") {
-        clearInterval(audioIntervalRef.current);
-        audioIntervalRef.current = null;
-        setVisualScale([1, 1, 1, 1, 1]);
-      }
-    };
-
+  const startListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) { setError("Voice typing is not supported in this browser. You can type your request below."); setStatus("error"); return; }
+    setError(null); const recognition = new SpeechRecognition(); recognitionRef.current = recognition;
+    recognition.lang = "en-IN"; recognition.continuous = false; recognition.interimResults = true;
+    recognition.onstart = () => setStatus("listening");
+    recognition.onresult = (event: any) => { const text = Array.from(event.results as any).map((result: any) => result[0].transcript).join("").trim(); setHeard(text); setDraft(text); };
+    recognition.onerror = () => { setStatus("error"); setError("We could not hear you clearly. Please try again or type your request."); };
+    recognition.onend = () => setStatus((current) => current === "listening" ? "idle" : current);
     recognition.start();
   };
 
-  const handleToggleOpen = () => {
-    if (!isOpen) {
-      setIsOpen(true);
-      startBrowserSpeechSimulator();
-    } else {
-      setIsOpen(false);
-      setConnState("offline");
-      if (synthRef.current) synthRef.current.cancel();
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch (e) {}
-      }
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-    }
+  const close = () => { recognitionRef.current?.stop(); window.speechSynthesis?.cancel(); setOpen(false); setStatus("idle"); };
+  const handleAction = async (action: AgentAction) => {
+    if (action.kind === "confirm_booking") { addMessage({ sender: "user", text: "Confirm booking" }); await send({ message: "confirm", action: "confirm_booking" }); return; }
+    if (action.kind === "select_slot") { addMessage({ sender: "user", text: `Select ${action.label}` }); await send({ message: action.label, action: "select_slot", doctor_id: action.doctor_id, appointment_time: action.appointment_time, consult_type: action.consult_type }); }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      
-      {/* Voice Assistant Panel Window */}
-      {isOpen && (
-        <div className="mb-4 w-80 bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl flex flex-col space-y-4 animate-in slide-in-from-bottom-5 duration-300">
-          
-          {/* Header */}
-          <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5 text-teal-400" />
-              <div>
-                <h4 className="text-xs font-bold text-slate-200">AI Care Assistant</h4>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${
-                    connState === "listening" ? "bg-amber-450 animate-pulse" :
-                    connState === "speaking" ? "bg-teal-400 animate-pulse" :
-                    connState === "ready" ? "bg-emerald-500" :
-                    "bg-slate-500"
-                  }`} />
-                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">
-                    {connState === "offline" ? "Offline" :
-                     connState === "connecting" ? "Connecting..." :
-                     connState === "listening" ? "Listening" :
-                     connState === "speaking" ? "Speaking" :
-                     "Ready"}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <button 
-              onClick={handleToggleOpen}
-              className="text-slate-500 hover:text-slate-300 hover:bg-slate-800 p-1.5 rounded-xl transition-all cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Messages Console View */}
-          <div className="h-44 overflow-y-auto space-y-2.5 p-3 rounded-2xl bg-slate-950/60 border border-slate-850 shadow-inner flex flex-col scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
-            {messages.map((m, idx) => (
-              <div 
-                key={idx} 
-                className={`text-[11px] max-w-[85%] p-2.5 rounded-xl leading-relaxed ${
-                  m.sender === "user" 
-                    ? "bg-indigo-500/10 text-indigo-300 border border-indigo-500/15 self-end"
-                    : "bg-slate-900 text-slate-350 border border-slate-850 self-start"
-                }`}
-              >
-                {m.text}
-              </div>
-            ))}
-          </div>
-
-          {/* Sound wave Visualizer bars */}
-          <div className="flex justify-center items-center gap-1.5 h-12 py-2 bg-slate-950/20 border border-slate-850/50 rounded-2xl">
-            {visualScale.map((scale, i) => (
-              <span 
-                key={i} 
-                style={{ transform: `scaleY(${scale})` }}
-                className={`w-1.5 rounded-full transition-transform duration-100 ${
-                  connState === "listening" ? "h-6 bg-amber-400" :
-                  connState === "speaking" ? "h-8 bg-teal-400" :
-                  "h-2 bg-slate-800"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Control Banner */}
-          <div className="flex justify-between items-center bg-slate-950/40 border border-slate-850 rounded-xl px-3 py-2 text-[10px] text-slate-500">
-            <span className="flex items-center gap-1">
-              <Wifi className="w-3.5 h-3.5 text-teal-400" />
-              Browser Speech Simulator
-            </span>
-            {connState === "ready" && (
-              <button 
-                onClick={listenToUser}
-                className="text-teal-400 hover:text-teal-300 font-bold hover:underline cursor-pointer"
-              >
-                Press to Speak
-              </button>
-            )}
-          </div>
-
-        </div>
-      )}
-
-      {/* Floating Microphone Trigger Action Button */}
-      <button
-        onClick={handleToggleOpen}
-        className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl cursor-pointer ${
-          isOpen 
-            ? "bg-slate-800 text-teal-400 border border-slate-750 hover:bg-slate-750 shadow-teal-500/10" 
-            : "bg-gradient-to-r from-teal-500 to-indigo-500 hover:from-teal-400 hover:to-indigo-400 text-slate-950 hover:scale-105 shadow-teal-500/20 shadow-lg"
-        }`}
-      >
-        {isOpen ? <MicOff className="w-6 h-6 animate-pulse" /> : <Mic className="w-6 h-6" />}
-      </button>
-
+    <div className="fixed bottom-5 right-4 z-50 sm:bottom-6 sm:right-6">
+      {open && <section aria-label="Health Help voice assistant" className="mb-3 flex w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/20">
+        <header className="flex items-center justify-between border-b border-slate-100 bg-teal-50 px-4 py-3"><div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-teal-600 text-white"><Bot className="h-5 w-5" /></span><div><h2 className="text-sm font-bold text-slate-900">Health Help</h2><p className="text-xs text-slate-600">Find a doctor or book a visit</p></div></div><button onClick={close} aria-label="Close Health Help" className="rounded-xl p-2 text-slate-600 hover:bg-white"><X className="h-5 w-5" /></button></header>
+        <div className="max-h-72 min-h-44 space-y-3 overflow-y-auto bg-slate-50 p-4">{messages.length === 0 && <p className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm">Tell me the kind of doctor you need. You can speak or type in English, Hindi, or Hinglish.</p>}{messages.map((item, index) => <p key={index} className={`max-w-[90%] rounded-2xl px-3 py-2 text-sm leading-5 ${item.sender === "user" ? "ml-auto bg-teal-600 text-white" : "bg-white text-slate-700 shadow-sm"}`}>{item.text}</p>)}{status === "thinking" && <p className="flex items-center gap-2 text-sm text-slate-500"><Loader2 className="h-4 w-4 animate-spin" /> Checking live availability…</p>}</div>
+        {heard && <div className="border-t border-slate-100 px-4 py-2 text-xs text-slate-500">You said: <span className="font-medium text-slate-700">{heard}</span></div>}
+        {error && <div className="m-3 flex gap-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-900"><AlertTriangle className="h-4 w-4 shrink-0" />{error}</div>}
+        {actions.length > 0 && <div className="flex flex-wrap gap-2 border-t border-slate-100 p-3">{actions.map((action) => <button key={action.id} disabled={status === "thinking"} onClick={() => handleAction(action)} className="rounded-xl border border-teal-200 bg-teal-50 px-3 py-2 text-xs font-semibold text-teal-800 hover:bg-teal-100 disabled:opacity-50">{action.label}</button>)}</div>}
+        <form onSubmit={submitText} className="flex gap-2 border-t border-slate-100 p-3"><button type="button" onClick={startListening} disabled={status === "thinking" || status === "speaking"} aria-label="Start voice typing" className={`rounded-xl p-3 ${status === "listening" ? "bg-red-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`}>{status === "listening" ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}</button><input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Type your request" className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-teal-600" /><button type="submit" disabled={!draft.trim() || status === "thinking"} aria-label="Send message" className="rounded-xl bg-teal-600 p-3 text-white hover:bg-teal-700 disabled:opacity-40"><Send className="h-5 w-5" /></button></form>
+        <p className="px-4 pb-3 text-[11px] text-slate-500"><Volume2 className="mr-1 inline h-3 w-3" />Voice typing is a browser fallback. Do not use this for emergency care.</p>
+      </section>}
+      <button id="voiceTrigger" onClick={() => setOpen(true)} aria-label="Open Health Help" className="flex h-14 w-14 items-center justify-center rounded-full bg-teal-600 text-white shadow-lg shadow-teal-700/30 transition hover:scale-105 hover:bg-teal-700"><Mic className="h-6 w-6" /></button>
     </div>
   );
 }
