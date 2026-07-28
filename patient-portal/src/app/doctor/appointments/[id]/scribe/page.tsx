@@ -64,6 +64,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   const [assessment, setAssessment] = useState("");
   const [plan, setPlan] = useState("");
   const [patientSummary, setPatientSummary] = useState("");
+  const [notice, setNotice] = useState<string | null>(null);
 
   // Auto-save notification status
   const [saveStatus, setSaveStatus] = useState<"SAVED" | "SAVING" | "ERROR">("SAVED");
@@ -198,11 +199,10 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clinical-note", appointmentId] });
       queryClient.invalidateQueries({ queryKey: ["appointment-scribe", appointmentId] });
-      alert("Clinical Note Approved and Electronic Signature Confirmed!");
-      router.push("/doctor/dashboard");
+      setNotice("The note has been approved and signed. It is now read-only.");
     },
     onError: (err: Error) => {
-      alert(`Signature failed: ${err.message}`);
+      setNotice(`We could not approve this note: ${err.message}`);
     }
   });
 
@@ -232,6 +232,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   }, []);
 
   const isApproved = clinicalNote?.status === "approved";
+  const canApprove = Boolean(subjective.trim() && objective.trim() && assessment.trim() && plan.trim() && patientSummary.trim());
 
   // Parse raw transcript lines
   const transcriptLines = clinicalNote?.raw_transcript
@@ -259,10 +260,10 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans transition-theme">
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 font-sans">
       
       {/* Workspace Sub Header */}
-      <div className="bg-card-bg/60 border-b border-card-border px-6 py-4 flex items-center justify-between z-10 backdrop-blur-xl transition-theme">
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
         <div className="flex items-center gap-4">
           <Link 
             href="/doctor/dashboard"
@@ -272,7 +273,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-teal-400 font-bold uppercase tracking-widest">Scribe Workspace</span>
+              <span className="text-[10px] text-teal-700 font-bold uppercase tracking-widest">Visit note</span>
               {isApproved && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[9px] font-bold border border-emerald-500/20">
                   <Lock className="w-2.5 h-2.5" /> APPROVED
@@ -280,7 +281,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
               )}
             </div>
             <h2 className="text-sm font-bold text-slate-150">
-              Clinical SOAP Documentation: {patientProfile?.name || "Patient Profile"}
+              Visit note for {patientProfile?.name || "patient"}
             </h2>
             {patientProfile && (
               <div className="text-[11px] text-slate-450 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -352,7 +353,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
           ) : (
             <button
               onClick={() => approveNoteMutation.mutate()}
-              disabled={isLoadingNote || approveNoteMutation.isPending}
+              disabled={isLoadingNote || approveNoteMutation.isPending || !canApprove}
               className="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md shadow-teal-500/10 disabled:opacity-50"
             >
               <CheckCircle className="w-4 h-4" />
@@ -362,17 +363,20 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
         </div>
       </div>
 
+      {notice && <div className={`mx-4 mt-4 rounded-xl p-3 text-sm ${isApproved ? "bg-teal-50 text-teal-800" : "bg-rose-50 text-rose-700"}`}>{notice}</div>}
+      {!isApproved && !canApprove && <p className="mx-4 mt-3 text-sm text-slate-600">Complete all four note sections and the patient summary before signing.</p>}
+
       {/* Main Splitscreen Body */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-col gap-4 p-4 lg:flex-row lg:overflow-hidden lg:p-6">
         
         {/* Collapsible EHR History Drawer */}
         {isHistoryOpen && patientProfile && (
-          <div className="w-[340px] border-r border-card-border bg-sidebar-bg flex flex-col shrink-0 overflow-y-auto p-5 space-y-6 selection:bg-teal-500 selection:text-slate-950 transition-theme">
+          <div className="w-full rounded-2xl border border-slate-200 bg-white flex flex-col shrink-0 overflow-y-auto p-5 space-y-6 lg:w-[340px] transition-theme">
             {/* Header */}
             <div>
               <h3 className="text-xs font-bold text-foreground uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-card-border">
                 <User className="w-4 h-4 text-teal-500" />
-                Patient EHR Constants
+                Patient overview
               </h3>
             </div>
 
@@ -422,7 +426,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
 
               {/* Chronic profile details */}
               <div className="space-y-1.5">
-                <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Chronic Pre-existing Conditions</span>
+                <span className="block text-[8px] font-bold text-slate-500 uppercase tracking-wider">Ongoing conditions</span>
                 {patientProfile.chronic_illnesses ? (
                   <div className="bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-xl text-[11px] text-amber-450 font-semibold">
                     {patientProfile.chronic_illnesses}
@@ -540,7 +544,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
         )}
 
         {/* LEFT COLUMN: Transcript Dialogues */}
-        <div className="w-1/2 flex flex-col border-r border-card-border bg-sidebar-bg/10 transition-theme">
+        <div className="w-full min-h-[360px] rounded-2xl border border-slate-200 bg-white flex flex-col overflow-hidden lg:w-1/2 transition-theme">
           
           {/* Transcript Search Toolbar */}
           <div className="p-4 border-b border-card-border bg-card-bg/40 transition-theme">
@@ -607,7 +611,7 @@ export default function ClinicalScribeWorkspace({ params }: { params: Promise<{ 
         </div>
 
         {/* RIGHT COLUMN: Interactive SOAP Editor */}
-        <div className="w-1/2 flex flex-col bg-background overflow-y-auto p-6 space-y-6 transition-theme">
+        <div className="w-full rounded-2xl border border-slate-200 bg-white flex flex-col overflow-y-auto p-5 space-y-6 lg:w-1/2 transition-theme">
           
           {/* Header instructions warning */}
           {isApproved && (
