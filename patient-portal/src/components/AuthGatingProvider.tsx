@@ -40,7 +40,7 @@ export default function AuthGatingProvider({ children }: AuthGatingProviderProps
         }
       } else {
         // Enforce role-based route access controls
-        const isDoctorRoute = pathname.startsWith("/doctor");
+        const isDoctorRoute = pathname === "/doctor" || pathname.startsWith("/doctor/");
         if (isDoctorRoute && user.role !== "Doctor") {
           router.replace("/");
         } else if (!isDoctorRoute && pathname !== "/welcome" && user.role === "Doctor") {
@@ -71,7 +71,7 @@ export default function AuthGatingProvider({ children }: AuthGatingProviderProps
   }
 
   if (isAuthenticated && user) {
-    const isDoctorRoute = pathname.startsWith("/doctor");
+    const isDoctorRoute = pathname === "/doctor" || pathname.startsWith("/doctor/");
     if (isDoctorRoute && user.role !== "Doctor") {
       return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center">
