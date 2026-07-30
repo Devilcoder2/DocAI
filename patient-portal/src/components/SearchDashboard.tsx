@@ -76,45 +76,41 @@ export default function SearchDashboard({ onSelectDoctor }: SearchDashboardProps
     <div className="w-full p-6 md:p-8 space-y-8 bg-transparent">
 
       {/* Discovery Search Panel */}
-      <div className="bg-sidebar-bg/30 border border-card-border/40 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-        <h2 className="text-lg font-display font-extrabold text-foreground mb-6 flex items-center gap-2">
-          <Search className="text-primary-container dark:text-indigo-400 w-5 h-5" />
-          Find Your Healthcare Provider
-        </h2>
-        <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative">
-            <Search className="absolute left-4 top-3.5 text-slate-400 w-5 h-5" />
+      <div className="bg-sidebar-bg/30 border border-card-border/40 rounded-3xl p-5 shadow-sm">
+        <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-3 text-slate-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Specialty (e.g. Cardiologist, Dentist...)"
               value={specialtyInput}
               onChange={(e) => setSpecialtyInput(e.target.value)}
-              className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 pl-12 pr-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
+              className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-2.5 pl-11 pr-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
             />
           </div>
-          <div className="relative">
-            <MapPin className="absolute left-4 top-3.5 text-slate-400 w-5 h-5" />
+          <div className="relative flex-1">
+            <MapPin className="absolute left-4 top-3 text-slate-400 w-4 h-4" />
             <input
               type="text"
               placeholder="ZIP Code (e.g. 90210, 10001...)"
               value={zipInput}
               onChange={(e) => setZipInput(e.target.value)}
-              className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-3.5 pl-12 pr-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
+              className="w-full bg-sidebar-bg/35 border border-card-border/50 focus:bg-card-bg rounded-2xl py-2.5 pl-11 pr-4 text-foreground placeholder-slate-400 focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 text-sm transition-all outline-none"
             />
           </div>
-          <div className="md:col-span-2 flex justify-end gap-3 mt-2">
+          <div className="flex gap-2 shrink-0">
             {(specialtyQuery || zipQuery) && (
               <button
                 type="button"
                 onClick={handleClearFilters}
-                className="px-5 py-2.5 rounded-2xl bg-card-bg hover:bg-sidebar-bg/60 border border-card-border text-foreground text-sm font-bold transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-2xl bg-card-bg hover:bg-sidebar-bg/60 border border-card-border text-foreground text-xs font-bold transition-all cursor-pointer whitespace-nowrap"
               >
                 Clear Filters
               </button>
             )}
             <button
               type="submit"
-              className="px-8 py-2.5 rounded-2xl bg-primary-container hover:bg-primary-container/90 text-white font-bold text-sm shadow-lg shadow-primary-container/15 flex items-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 duration-200"
+              className="px-6 py-2.5 rounded-2xl bg-primary-container hover:bg-primary-container/90 text-white font-bold text-xs shadow-md shadow-primary-container/15 flex items-center justify-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 duration-200 whitespace-nowrap"
             >
               Search Providers
             </button>
