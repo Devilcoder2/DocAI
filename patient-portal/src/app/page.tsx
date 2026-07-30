@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import SearchDashboard from "@/components/SearchDashboard";
+import DoctorProfileView from "@/components/DoctorProfileView";
 
 interface ClinicalNote {
   id: string;
@@ -65,6 +66,7 @@ export default function HomePage() {
   const [expandedApptId, setExpandedApptId] = useState<string | null>(null);
   const [noteTabs, setNoteTabs] = useState<Record<string, "summary" | "soap">>({});
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
 
   // Redirect to welcome if not authenticated
   useEffect(() => {
@@ -72,6 +74,25 @@ export default function HomePage() {
       router.push("/welcome");
     }
   }, [isAuthenticated, router]);
+
+  // Read URL search params for direct/redirect doctor deep linking
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const doctorQuery = params.get("doctor");
+      if (doctorQuery) {
+        setSelectedDoctorId(doctorQuery);
+        setActiveTab("directory");
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+      }
+    }
+  }, []);
+
+  // Reset selected doctor when tab changes
+  useEffect(() => {
+    setSelectedDoctorId(null);
+  }, [activeTab]);
 
   // Fetch patient's actual appointments
   const { data: appointments = [], isLoading } = useQuery<Appointment[]>({
@@ -88,7 +109,7 @@ export default function HomePage() {
   });
 
   const handleSelectDoctor = (doctorId: string) => {
-    router.push(`/doctors/${doctorId}`);
+    setSelectedDoctorId(doctorId);
   };
 
   const triggerVoiceAssistant = () => {
@@ -524,16 +545,25 @@ export default function HomePage() {
 
             {activeTab === "directory" && (
               <div className="animate-float-up space-y-6">
-                <button 
-                  onClick={() => setActiveTab("dashboard")}
-                  className="text-xs text-primary-container dark:text-indigo-450 hover:underline flex items-center gap-1 font-bold cursor-pointer"
-                >
-                  <ArrowRight className="w-3.5 h-3.5 rotate-180" />
-                  Back to Dashboard
-                </button>
-                <div className="glass-card rounded-[32px] border border-card-border overflow-hidden">
-                  <SearchDashboard onSelectDoctor={handleSelectDoctor} />
-                </div>
+                {selectedDoctorId ? (
+                  <DoctorProfileView 
+                    doctorId={selectedDoctorId} 
+                    onBack={() => setSelectedDoctorId(null)} 
+                  />
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab("dashboard")}
+                      className="text-xs text-primary-container dark:text-indigo-450 hover:underline flex items-center gap-1 font-bold cursor-pointer"
+                    >
+                      <ArrowRight className="w-3.5 h-3.5 rotate-180" />
+                      Back to Dashboard
+                    </button>
+                    <div className="glass-card rounded-[32px] border border-card-border overflow-hidden">
+                      <SearchDashboard onSelectDoctor={handleSelectDoctor} />
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
